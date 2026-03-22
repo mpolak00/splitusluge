@@ -65,7 +65,7 @@ export default function HomeNew() {
 
   const seoPayload = useMemo(() => {
     const title = "Split Usluge | Lokalni imenik usluga, obrta i firmi u Splitu";
-    const description = `Pronađite ${allBusinesses.length || "provjerene"} lokalne usluge, obrte i firme u Splitu i okolici. Kategorije, kontakti, karta i profilna poslovanja na jednom mjestu.`;
+    const description = `Pronaite ${allBusinesses.length || "provjerene"} lokalne usluge, obrte i firme u Splitu i okolici. Kategorije, kontakti, karta i profilna poslovanja na jednom mjestu.`;
     const siteUrl = typeof window !== "undefined" ? window.location.origin : undefined;
 
     return buildSeoPayload({
@@ -95,7 +95,7 @@ export default function HomeNew() {
         {
           "@context": "https://schema.org",
           "@type": "ItemList",
-          name: "Najtraženije kategorije u Splitu",
+          name: "Najtra~enije kategorije u Splitu",
           itemListElement: categorySummaries.slice(0, 8).map((category, index) => ({
             "@type": "ListItem",
             position: index + 1,
@@ -127,7 +127,7 @@ export default function HomeNew() {
             </h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-white/80 md:text-xl">
               Od vulkanizera i frizera do vodoinstalatera, stomatologa i selidbi. Split Usluge
-              okuplja lokalne biznise, kontakte i profile poslovanja kako bi ih korisnici lakše našli,
+              okuplja lokalne biznise, kontakte i profile poslovanja kako bi ih korisnici lakae naali,
               usporedili i kontaktirali.
             </p>
 
@@ -138,7 +138,7 @@ export default function HomeNew() {
                   <Input
                     value={searchTerm}
                     onChange={event => setSearchTerm(event.target.value)}
-                    placeholder="Pretraži po nazivu, usluzi ili adresi..."
+                    placeholder="Pretra~i po nazivu, usluzi ili adresi..."
                     className="h-14 border-white/0 bg-transparent pl-12 text-base text-white placeholder:text-white/55 focus-visible:ring-0 focus-visible:ring-offset-0"
                   />
                 </div>
@@ -166,11 +166,11 @@ export default function HomeNew() {
                 <p className="mt-2 text-3xl font-bold">{categories.length || "..."}</p>
               </div>
               <div className="rounded-2xl border border-white/12 bg-white/8 p-4 backdrop-blur">
-                <p className="text-sm text-white/70">Prosječna ocjena</p>
+                <p className="text-sm text-white/70">Prosjena ocjena</p>
                 <p className="mt-2 text-3xl font-bold">{averageRating > 0 ? averageRating.toFixed(1) : "-"}</p>
               </div>
               <div className="rounded-2xl border border-white/12 bg-white/8 p-4 backdrop-blur">
-                <p className="text-sm text-white/70">Pokrivena područja</p>
+                <p className="text-sm text-white/70">Pokrivena podruja</p>
                 <p className="mt-2 text-lg font-semibold">{SERVICE_AREAS.join(", ")}</p>
               </div>
             </div>
@@ -185,7 +185,7 @@ export default function HomeNew() {
               <div>
                 <h2 className="text-3xl font-bold tracking-tight">Rezultati pretrage</h2>
                 <p className="mt-2 text-muted-foreground">
-                  Pronađeno {filteredBusinesses.length} rezultata za upit "{searchTerm}".
+                  Pronadjeno {filteredBusinesses.length} rezultata za upit "{searchTerm}".
                 </p>
               </div>
               <Button asChild variant="outline">
@@ -271,7 +271,7 @@ export default function HomeNew() {
                 <CardContent className="p-10 text-center">
                   <p className="text-lg font-medium">Nema rezultata za ovaj upit.</p>
                   <p className="mt-2 text-muted-foreground">
-                    Pokušaj s nazivom usluge, kvartom ili otvori cijeli imenik.
+                    Pokuaaj s nazivom usluge, kvartom ili otvori cijeli imenik.
                   </p>
                 </CardContent>
               </Card>
@@ -283,14 +283,14 @@ export default function HomeNew() {
               <div className="space-y-6">
                 <div>
                   <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">
-                    Najtraženije kategorije
+                    Najtra~enije kategorije
                   </p>
                   <h2 className="mt-3 text-4xl font-bold tracking-tight">
-                    Kategorije koje najčešće traže ljudi u Splitu
+                    Kategorije koje najcesce traze ljudi u Splitu
                   </h2>
                   <p className="mt-4 max-w-2xl text-lg leading-8 text-muted-foreground">
-                    Kreni od najjačih kategorija s najviše unosa i najviše lokalnih upita. Svaka kategorija
-                    vodi na vlastitu optimiziranu stranicu s kartom, FAQ sadržajem i profilima poslovanja.
+                    Kreni od najjaih kategorija s najviae unosa i najviae lokalnih upita. Svaka kategorija
+                    vodi na vlastitu optimiziranu stranicu s kartom, FAQ sadr~ajem i profilima poslovanja.
                   </p>
                 </div>
 
@@ -327,10 +327,10 @@ export default function HomeNew() {
                 <CardContent className="p-0">
                   <div className="border-b border-white/10 p-6">
                     <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-300">Za biznise</p>
-                    <h2 className="mt-3 text-3xl font-bold tracking-tight">Želiš više poziva i bolju poziciju na Googleu?</h2>
+                    <h2 className="mt-3 text-3xl font-bold tracking-tight">Zelis vise poziva i bolju poziciju na Googleu?</h2>
                     <p className="mt-4 text-white/75">
                       Split Usluge gradimo kao lokalni imenik koji spaja organski SEO, Google Ads i
-                      prioritetne pozicije unutar kategorija. To znači više vidljivosti za one koji žele biti
+                      prioritetne pozicije unutar kategorija. To znaci vise vidljivosti za one koji zele biti
                       ispred konkurencije.
                     </p>
                   </div>
@@ -338,19 +338,19 @@ export default function HomeNew() {
                     <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                       <p className="font-semibold">Profil poslovanja</p>
                       <p className="mt-2 text-sm leading-6 text-white/70">
-                        Vlastita landing stranica s kontaktima, lokacijom i SEO sadržajem.
+                        Vlastita landing stranica s kontaktima, lokacijom i SEO sadr~ajem.
                       </p>
                     </div>
                     <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                       <p className="font-semibold">Prioritetni prikaz</p>
                       <p className="mt-2 text-sm leading-6 text-white/70">
-                        Mogućnost isticanja u kategoriji i kampanjama kad krenemo s oglasima.
+                        Mogucnost isticanja u kategoriji i kampanjama kad krenemo s oglasima.
                       </p>
                     </div>
                     <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                       <p className="font-semibold">Lokalni doseg</p>
                       <p className="mt-2 text-sm leading-6 text-white/70">
-                        Fokus na Split, Solin, Kaštela, Podstranu, Dugopolje i Omiš.
+                        Fokus na Split, Solin, Kaatela, Podstranu, Dugopolje i Omia.
                       </p>
                     </div>
                     <Button asChild className="mt-2 w-full bg-orange-500 text-white hover:bg-orange-600">
@@ -365,7 +365,7 @@ export default function HomeNew() {
               <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
                 <div>
                   <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">Istaknuti profili</p>
-                  <h2 className="mt-3 text-4xl font-bold tracking-tight">Poslovanja s najjačim signalima povjerenja</h2>
+                  <h2 className="mt-3 text-4xl font-bold tracking-tight">Poslovanja s najjaim signalima povjerenja</h2>
                   <p className="mt-3 max-w-2xl text-lg leading-8 text-muted-foreground">
                     Kombiniramo broj recenzija i ocjene kako bismo korisniku odmah pokazali najrelevantnije profile.
                   </p>
@@ -451,7 +451,7 @@ export default function HomeNew() {
                   <ShieldCheck className="h-8 w-8 text-primary" />
                   <h3 className="text-xl font-bold">SEO-orijentiran imenik</h3>
                   <p className="text-sm leading-7 text-muted-foreground">
-                    Kategorijske i profilne stranice gradimo tako da svaka može rankati za lokalne upite
+                    Kategorijske i profilne stranice gradimo tako da svaka mo~e rankati za lokalne upite
                     poput "vodoinstalater Split", "frizer Split" ili "selidbe Split".
                   </p>
                 </CardContent>
@@ -461,8 +461,8 @@ export default function HomeNew() {
                   <MapPin className="h-8 w-8 text-primary" />
                   <h3 className="text-xl font-bold">Lokalni fokus</h3>
                   <p className="text-sm leading-7 text-muted-foreground">
-                    Ne ciljamo generički cijelu Hrvatsku, nego gradimo autoritet za Split i okolicu gdje su
-                    pretrage i namjera korisnika najjače.
+                    Ne ciljamo generiki cijelu Hrvatsku, nego gradimo autoritet za Split i okolicu gdje su
+                    pretrage i namjera korisnika najjae.
                   </p>
                 </CardContent>
               </Card>
@@ -471,8 +471,8 @@ export default function HomeNew() {
                   <Globe className="h-8 w-8 text-primary" />
                   <h3 className="text-xl font-bold">Spremno za oglase</h3>
                   <p className="text-sm leading-7 text-muted-foreground">
-                    Kad kreneš s Google Ads kampanjama, svaka kategorija i svaki profil već će imati jasnu
-                    landing strukturu za bolje rezultate i veći broj upita.
+                    Kad krenes s Google Ads kampanjama, svaka kategorija i svaki profil vec ce imati jasnu
+                    landing strukturu za bolje rezultate i veci broj upita.
                   </p>
                 </CardContent>
               </Card>
@@ -481,11 +481,11 @@ export default function HomeNew() {
             <div className="grid gap-10 lg:grid-cols-[1fr_1fr]">
               <Card className="border-border/70">
                 <CardContent className="space-y-5 p-6 md:p-8">
-                  <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">Područja</p>
+                  <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">Podruja</p>
                   <h2 className="text-3xl font-bold tracking-tight">Gdje trenutno gradimo lokalni autoritet</h2>
                   <p className="leading-8 text-muted-foreground">
                     Split Usluge nije samo za strogi centar grada. Imenik je postavljen tako da pokriva i
-                    širu okolicu u kojoj ljudi svakodnevno traže lokalne usluge.
+                    airu okolicu u kojoj ljudi svakodnevno tra~e lokalne usluge.
                   </p>
                   <div className="grid gap-3 sm:grid-cols-2">
                     {SERVICE_AREAS.map(area => (
@@ -500,7 +500,7 @@ export default function HomeNew() {
               <Card className="border-border/70">
                 <CardContent className="space-y-5 p-6 md:p-8">
                   <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">FAQ</p>
-                  <h2 className="text-3xl font-bold tracking-tight">Česta pitanja o imeniku</h2>
+                  <h2 className="text-3xl font-bold tracking-tight">Cesta pitanja o imeniku</h2>
                   <div className="space-y-4">
                     <div className="rounded-2xl border border-border/70 bg-muted/30 p-4">
                       <p className="font-semibold">Kako odabiremo profile koji su prikazani?</p>
@@ -510,17 +510,17 @@ export default function HomeNew() {
                       </p>
                     </div>
                     <div className="rounded-2xl border border-border/70 bg-muted/30 p-4">
-                      <p className="font-semibold">Hoće li biti moguće platiti prioritetnu poziciju?</p>
+                      <p className="font-semibold">Hoce li biti moguce platiti prioritetnu poziciju?</p>
                       <p className="mt-2 text-sm leading-7 text-muted-foreground">
                         Da. Plan je ponuditi prioritetne pozicije i isticanje unutar kategorija, ali prvo gradimo
-                        kvalitetan organski temelj i dobru korisničku bazu.
+                        kvalitetan organski temelj i dobru korisniku bazu.
                       </p>
                     </div>
                     <div className="rounded-2xl border border-border/70 bg-muted/30 p-4">
-                      <p className="font-semibold">Zašto su profilne stranice važne za Google?</p>
+                      <p className="font-semibold">Zaato su profilne stranice va~ne za Google?</p>
                       <p className="mt-2 text-sm leading-7 text-muted-foreground">
-                        Zato što svako poslovanje dobiva svoju indexabilnu stranicu s kontaktima, lokacijom,
-                        povezanim kategorijama i lokalnim kontekstom koji pomaže organskom rankingu.
+                        Zato ato svako poslovanje dobiva svoju indexabilnu stranicu s kontaktima, lokacijom,
+                        povezanim kategorijama i lokalnim kontekstom koji poma~e organskom rankingu.
                       </p>
                     </div>
                   </div>

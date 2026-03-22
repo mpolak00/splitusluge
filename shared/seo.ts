@@ -1,4 +1,4 @@
-import { ALL_BUSINESSES_PATH, LEGACY_ALL_BUSINESSES_PATH } from "./paths";
+﻿import { ALL_BUSINESSES_PATH, LEGACY_ALL_BUSINESSES_PATH } from "./paths";
 
 export type BreadcrumbItem = {
   name: string;
@@ -60,10 +60,10 @@ export const DEFAULT_OG_IMAGE = "/images/hero-split.jpg";
 export const SERVICE_AREAS = [
   "Split",
   "Solin",
-  "Kaštela",
+  "Kastela",
   "Podstrana",
   "Dugopolje",
-  "Omiš",
+  "Omis",
 ];
 
 const CATEGORY_ALIASES: Record<string, string> = {
@@ -74,374 +74,156 @@ const CATEGORY_ALIASES: Record<string, string> = {
 
 const CATEGORY_CONTENT: Record<string, CategoryPageCopy> = {
   automehanicari: {
-    title: "Automehaničari",
-    intro:
-      "Pronađite automehaničare u Splitu i okolici za dijagnostiku, redovni servis, pripremu za tehnički pregled i hitne kvarove. Na jednom mjestu možete usporediti lokaciju, kontakt, radno vrijeme i ocjene.",
-    keywords: [
-      "automehaničar split",
-      "auto servis split",
-      "servis auta split",
-      "dijagnostika vozila split",
-    ],
+    title: "Automehanicari",
+    intro: "Pronadite automehanicare u Splitu i okolici za servis, dijagnostiku, pripremu za tehnicki pregled i hitne kvarove.",
+    keywords: ["automehanicar split", "auto servis split", "servis auta split", "dijagnostika vozila split"],
     faq: [
-      {
-        question: "Kako odabrati dobrog automehaničara u Splitu?",
-        answer:
-          "Najbolje je usporediti ocjene, broj recenzija, lokaciju i specijalizaciju servisa. Posebno je korisno provjeriti nude li dijagnostiku, limarske radove ili servis određene marke vozila.",
-      },
-      {
-        question: "Mogu li pronaći servis blizu svoje lokacije?",
-        answer:
-          "Da. Na stranici kategorije možete pregledati popis poslovanja i kartu kako biste lakše pronašli servis u svom kvartu ili najbližu opciju u Splitu i okolici.",
-      },
+      { question: "Kako odabrati automehanicara u Splitu?", answer: "Usporedite ocjene, broj recenzija, lokaciju i ponudu usluga prije nego sto nazovete servis." },
+      { question: "Mogu li pronaci servis blizu sebe?", answer: "Da. Popis i karta pomazu da brzo izdvojite najblizu opciju u Splitu i okolici." },
     ],
   },
   "servisi-za-ciscenje": {
-    title: "Servisi za čišćenje",
-    intro:
-      "Usporedite servise za čišćenje u Splitu za stanove, apartmane, urede i poslovne prostore. Stranica pomaže brzo pronaći kontakt, područje rada i dodatne usluge poput dubinskog čišćenja.",
-    keywords: [
-      "čišćenje split",
-      "servis za čišćenje split",
-      "čišćenje apartmana split",
-      "dubinsko čišćenje split",
-    ],
+    title: "Servisi za ciscenje",
+    intro: "Usporedite servise za ciscenje stanova, apartmana, ureda i poslovnih prostora u Splitu i okolici.",
+    keywords: ["ciscenje split", "servis za ciscenje split", "ciscenje apartmana split", "dubinsko ciscenje split"],
     faq: [
-      {
-        question: "Jesu li navedeni servisi za čišćenje pogodni za apartmane?",
-        answer:
-          "Mnogi servisi rade čišćenje apartmana, stanova i poslovnih prostora. U opisu i oznakama možete provjeriti nudi li pojedini pružatelj upravo ono što vam treba.",
-      },
-      {
-        question: "Kako pronaći servis za hitno čišćenje u Splitu?",
-        answer:
-          "Najbrže je pregledati listu, filtrirati rezultate i odmah kontaktirati pružatelje koji imaju istaknut telefon ili radno vrijeme.",
-      },
+      { question: "Jesu li dostupni servisi za apartmane?", answer: "Da. Mnogi servisi rade ciscenje apartmana, stanova i poslovnih prostora." },
+      { question: "Kako naci servis za hitno ciscenje?", answer: "Najbrze je otvoriti kategoriju, provjeriti telefon i kontaktirati nekoliko opcija." },
     ],
   },
   elektricari: {
-    title: "Električari",
-    intro:
-      "Popis električara u Splitu za hitne intervencije, elektroinstalacije, rasvjetu, popravke i adaptacije. Brzo pronađite majstora prema lokaciji, kontaktu i korisničkim ocjenama.",
-    keywords: [
-      "električar split",
-      "elektroinstalacije split",
-      "majstor za struju split",
-      "hitni električar split",
-    ],
+    title: "Elektricari",
+    intro: "Popis elektricara u Splitu za hitne intervencije, elektroinstalacije, rasvjetu, popravke i adaptacije.",
+    keywords: ["elektricar split", "elektroinstalacije split", "majstor za struju split", "hitni elektricar split"],
     faq: [
-      {
-        question: "Mogu li pronaći električara za hitne intervencije?",
-        answer:
-          "Da. Za hitne kvarove preporuka je pregledati električare s jasno istaknutim telefonom i radnim vremenom, kako biste ih mogli odmah kontaktirati.",
-      },
-      {
-        question: "Jesu li dostupni i izvođači za veće adaptacije?",
-        answer:
-          "Da. Uz manje popravke, mnogi električari rade i kompletne instalacije, rasvjetu i pripremu za renovacije stanova ili poslovnih prostora.",
-      },
+      { question: "Mogu li pronaci elektricara za hitne intervencije?", answer: "Da. Preporuka je pregledati one s istaknutim telefonom i radnim vremenom." },
+      { question: "Rade li i vece adaptacije?", answer: "Da. Mnogi elektricari rade i kompletne instalacije i pripremu za renovacije." },
     ],
   },
   "frizerski-saloni": {
     title: "Frizerski saloni",
-    intro:
-      "Pregled frizerskih salona u Splitu za muško i žensko šišanje, bojanje, tretmane i njegu kose. Usporedite ocjene, adrese i filtre kako biste brže pronašli salon koji vam odgovara.",
-    keywords: [
-      "frizer split",
-      "frizerski salon split",
-      "muški frizer split",
-      "ženski frizer split",
-    ],
+    intro: "Pregled frizerskih salona u Splitu za sisanje, bojanje, tretmane i njegu kose.",
+    keywords: ["frizer split", "frizerski salon split", "muski frizer split", "zenski frizer split"],
     faq: [
-      {
-        question: "Mogu li filtrirati muške i ženske frizerske salone?",
-        answer:
-          "Da. Ova kategorija ima dodatni filter kojim možete brže izdvojiti muške, ženske ili opće salone.",
-      },
-      {
-        question: "Kako pronaći frizerski salon u svom kvartu?",
-        answer:
-          "Pogledajte kartu i adresu svakog salona, zatim usporedite ocjene i broj recenzija prije poziva ili posjeta.",
-      },
+      { question: "Mogu li filtrirati muske i zenske salone?", answer: "Da. Ova kategorija ima dodatni filter za brze izdvajanje salona." },
+      { question: "Kako pronaci salon u svom kvartu?", answer: "Pogledajte kartu, adresu i ocjene prije poziva ili dolaska." },
     ],
   },
   hoteli: {
     title: "Hoteli",
-    intro:
-      "Pregled hotela u Splitu i okolici s osnovnim informacijama, lokacijom i kontaktima na jednom mjestu. Korisno za brzo pretraživanje smještaja prije direktnog kontakta ili rezervacije.",
-    keywords: ["hoteli split", "smještaj split", "hotel split centar", "hoteli dalmacija"],
+    intro: "Pregled hotela u Splitu i okolici s osnovnim informacijama, lokacijom i kontaktima na jednom mjestu.",
+    keywords: ["hoteli split", "smjestaj split", "hotel split centar", "hoteli dalmacija"],
     faq: [
-      {
-        question: "Jesu li dostupne informacije o lokaciji hotela?",
-        answer:
-          "Da. Svaki unos može sadržavati adresu, lokaciju na karti i poveznicu za otvaranje u mapama radi lakšeg snalaženja.",
-      },
-      {
-        question: "Mogu li usporediti više hotela na jednom mjestu?",
-        answer:
-          "Da. Popis omogućuje brz pregled više opcija prije odlaska na službenu stranicu hotela ili izravnog kontakta.",
-      },
+      { question: "Jesu li dostupne informacije o lokaciji?", answer: "Da. Svaki unos moze sadrzavati adresu i lokaciju na karti." },
+      { question: "Mogu li usporediti vise hotela na jednom mjestu?", answer: "Da. Popis omogucuje brz pregled vise opcija prije rezervacije ili kontakta." },
     ],
   },
   klima: {
     title: "Klima servisi",
-    intro:
-      "Pronađite klima servise u Splitu za montažu, punjenje plina, redovni servis i hitne popravke klima uređaja. Na jednom mjestu možete usporediti kontakt, ocjene i područje rada.",
-    keywords: [
-      "klima servis split",
-      "montaža klime split",
-      "servis klima uređaja split",
-      "popravak klime split",
-    ],
+    intro: "Pronadite klima servise u Splitu za montazu, punjenje plina, redovni servis i hitne popravke klima uredaja.",
+    keywords: ["klima servis split", "montaza klime split", "servis klima uredaja split", "popravak klime split"],
     faq: [
-      {
-        question: "Pomaže li stranica pronaći servis za montažu klime?",
-        answer:
-          "Da. U ovoj kategoriji možete pronaći izvođače za montažu, servis i održavanje klima uređaja u Splitu i okolici.",
-      },
-      {
-        question: "Kako odabrati klima servis?",
-        answer:
-          "Provjerite lokaciju, radno vrijeme, broj recenzija i specifične usluge poput punjenja plina, čišćenja ili popravka vanjske jedinice.",
-      },
+      { question: "Mogu li naci servis za montazu klime?", answer: "Da. Ovdje su objedinjeni izvodaci za montazu, servis i odrzavanje klima uredaja." },
+      { question: "Kako odabrati klima servis?", answer: "Provjerite lokaciju, radno vrijeme, broj recenzija i popis usluga." },
     ],
   },
   "prijevoz-i-selidbe": {
     title: "Prijevoz i selidbe",
-    intro:
-      "Usporedite lokalne prijevoznike, selidbe i kombi prijevoz u Splitu. Ovdje možete brzo pronaći kontakte za prijevoz stvari, manjih tereta, selidbi stanova i poslovnih prostora.",
-    keywords: [
-      "selidbe split",
-      "kombi prijevoz split",
-      "prijevoz stvari split",
-      "odvoz glomaznog otpada split",
-    ],
+    intro: "Usporedite lokalne prijevoznike, selidbe i kombi prijevoz u Splitu i okolici.",
+    keywords: ["selidbe split", "kombi prijevoz split", "prijevoz stvari split", "odvoz otpada split"],
     faq: [
-      {
-        question: "Jesu li na stranici samo selidbe ili i drugi oblici prijevoza?",
-        answer:
-          "Možete pronaći selidbe, kombi prijevoz, prijevoz robe i srodne usluge, ovisno o podacima pojedinog poslovanja.",
-      },
-      {
-        question: "Kako najbrže doći do ponude za selidbu?",
-        answer:
-          "Najbrže je odabrati nekoliko prijevoznika iz popisa i izravno ih kontaktirati telefonom ili preko web stranice.",
-      },
+      { question: "Jesu li ovdje samo selidbe?", answer: "Ne. Mogu se naci i kombi prijevoz, prijevoz robe i slicne usluge." },
+      { question: "Kako brzo doci do ponude?", answer: "Najbrze je odabrati nekoliko prijevoznika i javiti im se direktno telefonom." },
     ],
   },
   prozori: {
     title: "Prozori i stolarija",
-    intro:
-      "Popis tvrtki za prozore i stolariju u Splitu uključuje montažu, servis, zamjenu PVC i ALU stolarije te prilagođena rješenja za domove i poslovne prostore.",
-    keywords: [
-      "prozori split",
-      "pvc stolarija split",
-      "alu stolarija split",
-      "zamjena prozora split",
-    ],
+    intro: "Popis tvrtki za prozore i stolariju u Splitu ukljucuje montazu, servis i zamjenu PVC i ALU stolarije.",
+    keywords: ["prozori split", "pvc stolarija split", "alu stolarija split", "zamjena prozora split"],
     faq: [
-      {
-        question: "Mogu li ovdje pronaći izvođače za PVC i ALU stolariju?",
-        answer:
-          "Da. U ovoj kategoriji mogu se pronaći izvođači za različite vrste prozora, vrata i stolarije, uz kontakt podatke i lokaciju.",
-      },
-      {
-        question: "Jesu li dostupne usluge servisa postojećih prozora?",
-        answer:
-          "Da. Ovisno o poslovanju, uz montažu su često navedeni i servis, zamjena okova ili popravci postojećih sustava.",
-      },
+      { question: "Mogu li naci izvodace za PVC i ALU stolariju?", answer: "Da. Kategorija ukljucuje razlicite vrste prozora, vrata i stolarije." },
+      { question: "Jesu li dostupni i servisi postojecih prozora?", answer: "Da. Ovisno o poslovanju, dostupni su i servis, zamjena okova ili popravci." },
     ],
   },
   restorani: {
     title: "Restorani",
-    intro:
-      "Pretražite restorane u Splitu po lokaciji, kontaktu i osnovnim informacijama. Korisno za brz pregled ponude prije dolaska, rezervacije ili otvaranja u kartama.",
+    intro: "Pretrazite restorane u Splitu po lokaciji, kontaktu i osnovnim informacijama.",
     keywords: ["restorani split", "gdje jesti split", "konoba split", "restoran split centar"],
     faq: [
-      {
-        question: "Mogu li pronaći restorane po lokaciji?",
-        answer:
-          "Da. Popis uključuje adresu i kartu kako biste lakše pronašli restoran u centru Splita ili okolnim kvartovima.",
-      },
-      {
-        question: "Jesu li na raspolaganju i kontakti restorana?",
-        answer:
-          "Da. Ako su dostupni, vidjet ćete broj telefona i web stranicu za rezervacije ili dodatne informacije.",
-      },
+      { question: "Mogu li naci restorane po lokaciji?", answer: "Da. Popis ukljucuje adresu i kartu za laksi odabir." },
+      { question: "Jesu li dostupni i kontakti restorana?", answer: "Da. Ako su dostupni, vidjet cete telefon i web stranicu." },
     ],
   },
   slikari: {
-    title: "Soboslikari i ličioci",
-    intro:
-      "Pronađite soboslikare u Splitu za bojanje stanova, poslovnih prostora, fasada i adaptacije. Brzo usporedite kontakte, ocjene i lokacije izvođača.",
-    keywords: [
-      "soboslikar split",
-      "ličilac split",
-      "bojanje stanova split",
-      "farbanje zidova split",
-    ],
+    title: "Soboslikari i licioci",
+    intro: "Pronadite soboslikare u Splitu za bojanje stanova, poslovnih prostora, fasada i adaptacije.",
+    keywords: ["soboslikar split", "licilac split", "bojanje stanova split", "farbanje zidova split"],
     faq: [
-      {
-        question: "Pokrivaju li soboslikari i manje i veće radove?",
-        answer:
-          "Da. Ovisno o izvođaču, možete pronaći majstore za manje zahvate, adaptacije stanova, poslovne prostore i fasadne radove.",
-      },
-      {
-        question: "Kako odabrati soboslikara za adaptaciju stana?",
-        answer:
-          "Provjerite recenzije, lokaciju, fotografije i opise usluga, pa zatim usporedite nekoliko izvođača prije dogovora.",
-      },
+      { question: "Pokrivaju li i manje i vece radove?", answer: "Da. Ovisno o izvodacu, mogu se naci manji zahvati, adaptacije i fasadni radovi." },
+      { question: "Kako odabrati soboslikara?", answer: "Provjerite recenzije, lokaciju i opis usluga prije dogovora." },
     ],
   },
   stolari: {
     title: "Stolari",
-    intro:
-      "Usporedite stolare u Splitu za izradu namještaja po mjeri, kuhinja, ugradbenih ormara i drugih drvenih elemenata. Popis pomaže brzo pronaći lokalnog izvođača s odgovarajućom ponudom.",
-    keywords: [
-      "stolar split",
-      "namještaj po mjeri split",
-      "kuhinje po mjeri split",
-      "drveni namještaj split",
-    ],
+    intro: "Usporedite stolare u Splitu za izradu namjestaja po mjeri, kuhinja, ormara i drugih drvenih elemenata.",
+    keywords: ["stolar split", "namjestaj po mjeri split", "kuhinje po mjeri split", "drveni namjestaj split"],
     faq: [
-      {
-        question: "Jesu li dostupni stolari za namještaj po mjeri?",
-        answer:
-          "Da. U ovoj kategoriji možete pronaći izvođače za kuhinje, ormare, police i ostali namještaj po mjeri.",
-      },
-      {
-        question: "Mogu li pronaći stolara blizu sebe?",
-        answer:
-          "Da. Adresa, lokacija na karti i kontakti pomažu da brzo izdvojite stolara iz Splita ili okolice.",
-      },
+      { question: "Jesu li dostupni stolari za namjestaj po mjeri?", answer: "Da. U ovoj kategoriji mozete naci izvodace za kuhinje, ormare i police." },
+      { question: "Mogu li naci stolara blizu sebe?", answer: "Da. Adresa, lokacija i kontakti pomazu da brzo izdvojite pravu opciju." },
     ],
   },
   stomatolozi: {
-    title: "Stomatološke ordinacije",
-    intro:
-      "Pregled stomatoloških ordinacija u Splitu za redovne preglede, estetsku stomatologiju, implantate i hitne dentalne zahvate. Usporedite kontakte, lokacije i recenzije prije naručivanja.",
-    keywords: [
-      "stomatolog split",
-      "zubar split",
-      "dentalna ordinacija split",
-      "implantati split",
-    ],
+    title: "Stomatoloske ordinacije",
+    intro: "Pregled stomatoloskih ordinacija u Splitu za redovne preglede, estetske zahvate, implantate i hitne intervencije.",
+    keywords: ["stomatolog split", "zubar split", "dentalna ordinacija split", "implantati split"],
     faq: [
-      {
-        question: "Mogu li pronaći stomatologa prema lokaciji?",
-        answer:
-          "Da. Svaki unos može sadržavati adresu i kartu, što olakšava izbor ordinacije blizu kuće, posla ili centra Splita.",
-      },
-      {
-        question: "Jesu li navedene i estetske dentalne usluge?",
-        answer:
-          "Ovisno o ordinaciji, uz osnovne podatke mogu biti navedene i usluge poput izbjeljivanja, implantologije ili protetike.",
-      },
+      { question: "Mogu li naci stomatologa prema lokaciji?", answer: "Da. Svaki unos moze sadrzavati adresu i kartu za laksi odabir ordinacije." },
+      { question: "Jesu li navedene i estetske dentalne usluge?", answer: "Ovisno o ordinaciji, mogu biti navedeni implantati, protetika i slicne usluge." },
     ],
   },
   vodoinstalateri: {
     title: "Vodoinstalateri",
-    intro:
-      "Pronađite vodoinstalatere u Splitu za hitne intervencije, odštopavanje odvoda, zamjenu sanitarija i adaptacije kupaonica. Popis je prilagođen brzom pronalasku dostupnog majstora u vašoj blizini.",
-    keywords: [
-      "vodoinstalater split",
-      "odštopavanje odvoda split",
-      "hitni vodoinstalater split",
-      "adaptacija kupaonice split",
-    ],
+    intro: "Pronadite vodoinstalatere u Splitu za hitne intervencije, odstopavanje odvoda, zamjenu sanitarija i adaptacije kupaonica.",
+    keywords: ["vodoinstalater split", "odstopavanje odvoda split", "hitni vodoinstalater split", "adaptacija kupaonice split"],
     faq: [
-      {
-        question: "Mogu li pronaći vodoinstalatera za hitnu intervenciju?",
-        answer:
-          "Da. Za hitne situacije korisno je otvoriti ovu kategoriju, provjeriti telefone i odmah kontaktirati nekoliko najbližih izvođača.",
-      },
-      {
-        question: "Jesu li obuhvaćene i veće adaptacije kupaonica?",
-        answer:
-          "Da. Uz manje popravke često su dostupni i izvođači za zamjenu instalacija, sanitarija i kompletnu adaptaciju kupaonica.",
-      },
+      { question: "Mogu li naci vodoinstalatera za hitnu intervenciju?", answer: "Da. Otvorite kategoriju, provjerite telefone i javite se najblizim opcijama." },
+      { question: "Jesu li obuhvacene i vece adaptacije?", answer: "Da. Uz manje popravke cesto su dostupni i radovi na zamjeni instalacija i sanitarija." },
     ],
   },
   vrtlari: {
-    title: "Vrtlari i održavanje okućnice",
-    intro:
-      "Popis vrtlara u Splitu za uređenje okućnice, šišanje živice, navodnjavanje i redovno održavanje zelenih površina. Usporedite kontakte i lokacije za brži dogovor radova.",
-    keywords: ["vrtlar split", "uređenje okućnice split", "održavanje vrta split", "navodnjavanje split"],
+    title: "Vrtlari i odrzavanje okucnice",
+    intro: "Popis vrtlara u Splitu za uredenje okucnice, sisanje zivice, navodnjavanje i redovno odrzavanje zelenih povrsina.",
+    keywords: ["vrtlar split", "uredenje okucnice split", "odrzavanje vrta split", "navodnjavanje split"],
     faq: [
-      {
-        question: "Mogu li pronaći vrtlara za redovno održavanje?",
-        answer:
-          "Da. Ova kategorija uključuje i povremene i redovne usluge održavanja vrtova, dvorišta i zelenih površina.",
-      },
-      {
-        question: "Jesu li dostupne i usluge navodnjavanja?",
-        answer:
-          "Kod pojedinih izvođača dostupni su i sustavi navodnjavanja, sezonska priprema vrta i slični radovi.",
-      },
+      { question: "Mogu li naci vrtlara za redovno odrzavanje?", answer: "Da. Ova kategorija ukljucuje i povremene i redovne usluge odrzavanja vrtova i dvorista." },
+      { question: "Jesu li dostupne i usluge navodnjavanja?", answer: "Kod pojedinih izvodaca dostupni su i sustavi navodnjavanja i sezonska priprema vrta." },
     ],
   },
   vulkanizeri: {
     title: "Vulkanizeri",
-    intro:
-      "Pronađite vulkanizere u Splitu za zamjenu guma, balansiranje, popravak pneumatika i sezonsko skladištenje. Na jednom mjestu možete usporediti lokaciju, telefon i ocjene servisa.",
-    keywords: [
-      "vulkanizer split",
-      "zamjena guma split",
-      "balansiranje guma split",
-      "servis guma split",
-    ],
+    intro: "Pronadite vulkanizere u Splitu za zamjenu guma, balansiranje, popravak pneumatika i sezonsko skladistenje.",
+    keywords: ["vulkanizer split", "zamjena guma split", "balansiranje guma split", "servis guma split"],
     faq: [
-      {
-        question: "Kako pronaći vulkanizera blizu mene u Splitu?",
-        answer:
-          "Otvorite ovu kategoriju, pregledajte lokacije na karti i usporedite telefone servisa kako biste brzo kontaktirali najbližu opciju.",
-      },
-      {
-        question: "Jesu li uvrštene i usluge popravka guma?",
-        answer:
-          "Da. U ovoj kategoriji se često nalaze servisi za zamjenu, balansiranje, krpanje i srodne usluge vezane uz pneumatike.",
-      },
+      { question: "Kako pronaci vulkanizera blizu sebe?", answer: "Pogledajte lokacije na karti i usporedite telefone servisa prije kontakta." },
+      { question: "Jesu li ukljucene i usluge popravka guma?", answer: "Da. U ovoj kategoriji cesto su dostupni i popravci, krpanje i slicne usluge." },
     ],
   },
   zdravstvo: {
     title: "Zdravstvene usluge",
-    intro:
-      "Pretražite zdravstvene usluge u Splitu na jednom mjestu, od specijalističkih ordinacija do privatnih pružatelja različitih medicinskih usluga. Usporedite lokaciju i osnovne informacije prije kontakta.",
+    intro: "Pretrazite zdravstvene usluge u Splitu, od ordinacija do privatnih pruzatelja razlicitih medicinskih usluga.",
     keywords: ["zdravstvo split", "privatna ordinacija split", "medicinske usluge split", "ambulanta split"],
     faq: [
-      {
-        question: "Koje vrste zdravstvenih usluga mogu pronaći?",
-        answer:
-          "To ovisi o podacima u bazi, ali kategorija može uključivati različite ordinacije, ambulante i specijalističke usluge na području Splita i okolice.",
-      },
-      {
-        question: "Jesu li dostupni kontakti i adrese?",
-        answer:
-          "Da. Kada su dostupni u bazi, prikazani su telefon, web stranica, lokacija i osnovne informacije o poslovanju.",
-      },
+      { question: "Koje vrste usluga mogu naci?", answer: "To ovisi o podacima u bazi, ali kategorija moze ukljucivati razlicite ordinacije i ambulante." },
+      { question: "Jesu li dostupni kontakti i adrese?", answer: "Da. Kada su dostupni u bazi, prikazani su telefon, web i lokacija." },
     ],
   },
   zidari: {
-    title: "Zidari i građevinski radovi",
-    intro:
-      "Pregled zidara u Splitu za grube radove, adaptacije, zidanje i manje građevinske zahvate. Popis pomaže brzo doći do kontakata i usporediti izvođače po lokaciji i dojmu korisnika.",
-    keywords: [
-      "zidar split",
-      "građevinski radovi split",
-      "adaptacija stana split",
-      "majstor za zidanje split",
-    ],
+    title: "Zidari i gradevinski radovi",
+    intro: "Pregled zidara u Splitu za grube radove, adaptacije, zidanje i manje gradevinske zahvate.",
+    keywords: ["zidar split", "gradevinski radovi split", "adaptacija stana split", "majstor za zidanje split"],
     faq: [
-      {
-        question: "Jesu li dostupni izvođači za manje i veće građevinske radove?",
-        answer:
-          "Da. U ovoj kategoriji mogu se pronaći izvođači za zidanje, pregradne zidove, adaptacije i druge građevinske zahvate.",
-      },
-      {
-        question: "Kako odabrati zidara za adaptaciju?",
-        answer:
-          "Preporuka je usporediti ocjene, lokaciju, opise usluga i po potrebi kontaktirati više izvođača radi ponude.",
-      },
+      { question: "Jesu li dostupni izvodaci za manje i vece radove?", answer: "Da. Ovdje se mogu naci izvodaci za zidanje, adaptacije i slicne gradevinske zahvate." },
+      { question: "Kako odabrati zidara za adaptaciju?", answer: "Usporedite ocjene, lokaciju i opis usluga prije trazenja ponude." },
     ],
   },
 };
@@ -449,45 +231,33 @@ const CATEGORY_CONTENT: Record<string, CategoryPageCopy> = {
 const STATIC_ROUTE_CONTENT: Record<string, { title: string; description: string; keywords: string[] }> = {
   "/": {
     title: "Split Usluge | Lokalni imenik obrta i usluga u Splitu",
-    description:
-      "Pronađite provjerene obrte, majstore i lokalne usluge u Splitu, Solinu, Kaštelima, Podstrani, Dugopolju i Omišu. Kategorije, karta i kontakti na jednom mjestu.",
-    keywords: [
-      "split usluge",
-      "obrti split",
-      "lokalne usluge split",
-      "majstori split",
-      "imenik obrta split",
-    ],
+    description: "Pronadite provjerene obrte, majstore i lokalne usluge u Splitu, Solinu, Kastelima, Podstrani, Dugopolju i Omisu.",
+    keywords: ["split usluge", "obrti split", "lokalne usluge split", "majstori split", "imenik obrta split"],
   },
   "/mapa": {
     title: "Mapa lokalnih usluga u Splitu | Split Usluge",
-    description:
-      "Pregledajte lokalne usluge i obrte na karti Splita i okolice. Brže pronađite najbliži servis, salon ili majstora prema lokaciji.",
+    description: "Pregledajte lokalne usluge i obrte na karti Splita i okolice i brze pronadite najblizu opciju.",
     keywords: ["mapa usluga split", "lokalne usluge karta", "obrti split mapa"],
   },
   [ALL_BUSINESSES_PATH]: {
     title: "Svi obrti i lokalne usluge u Splitu | Split Usluge",
-    description:
-      "Popis svih dostupnih obrta i lokalnih usluga u Splitu i okolici. Usporedite kontakte, lokacije i kategorije na jednoj stranici.",
+    description: "Popis svih dostupnih obrta i lokalnih usluga u Splitu i okolici na jednoj stranici.",
     keywords: ["svi obrti split", "sve usluge split", "imenik obrta split"],
   },
   "/registracija": {
     title: "Registracija obrta i poslovanja | Split Usluge",
-    description:
-      "Dodajte svoj obrt ili poslovanje u lokalni imenik Split Usluge i povećajte vidljivost u Splitu i okolici.",
-    keywords: ["registracija obrta split", "dodaj poslovanje split", "oglašavanje obrta split"],
+    description: "Dodajte svoj obrt ili poslovanje u lokalni imenik Split Usluge i povecajte vidljivost u Splitu i okolici.",
+    keywords: ["registracija obrta split", "dodaj poslovanje split", "oglasavanje obrta split"],
   },
   "/o-nama": {
     title: "O nama | Split Usluge",
-    description:
-      "Saznajte kako Split Usluge pomaže građanima i turistima da lakše pronađu pouzdane lokalne usluge u Splitu i okolici.",
+    description: "Saznajte kako Split Usluge pomaze gradanima i turistima da lakse pronadu lokalne usluge u Splitu i okolici.",
     keywords: ["o nama split usluge", "lokalni imenik split"],
   },
   "/uvjeti": {
-    title: "Uvjeti korištenja | Split Usluge",
-    description:
-      "Uvjeti korištenja i osnovne informacije o pravilima korištenja platforme Split Usluge.",
-    keywords: ["uvjeti korištenja split usluge"],
+    title: "Uvjeti koristenja | Split Usluge",
+    description: "Uvjeti koristenja i osnovne informacije o pravilima koristenja platforme Split Usluge.",
+    keywords: ["uvjeti koristenja split usluge"],
   },
 };
 
@@ -506,8 +276,7 @@ function normalizeKnownPath(pathname: string): string {
 
   if (pathname.startsWith("/usluga/")) {
     const slug = pathname.replace("/usluga/", "");
-    const resolvedSlug = resolveCategorySlug(slug);
-    return `/usluga/${resolvedSlug}`;
+    return `/usluga/${resolveCategorySlug(slug)}`;
   }
 
   return pathname;
@@ -515,9 +284,7 @@ function normalizeKnownPath(pathname: string): string {
 
 function normalizePath(pathname: string): string {
   try {
-    const url = pathname.startsWith("http")
-      ? new URL(pathname)
-      : new URL(pathname, DEFAULT_SITE_URL);
+    const url = pathname.startsWith("http") ? new URL(pathname) : new URL(pathname, DEFAULT_SITE_URL);
     const normalized = url.pathname.replace(/\/+$/, "");
     return normalizeKnownPath(normalized === "" ? "/" : normalized);
   } catch {
@@ -550,29 +317,18 @@ export function getCategoryCopy(slug: string, fallbackName?: string | null): Cat
   const name = fallbackName || toTitleCase(slug);
   return {
     title: name,
-    intro: `${name} u Splitu i okolici na jednom mjestu. Usporedite lokaciju, kontakt podatke i dostupne informacije prije nego što odaberete poslovanje koje vam najviše odgovara.`,
-    keywords: [
-      `${name.toLowerCase()} split`,
-      `${name.toLowerCase()} split i okolica`,
-      `lokalne usluge ${name.toLowerCase()} split`,
-    ],
+    intro: `${name} u Splitu i okolici na jednom mjestu. Usporedite lokaciju, kontakt podatke i dostupne informacije prije odabira.`,
+    keywords: [`${name.toLowerCase()} split`, `${name.toLowerCase()} split i okolica`, `lokalne usluge ${name.toLowerCase()} split`],
     faq: [
-      {
-        question: `Kako odabrati ${name.toLowerCase()} u Splitu?`,
-        answer:
-          "Usporedite lokaciju, dostupne kontakte, ocjene i dodatne informacije na stranici kategorije kako biste lakše suzili izbor.",
-      },
-      {
-        question: `Mogu li pronaći ${name.toLowerCase()} blizu sebe?`,
-        answer:
-          "Da. Popis i karta pomažu da brzo izdvojite poslovanja u Splitu ili okolnim mjestima koja su vam najbliža.",
-      },
+      { question: `Kako odabrati ${name.toLowerCase()} u Splitu?`, answer: "Usporedite lokaciju, kontakte, ocjene i dodatne informacije prije odluke." },
+      { question: `Mogu li pronaci ${name.toLowerCase()} blizu sebe?`, answer: "Da. Popis i karta pomazu da brzo izdvojite poslovanja u vasoj blizini." },
     ],
   };
 }
 
 function buildBreadcrumbs(pathname: string, categoryTitle?: string, businessTitle?: string): BreadcrumbItem[] {
   const normalized = normalizePath(pathname);
+
   if (normalized === "/") {
     return [{ name: "Naslovnica", path: "/" }];
   }
@@ -646,17 +402,7 @@ export function buildBaseStructuredData(siteUrl: string) {
   ];
 }
 
-export function buildSeoPayload({
-  title,
-  description,
-  keywords,
-  pathname,
-  siteUrl,
-  ogType = "website",
-  robots = "index, follow",
-  structuredData = [],
-  ogImagePath = DEFAULT_OG_IMAGE,
-}: SeoBuilderInput): SeoPayload {
+export function buildSeoPayload({ title, description, keywords, pathname, siteUrl, ogType = "website", robots = "index, follow", structuredData = [], ogImagePath = DEFAULT_OG_IMAGE }: SeoBuilderInput): SeoPayload {
   const baseUrl = getBaseUrl(siteUrl);
   const normalized = normalizePath(pathname);
   const canonicalPath = normalized === "/" ? "" : normalized;
@@ -695,12 +441,12 @@ export function getSeoForPath(pathname: string, siteUrl?: string): SeoPayload {
     const category = getCategoryCopy(slug);
     const breadcrumbs = buildBreadcrumbs(normalized, category.title);
     const title = `${category.title} u Splitu | ${DEFAULT_SITE_NAME}`;
-    const description = `${category.intro} Pokrivamo područje: ${SERVICE_AREAS.join(", ")}.`;
+    const description = `${category.intro} Pokrivamo podrucje: ${SERVICE_AREAS.join(", ")}.`;
 
     return {
       title,
       description,
-      keywords: [...category.keywords, "Split usluge", "lokalne usluge Split"].join(", "),
+      keywords: [...category.keywords, "split usluge", "lokalne usluge split"].join(", "),
       canonicalUrl: `${baseUrl}${normalized}`,
       ogTitle: title,
       ogDescription: description,
@@ -751,12 +497,7 @@ export function getSeoForPath(pathname: string, siteUrl?: string): SeoPayload {
     return {
       title,
       description,
-      keywords: [
-        `${businessName.toLowerCase()} split`,
-        `kontakt ${businessName.toLowerCase()}`,
-        "lokalne usluge split",
-        "split usluge",
-      ].join(", "),
+      keywords: [`${businessName.toLowerCase()} split`, `kontakt ${businessName.toLowerCase()}`, "lokalne usluge split", "split usluge"].join(", "),
       canonicalUrl: `${baseUrl}${normalized}`,
       ogTitle: title,
       ogDescription: description,
@@ -819,7 +560,6 @@ export function getSeoForPath(pathname: string, siteUrl?: string): SeoPayload {
 
 export function buildRobotsTxt(siteUrl?: string): string {
   const baseUrl = getBaseUrl(siteUrl);
-
   return [
     "User-agent: *",
     "Allow: /",
@@ -835,11 +575,7 @@ export function buildRobotsTxt(siteUrl?: string): string {
   ].join("\n");
 }
 
-export function buildSitemapXml(
-  categorySlugs: string[],
-  dynamicEntries: SitemapEntry[] = [],
-  siteUrl?: string
-): string {
+export function buildSitemapXml(categorySlugs: string[], dynamicEntries: SitemapEntry[] = [], siteUrl?: string): string {
   const baseUrl = getBaseUrl(siteUrl);
   const today = new Date().toISOString().slice(0, 10);
   const staticRoutes: SitemapEntry[] = [
@@ -851,16 +587,10 @@ export function buildSitemapXml(
     { path: "/uvjeti", changefreq: "monthly", priority: "0.4" },
   ];
 
-  const categoryRoutes: SitemapEntry[] = Array.from(
-    new Set(categorySlugs.map(resolveCategorySlug))
-  )
+  const categoryRoutes: SitemapEntry[] = Array.from(new Set(categorySlugs.map(resolveCategorySlug)))
     .filter(Boolean)
     .sort()
-    .map(slug => ({
-      path: `/usluga/${slug}`,
-      changefreq: "weekly",
-      priority: "0.8",
-    }));
+    .map(slug => ({ path: `/usluga/${slug}`, changefreq: "weekly", priority: "0.8" }));
 
   const urls = [...staticRoutes, ...categoryRoutes, ...dynamicEntries]
     .map(route => [
