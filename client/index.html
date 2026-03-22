@@ -1,0 +1,47 @@
+﻿<!doctype html>
+<html lang="hr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>%SEO_TITLE%</title>
+    <meta name="description" content="%SEO_DESCRIPTION%" />
+    <meta name="keywords" content="%SEO_KEYWORDS%" />
+    <meta name="author" content="Split Usluge" />
+    <meta name="robots" content="%SEO_ROBOTS%" />
+    <meta name="language" content="Croatian" />
+    <meta name="revisit-after" content="7 days" />
+
+    <meta property="og:type" content="%SEO_OG_TYPE%" />
+    <meta property="og:url" content="%SEO_URL%" />
+    <meta property="og:title" content="%SEO_OG_TITLE%" />
+    <meta property="og:description" content="%SEO_OG_DESCRIPTION%" />
+    <meta property="og:image" content="%SEO_OG_IMAGE%" />
+    <meta property="og:site_name" content="%SEO_SITE_NAME%" />
+    <meta property="og:locale" content="%SEO_LOCALE%" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="%SEO_URL%" />
+    <meta name="twitter:title" content="%SEO_TWITTER_TITLE%" />
+    <meta name="twitter:description" content="%SEO_TWITTER_DESCRIPTION%" />
+    <meta name="twitter:image" content="%SEO_OG_IMAGE%" />
+
+    <link rel="canonical" href="%SEO_URL%" />
+
+    <script id="seo-structured-data" type="application/ld+json">
+      %SEO_SCHEMA%
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script
+      defer
+      src="%VITE_ANALYTICS_ENDPOINT%/umami"
+      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
+  </body>
+</html>

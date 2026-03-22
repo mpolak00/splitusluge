@@ -1,0 +1,1 @@
+ALTER TABLE `categories` ADD `imageUrl` varchar(1500);
