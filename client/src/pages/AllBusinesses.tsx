@@ -207,56 +207,79 @@ export default function AllBusinesses() {
                   )}
                 </div>
 
-                <CardContent className="space-y-4 p-5">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <Link href={getBusinessPath(business)}>
-                        <h2 className="text-xl font-semibold hover:text-primary">{business.name}</h2>
-                      </Link>
-                      {business.address && (
-                        <p className="mt-2 flex items-start gap-2 text-sm leading-6 text-muted-foreground">
-                          <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
-                          <span>{business.address}</span>
-                        </p>
-                      )}
-                    </div>
-                    {getRatingValue(business) > 0 && (
-                      <div className="inline-flex items-center gap-1 rounded-full bg-yellow-400/15 px-2.5 py-1 text-xs font-semibold text-yellow-700">
-                        <Star className="h-3.5 w-3.5 fill-current" />
-                        {getRatingValue(business).toFixed(1)}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="grid gap-2 sm:grid-cols-2">
-                    <Button asChild size="sm">
-                      <Link href={getBusinessPath(business)}>Otvori profil</Link>
-                    </Button>
-                    <Button size="sm" variant="outline" onClick={() => openGoogleMaps(business.name, business.address)}>
-                      <MapPin className="mr-2 h-4 w-4" />
-                      Mapa
-                    </Button>
+                <CardContent className="space-y-5 p-5">
+                  <div className="grid grid-cols-2 gap-3">
                     {business.phone ? (
-                      <Button asChild size="sm" variant="outline">
+                      <Button
+                        asChild
+                        size="lg"
+                        className="h-12 rounded-xl bg-emerald-600 text-sm font-extrabold uppercase tracking-wide text-white shadow-lg shadow-emerald-600/30 hover:bg-emerald-700"
+                      >
                         <a href={`tel:${business.phone}`}>
-                          <Phone className="mr-2 h-4 w-4" />
+                          <Phone className="h-5 w-5" />
                           Pozovi
                         </a>
                       </Button>
                     ) : (
-                      <Button size="sm" variant="outline" disabled>
+                      <Button
+                        size="lg"
+                        disabled
+                        className="h-12 rounded-xl text-sm font-bold uppercase tracking-wide"
+                      >
                         Bez telefona
                       </Button>
                     )}
+
+                    <Button
+                      size="lg"
+                      onClick={() => openGoogleMaps(business.name, business.address)}
+                      className="h-12 rounded-xl bg-red-600 text-sm font-extrabold uppercase tracking-wide text-white shadow-lg shadow-red-600/30 hover:bg-red-700"
+                    >
+                      <MapPin className="h-5 w-5" />
+                      Mapa
+                    </Button>
+                  </div>
+
+                  <div className="space-y-3">
+                    <Link href={getBusinessPath(business)}>
+                      <h2 className="text-xl font-semibold leading-tight hover:text-primary">{business.name}</h2>
+                    </Link>
+
+                    {business.address && (
+                      <p className="flex items-start gap-2 text-sm leading-6 text-muted-foreground">
+                        <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
+                        <span>{business.address}</span>
+                      </p>
+                    )}
+
+                    <div className="flex flex-wrap items-center gap-3 text-sm">
+                      {getRatingValue(business) > 0 ? (
+                        <div className="inline-flex items-center gap-1 rounded-full bg-yellow-400/15 px-3 py-1.5 font-semibold text-yellow-700">
+                          <Star className="h-4 w-4 fill-current" />
+                          {getRatingValue(business).toFixed(1)} recenzije
+                        </div>
+                      ) : (
+                        <div className="inline-flex items-center gap-1 rounded-full bg-muted px-3 py-1.5 font-medium text-muted-foreground">
+                          <Star className="h-4 w-4" />
+                          Nema recenzija
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    <Button asChild variant="outline" className="rounded-xl">
+                      <Link href={getBusinessPath(business)}>Otvori profil</Link>
+                    </Button>
                     {business.website ? (
-                      <Button asChild size="sm" variant="outline">
+                      <Button asChild variant="outline" className="rounded-xl">
                         <a href={business.website} target="_blank" rel="noopener noreferrer">
                           <Globe className="mr-2 h-4 w-4" />
                           Web
                         </a>
                       </Button>
                     ) : (
-                      <Button size="sm" variant="outline" disabled>
+                      <Button variant="outline" className="rounded-xl" disabled>
                         Bez weba
                       </Button>
                     )}
