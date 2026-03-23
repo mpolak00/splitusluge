@@ -4,7 +4,7 @@ import process from "node:process";
 import { businesses } from "../drizzle/schema.ts";
 import { getAllCategories, getDb, upsertBusiness } from "../server/db.ts";
 
-const DEFAULT_CSV_PATH = "C:/Users/Administrator/Desktop/businesses_20260129_022602.csv";
+const DEFAULT_CSV_PATH = path.resolve(process.cwd(), "data/imports/businesses_20260129_022602.csv");
 
 type CsvRow = Record<string, string>;
 
