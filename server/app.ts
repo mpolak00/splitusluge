@@ -1,11 +1,11 @@
 import express, { type Express } from "express";
 import type { Server } from "http";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { appRouter } from "./routers";
-import { createContext } from "./_core/context";
-import { registerOAuthRoutes } from "./_core/oauth";
-import { registerSeoRoutes } from "./_core/seo";
-import { serveStatic, setupVite } from "./_core/vite";
+import { appRouter } from "./routers.js";
+import { createContext } from "./_core/context.js";
+import { registerOAuthRoutes } from "./_core/oauth.js";
+import { registerSeoRoutes } from "./_core/seo.js";
+import { serveStatic, setupVite } from "./_core/vite.js";
 
 type AppMode = "development" | "production";
 

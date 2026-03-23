@@ -1,7 +1,7 @@
 import type { Express, Request } from "express";
-import { buildRobotsTxt, buildSitemapXml, getFallbackCategorySlugs, getSeoForPath, serializeStructuredData } from "../../shared/seo";
-import { getBusinessPath } from "../../shared/paths";
-import { getAllCategories, getBusinessesForSitemap } from "../db";
+import { buildRobotsTxt, buildSitemapXml, getFallbackCategorySlugs, getSeoForPath, serializeStructuredData } from "../../shared/seo.js";
+import { getBusinessPath } from "../../shared/paths.js";
+import { getAllCategories, getBusinessesForSitemap } from "../db.js";
 
 const DEFAULT_SITE_URL = "https://split-usluge.com";
 

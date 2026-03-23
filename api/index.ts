@@ -1,13 +1,9 @@
-import "dotenv/config";
-import { createApp } from "../server/app";
+// @ts-ignore This file is generated during the build step.
+import vercelHandler from "../dist/api/vercel.cjs";
 
-let appPromise: ReturnType<typeof createApp> | null = null;
+const handler =
+  typeof vercelHandler === "function"
+    ? vercelHandler
+    : (vercelHandler as { default?: unknown }).default;
 
-export default async function handler(req: any, res: any) {
-  if (!appPromise) {
-    appPromise = createApp({ mode: "production" });
-  }
-
-  const app = await appPromise;
-  return app(req, res);
-}
+export default handler;

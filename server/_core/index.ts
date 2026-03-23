@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { createServer } from "http";
 import net from "net";
-import { createApp } from "../app";
+import { createApp } from "../app.js";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {

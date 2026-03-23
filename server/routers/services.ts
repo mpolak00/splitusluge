@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { publicProcedure, router } from "../_core/trpc";
+import { publicProcedure, router } from "../_core/trpc.js";
 import {
   getAllBusinesses,
   getAllCategories,
@@ -8,7 +8,7 @@ import {
   getBusinessesByCity,
   getCategoryBySlug,
   searchBusinesses,
-} from "../db";
+} from "../db.js";
 
 export const servicesRouter = router({
   getAllCategories: publicProcedure.query(async () => {

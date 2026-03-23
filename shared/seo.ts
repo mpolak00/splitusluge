@@ -1,4 +1,4 @@
-﻿import { ALL_BUSINESSES_PATH, LEGACY_ALL_BUSINESSES_PATH } from "./paths";
+import { ALL_BUSINESSES_PATH, LEGACY_ALL_BUSINESSES_PATH } from "./paths.js";
 
 export type BreadcrumbItem = {
   name: string;
