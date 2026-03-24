@@ -11,10 +11,21 @@ import {
   InsertCategory,
 } from "../drizzle/schema.js";
 import { ENV } from "./_core/env.js";
+import {
+  getStaticBusinesses,
+  getStaticCategories,
+  getStaticBusinessById,
+  getStaticCategoryBySlug,
+  searchStaticBusinesses,
+} from "./static-fallback.js";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
 const ACTIVE_BUSINESS_CONDITION = eq(businesses.isActive, 1);
+
+function hasDatabase(): boolean {
+  return Boolean(process.env.DATABASE_URL);
+}
 
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
@@ -103,18 +114,26 @@ export async function getUserByOpenId(openId: string) {
 }
 
 export async function getAllCategories() {
+  if (!hasDatabase()) {
+    return getStaticCategories();
+  }
+
   const db = await getDb();
   if (!db) {
-    return [];
+    return getStaticCategories();
   }
 
   return await db.select().from(categories);
 }
 
 export async function getCategoryBySlug(slug: string) {
+  if (!hasDatabase()) {
+    return getStaticCategoryBySlug(slug);
+  }
+
   const db = await getDb();
   if (!db) {
-    return undefined;
+    return getStaticCategoryBySlug(slug);
   }
 
   const result = await db.select().from(categories).where(eq(categories.slug, slug)).limit(1);
@@ -137,9 +156,13 @@ export async function upsertCategory(category: InsertCategory) {
 }
 
 export async function getBusinessesByCategory(categoryId: number, limit = 50) {
+  if (!hasDatabase()) {
+    return getStaticBusinesses({ categoryId, limit });
+  }
+
   const db = await getDb();
   if (!db) {
-    return [];
+    return getStaticBusinesses({ categoryId, limit });
   }
 
   return await db
@@ -150,6 +173,12 @@ export async function getBusinessesByCategory(categoryId: number, limit = 50) {
 }
 
 export async function getBusinessesByCity(city: string, limit = 100) {
+  if (!hasDatabase()) {
+    return getStaticBusinesses({ limit }).filter(
+      (b: any) => b.city?.toLowerCase() === city.toLowerCase()
+    );
+  }
+
   const db = await getDb();
   if (!db) {
     return [];
@@ -163,9 +192,13 @@ export async function getBusinessesByCity(city: string, limit = 100) {
 }
 
 export async function searchBusinesses(query: string, limit = 20) {
+  if (!hasDatabase()) {
+    return searchStaticBusinesses(query, limit);
+  }
+
   const db = await getDb();
   if (!db) {
-    return [];
+    return searchStaticBusinesses(query, limit);
   }
 
   return await db
@@ -190,9 +223,21 @@ export async function getAllBusinesses(options?: {
   offset?: number;
   includeInactive?: boolean;
 }) {
+  if (!hasDatabase()) {
+    return getStaticBusinesses({
+      categoryId: options?.categoryId,
+      limit: options?.limit ?? 20,
+      offset: options?.offset ?? 0,
+    });
+  }
+
   const db = await getDb();
   if (!db) {
-    return [];
+    return getStaticBusinesses({
+      categoryId: options?.categoryId,
+      limit: options?.limit ?? 20,
+      offset: options?.offset ?? 0,
+    });
   }
 
   const limit = options?.limit ?? 20;
@@ -217,6 +262,14 @@ export async function getAllBusinesses(options?: {
 }
 
 export async function getBusinessesForSitemap() {
+  if (!hasDatabase()) {
+    return getStaticBusinesses({}).map((b: any) => ({
+      id: b.id,
+      name: b.name,
+      updatedAt: b.updatedAt || new Date().toISOString(),
+    }));
+  }
+
   const db = await getDb();
   if (!db) {
     return [];
@@ -259,9 +312,13 @@ export async function upsertBusiness(business: InsertBusiness) {
 }
 
 export async function getBusinessById(id: number, options?: { includeInactive?: boolean }) {
+  if (!hasDatabase()) {
+    return getStaticBusinessById(id);
+  }
+
   const db = await getDb();
   if (!db) {
-    return undefined;
+    return getStaticBusinessById(id);
   }
 
   const conditions = [eq(businesses.id, id)];

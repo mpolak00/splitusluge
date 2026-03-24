@@ -4,6 +4,7 @@ import { ALL_BUSINESSES_PATH } from "@shared/paths";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import { PromoBanner } from "@/components/PromoBanner";
 import SeoHead from "@/components/SeoHead";
 import { SeoProvider } from "@/contexts/SeoContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
@@ -17,7 +18,6 @@ import HomeNew from "@/pages/HomeNew";
 import NotFound from "@/pages/NotFound";
 import Promoviranje from "@/pages/Promoviranje";
 import Terms from "@/pages/Terms";
-import { PromoBanner } from "@/components/PromoBanner";
 
 function LegacyAllBusinessesRedirect() {
   const [, navigate] = useLocation();
@@ -37,11 +37,12 @@ function Router() {
       <Route path="/svi-obrci" component={LegacyAllBusinessesRedirect} />
       <Route path={ALL_BUSINESSES_PATH} component={AllBusinesses} />
       <Route path="/registracija" component={BusinessRegistration} />
+      <Route path="/promoviranje" component={Promoviranje} />
+      <Route path="/promocija" component={Promoviranje} />
       <Route path="/usluga/:slug" component={CategoryPage} />
       <Route path="/poslovanje/:id/:slug" component={BusinessDetailPage} />
       <Route path="/o-nama" component={About} />
       <Route path="/uvjeti" component={Terms} />
-      <Route path="/promoviranje" component={Promoviranje} />
       <Route component={NotFound} />
     </Switch>
   );
