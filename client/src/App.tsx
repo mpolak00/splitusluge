@@ -15,7 +15,9 @@ import BusinessRegistration from "@/pages/BusinessRegistration";
 import CategoryPage from "@/pages/CategoryPage";
 import HomeNew from "@/pages/HomeNew";
 import NotFound from "@/pages/NotFound";
+import Promoviranje from "@/pages/Promoviranje";
 import Terms from "@/pages/Terms";
+import { PromoBanner } from "@/components/PromoBanner";
 
 function LegacyAllBusinessesRedirect() {
   const [, navigate] = useLocation();
@@ -39,6 +41,7 @@ function Router() {
       <Route path="/poslovanje/:id/:slug" component={BusinessDetailPage} />
       <Route path="/o-nama" component={About} />
       <Route path="/uvjeti" component={Terms} />
+      <Route path="/promoviranje" component={Promoviranje} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -53,6 +56,7 @@ function App() {
             <SeoHead />
             <Toaster />
             <Router />
+            <PromoBanner />
           </TooltipProvider>
         </SeoProvider>
       </ThemeProvider>

@@ -108,7 +108,7 @@ export default function CategoryPage() {
 
     const title = `${categoryCopy.title} u Splitu | ${businesses.length} profila | Split Usluge`;
     const description = `${categoryCopy.intro} Trenutno prikazujemo ${businesses.length} profila. ${
-      topLocations.length > 0 ? `Najviae unosa pokriva: ${topLocations.join(", ")}.` : ""
+      topLocations.length > 0 ? `Najviše unosa pokriva: ${topLocations.join(", ")}.` : ""
     }`;
     const siteUrl = typeof window !== "undefined" ? window.location.origin : undefined;
     const pathname = `/usluga/${categoryQuery.data.slug}`;
@@ -214,7 +214,7 @@ export default function CategoryPage() {
                 <p className="mt-2 text-3xl font-bold">{businesses.length || "0"}</p>
               </div>
               <div className="rounded-2xl border border-white/12 bg-white/10 p-4">
-                <p className="text-sm text-white/70">Prosjena ocjena</p>
+                <p className="text-sm text-white/70">Prosječna ocjena</p>
                 <p className="mt-2 text-3xl font-bold">{averageRating > 0 ? averageRating.toFixed(1) : "-"}</p>
               </div>
               <div className="rounded-2xl border border-white/12 bg-white/10 p-4">
@@ -237,7 +237,7 @@ export default function CategoryPage() {
               <div className="p-6 pb-0">
                 <h2 className="text-2xl font-bold tracking-tight">Lokacije na karti</h2>
                 <p className="mt-2 text-muted-foreground">
-                  Pregledaj raspored poslovanja po Splitu i okolici prije nego ato krenea zvati.
+                  Pregledaj raspored poslovanja po Splitu i okolici prije nego što kreneš zvati.
                 </p>
               </div>
               <div className="mt-6 h-[380px] overflow-hidden rounded-b-3xl">
@@ -303,7 +303,7 @@ export default function CategoryPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="weighted">Preporueni</SelectItem>
+                    <SelectItem value="weighted">Preporučeni</SelectItem>
                     <SelectItem value="rating">Ocjena</SelectItem>
                     <SelectItem value="name">Naziv A-Z</SelectItem>
                   </SelectContent>
@@ -319,8 +319,8 @@ export default function CategoryPage() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">Svi saloni</SelectItem>
-                      <SelectItem value="muski">Muski</SelectItem>
-                      <SelectItem value="zenski">Zenski</SelectItem>
+                      <SelectItem value="muski">Muški</SelectItem>
+                      <SelectItem value="zenski">Ženski</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -462,9 +462,9 @@ export default function CategoryPage() {
         ) : (
           <Card className="border-dashed">
             <CardContent className="p-10 text-center">
-              <p className="text-lg font-medium">Nema pronaenih poslovanja u ovoj kategoriji.</p>
+              <p className="text-lg font-medium">Nema pronađenih poslovanja u ovoj kategoriji.</p>
               <p className="mt-2 text-muted-foreground">
-                Pokuaaj promijeniti filtre ili otvori ostale kategorije.
+                Pokušaj promijeniti filtre ili otvori ostale kategorije.
               </p>
             </CardContent>
           </Card>
@@ -480,15 +480,15 @@ export default function CategoryPage() {
               <p className="leading-8 text-muted-foreground">{categoryCopy.intro}</p>
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="rounded-2xl border border-border/70 bg-muted/30 p-4">
-                  <p className="font-semibold">Najcesce lokacije</p>
+                  <p className="font-semibold">Najčešće lokacije</p>
                   <p className="mt-2 text-sm leading-7 text-muted-foreground">
                     {topLocations.length > 0
                       ? topLocations.join(", ")
-                      : "Lokacije ce se prikazati cim kategorija dobije vise unosa s potpunim adresama."}
+                      : "Lokacije će se prikazati čim kategorija dobije više unosa s potpunim adresama."}
                   </p>
                 </div>
                 <div className="rounded-2xl border border-border/70 bg-muted/30 p-4">
-                  <p className="font-semibold">Sto usporediti prije poziva</p>
+                  <p className="font-semibold">Što usporediti prije poziva</p>
                   <p className="mt-2 text-sm leading-7 text-muted-foreground">
                     Ocjene, broj recenzija, blizinu, dostupnost telefona i weba te dodatne oznake poput hitne usluge,
                     specijalizacije ili radnog vremena.
@@ -509,13 +509,13 @@ export default function CategoryPage() {
           <div className="space-y-6">
             <Card className="border-border/70 bg-slate-950 text-white">
               <CardContent className="space-y-4 p-6">
-                <h2 className="text-2xl font-bold tracking-tight">Zelis da tvoj profil bude medju prvima?</h2>
+                <h2 className="text-2xl font-bold tracking-tight">Želiš da tvoj profil bude među prvima?</h2>
                 <p className="text-sm leading-7 text-white/75">
-                  Kad krenemo s prioritetnim pozicijama, najbolje optimizirani profili imat ce najvecu vidljivost
+                  Kad krenemo s prioritetnim pozicijama, najbolje optimizirani profili imat će najveću vidljivost
                   na organskim rezultatima i oglasnim landing stranicama.
                 </p>
                 <Button asChild className="w-full bg-orange-500 text-white hover:bg-orange-600">
-                  <Link href="/registracija">Dodaj poslovanje</Link>
+                  <Link href="/promoviranje">Pogledaj planove</Link>
                 </Button>
               </CardContent>
             </Card>

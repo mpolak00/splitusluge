@@ -5,17 +5,19 @@ import { businesses } from "../../drizzle/schema.js";
 import { notifyOwner } from "../_core/notification.js";
 import { eq } from "drizzle-orm";
 
+const ADMIN_TOKEN = process.env.ADMIN_SECRET_TOKEN || "";
+
 export const businessesRouter = router({
   registerBusiness: publicProcedure
     .input(
       z.object({
-        name: z.string().min(1, "Naziv je obavezan"),
-        email: z.string().email("Validan email je obavezan"),
-        phone: z.string().min(1, "Telefon je obavezan"),
+        name: z.string().min(1, "Naziv je obavezan").max(200),
+        email: z.string().email("Validan email je obavezan").max(200),
+        phone: z.string().min(1, "Telefon je obavezan").max(50),
         category: z.string().min(1, "Kategorija je obavezna"),
-        address: z.string().optional(),
-        website: z.string().optional(),
-        description: z.string().optional(),
+        address: z.string().max(300).optional(),
+        website: z.string().url("Nevažeći URL").max(500).optional().or(z.literal("")),
+        description: z.string().max(2000).optional(),
       })
     )
     .mutation(async ({ input }) => {
@@ -65,20 +67,26 @@ export const businessesRouter = router({
       }
     }),
 
-  getPendingBusinesses: publicProcedure.query(async () => {
-    try {
-      const db = await getDb();
-      if (!db) return [];
+  getPendingBusinesses: publicProcedure
+    .input(z.object({ adminToken: z.string() }))
+    .query(async ({ input }) => {
+      if (!ADMIN_TOKEN || input.adminToken !== ADMIN_TOKEN) {
+        throw new Error("Neovlašteni pristup");
+      }
 
-      const pending = await db
-        .select()
-        .from(businesses)
-        .where(eq(businesses.isActive, 0));
+      try {
+        const db = await getDb();
+        if (!db) return [];
 
-      return pending;
-    } catch (error) {
-      console.error("Error fetching pending businesses:", error);
-      return [];
-    }
-  }),
+        const pending = await db
+          .select()
+          .from(businesses)
+          .where(eq(businesses.isActive, 0));
+
+        return pending;
+      } catch (error) {
+        console.error("Error fetching pending businesses:", error);
+        return [];
+      }
+    }),
 });
