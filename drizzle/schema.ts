@@ -97,3 +97,20 @@ export const platformReviews = mysqlTable("platformReviews", {
 
 export type PlatformReview = typeof platformReviews.$inferSelect;
 export type InsertPlatformReview = typeof platformReviews.$inferInsert;
+
+// Contact submissions (promo interest + newsletter signups)
+export const contactSubmissions = mysqlTable("contactSubmissions", {
+  id: int("id").autoincrement().primaryKey(),
+  type: varchar("type", { length: 50 }).notNull(), // "promo_interest" | "newsletter"
+  name: varchar("name", { length: 255 }),
+  email: varchar("email", { length: 320 }).notNull(),
+  phone: varchar("phone", { length: 50 }),
+  businessName: varchar("businessName", { length: 255 }),
+  planInterest: varchar("planInterest", { length: 50 }), // "standard" | "premium" | null
+  message: text("message"),
+  status: varchar("status", { length: 50 }).default("new"), // "new" | "contacted" | "converted"
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ContactSubmission = typeof contactSubmissions.$inferSelect;
+export type InsertContactSubmission = typeof contactSubmissions.$inferInsert;

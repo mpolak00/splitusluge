@@ -4,6 +4,8 @@ import { ALL_BUSINESSES_PATH } from "@shared/paths";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
 import { PromoBanner } from "@/components/PromoBanner";
 import SeoHead from "@/components/SeoHead";
 import { SeoProvider } from "@/contexts/SeoContext";
@@ -56,7 +58,9 @@ function App() {
           <TooltipProvider>
             <SeoHead />
             <Toaster />
+            <Header />
             <Router />
+            <Footer />
             <PromoBanner />
           </TooltipProvider>
         </SeoProvider>

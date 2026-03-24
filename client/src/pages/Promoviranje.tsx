@@ -1,10 +1,15 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import { buildBaseStructuredData, buildBreadcrumbSchema, buildSeoPayload } from "@shared/seo";
-import { Check, ArrowLeft, Zap, Star, Crown, Phone, Mail } from "lucide-react";
+import { Check, ArrowLeft, Zap, Star, Crown, Phone, Mail, ShieldCheck, Users, BarChart3 } from "lucide-react";
 import { usePageSeo } from "@/hooks/usePageSeo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { trpc } from "@/lib/trpc";
+import { toast } from "sonner";
 
 const PLANS = [
   {
@@ -67,6 +72,120 @@ const PLANS = [
     href: null, // Stripe – aktivirat će se uskoro
   },
 ];
+
+function ContactFormSection() {
+  const [form, setForm] = useState({ name: "", email: "", phone: "", businessName: "", planInterest: "", message: "" });
+  const submit = trpc.contacts.submitPromoInterest.useMutation({
+    onSuccess: (data) => {
+      toast.success(data.message);
+      setForm({ name: "", email: "", phone: "", businessName: "", planInterest: "", message: "" });
+    },
+    onError: () => toast.error("Greška pri slanju. Pokušajte ponovo."),
+  });
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    submit.mutate(form);
+  }
+
+  return (
+    <section id="kontakt" className="border-t border-border py-16">
+      <div className="container mx-auto max-w-2xl px-4">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold md:text-3xl">Zainteresirani ste? Javite nam se!</h2>
+          <p className="mt-3 text-muted-foreground">
+            Ostavite kontakt i javit ćemo vam se unutar 24 sata s ponudom prilagođenom vašem biznisu.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">Ime i prezime *</label>
+              <Input
+                value={form.name}
+                onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                placeholder="Vaše ime"
+                className="h-12"
+                required
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">Email *</label>
+              <Input
+                type="email"
+                value={form.email}
+                onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                placeholder="vas@email.com"
+                className="h-12"
+                required
+              />
+            </div>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">Telefon</label>
+              <Input
+                type="tel"
+                value={form.phone}
+                onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                placeholder="+385 ..."
+                className="h-12"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">Naziv biznisa</label>
+              <Input
+                value={form.businessName}
+                onChange={e => setForm(f => ({ ...f, businessName: e.target.value }))}
+                placeholder="Vaš biznis"
+                className="h-12"
+              />
+            </div>
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium">Plan koji vas zanima</label>
+            <Select value={form.planInterest} onValueChange={v => setForm(f => ({ ...f, planInterest: v }))}>
+              <SelectTrigger className="h-12">
+                <SelectValue placeholder="Odaberite plan..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="standard">Standard (49 €/mj)</SelectItem>
+                <SelectItem value="premium">Premium (99 €/mj)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium">Poruka</label>
+            <Textarea
+              value={form.message}
+              onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
+              placeholder="Pitanja, posebni zahtjevi..."
+              rows={3}
+            />
+          </div>
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full h-13 text-base bg-orange-500 text-white hover:bg-orange-600"
+            disabled={submit.isPending}
+          >
+            {submit.isPending ? "Šaljem..." : "Pošalji upit"}
+          </Button>
+        </form>
+
+        <div className="mt-6 flex flex-col items-center gap-2 text-sm text-muted-foreground sm:flex-row sm:justify-center sm:gap-4">
+          <a href="mailto:info@split-usluge.com" className="flex items-center gap-1.5 hover:text-foreground">
+            <Mail className="h-3.5 w-3.5" /> info@split-usluge.com
+          </a>
+          <a href="tel:+385000000000" className="flex items-center gap-1.5 hover:text-foreground">
+            <Phone className="h-3.5 w-3.5" /> Kontaktirajte nas
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function Promoviranje() {
   const seoPayload = useMemo(() => {
@@ -193,23 +312,54 @@ export default function Promoviranje() {
                       <Link href={plan.href}>{plan.cta}</Link>
                     </Button>
                   ) : (
-                    <div className="space-y-2">
-                      <Button
-                        className="w-full cursor-not-allowed opacity-70"
-                        variant={plan.highlighted ? "default" : "outline"}
-                        disabled
-                      >
-                        {plan.cta} — uskoro
-                      </Button>
-                      <p className="text-center text-xs text-muted-foreground">
-                        Plaćanje putem Stripe kartice — dolazi uskoro
-                      </p>
-                    </div>
+                    <Button
+                      className={`w-full ${plan.highlighted ? "bg-orange-500 text-white hover:bg-orange-600" : ""}`}
+                      variant={plan.highlighted ? "default" : "outline"}
+                      onClick={() => document.getElementById("kontakt")?.scrollIntoView({ behavior: "smooth" })}
+                    >
+                      Zatraži ponudu
+                    </Button>
                   )}
                 </CardContent>
               </Card>
             );
           })}
+        </div>
+      </section>
+
+      {/* Trust signals */}
+      <section className="border-t border-border py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid gap-6 md:grid-cols-3 max-w-4xl mx-auto">
+            <div className="flex items-start gap-4 rounded-2xl border border-border/70 p-5">
+              <ShieldCheck className="mt-0.5 h-8 w-8 flex-shrink-0 text-green-500" />
+              <div>
+                <p className="font-bold">Bez ugovora</p>
+                <p className="mt-1 text-sm text-muted-foreground">Otkažite u bilo kojem trenutku, bez skrivenih obveza.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4 rounded-2xl border border-border/70 p-5">
+              <Users className="mt-0.5 h-8 w-8 flex-shrink-0 text-blue-500" />
+              <div>
+                <p className="font-bold">Podrška 1-na-1</p>
+                <p className="mt-1 text-sm text-muted-foreground">Osobni kontakt i pomoć pri postavljanju profila.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4 rounded-2xl border border-border/70 p-5">
+              <BarChart3 className="mt-0.5 h-8 w-8 flex-shrink-0 text-orange-500" />
+              <div>
+                <p className="font-bold">Rezultati ili povrat</p>
+                <p className="mt-1 text-sm text-muted-foreground">Ako niste zadovoljni u prvih 30 dana, vraćamo uplaćeno.</p>
+              </div>
+            </div>
+          </div>
+          <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
+            <span className="font-semibold">768+ aktivnih profila</span>
+            <span>|</span>
+            <span className="font-semibold">10 kategorija usluga</span>
+            <span>|</span>
+            <span className="font-semibold">6 područja pokriveno</span>
+          </div>
         </div>
       </section>
 
@@ -245,29 +395,8 @@ export default function Promoviranje() {
         </div>
       </section>
 
-      {/* Contact CTA */}
-      <section className="py-16">
-        <div className="container mx-auto max-w-2xl px-4 text-center">
-          <h2 className="text-2xl font-bold">Imate pitanje ili poseban zahtjev?</h2>
-          <p className="mt-3 text-muted-foreground">
-            Javite se izravno — rado ćemo vam prilagoditi plan prema vašim potrebama.
-          </p>
-          <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <Button asChild variant="outline">
-              <a href="mailto:info@split-usluge.com">
-                <Mail className="mr-2 h-4 w-4" />
-                info@split-usluge.com
-              </a>
-            </Button>
-            <Button asChild variant="outline">
-              <a href="tel:+385000000000">
-                <Phone className="mr-2 h-4 w-4" />
-                Kontaktirajte nas
-              </a>
-            </Button>
-          </div>
-        </div>
-      </section>
+      {/* Contact Form */}
+      <ContactFormSection />
     </div>
   );
 }

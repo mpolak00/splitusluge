@@ -7,7 +7,7 @@ import {
   buildSeoPayload,
   SERVICE_AREAS,
 } from "@shared/seo";
-import { ArrowLeft, Clock, Globe, MapPin, Navigation, Phone, Star, Tag } from "lucide-react";
+import { ArrowLeft, Clock, Globe, MapPin, Navigation, Phone, Star, Tag, UserCheck } from "lucide-react";
 import { usePageSeo } from "@/hooks/usePageSeo";
 import { trpc } from "@/lib/trpc";
 import {
@@ -15,6 +15,7 @@ import {
   parseBusinessTags,
   sortBusinessesByWeighted,
 } from "@/lib/directory";
+import { getBusinessImage } from "@/lib/category-images";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -240,17 +241,11 @@ export default function BusinessDetailPage() {
 
             <Card className="overflow-hidden border-white/10 bg-white/8 text-white backdrop-blur">
               <CardContent className="p-0">
-                {business.imageUrl ? (
-                  <img
-                    src={business.imageUrl}
-                    alt={business.name}
-                    className="h-72 w-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-72 items-center justify-center bg-white/5 text-lg text-white/60">
-                    Profil bez fotografije
-                  </div>
-                )}
+                <img
+                  src={getBusinessImage(business.id, currentCategory?.slug || "", business.imageUrl)}
+                  alt={business.name}
+                  className="h-72 w-full object-cover"
+                />
               </CardContent>
             </Card>
           </div>
@@ -464,14 +459,26 @@ export default function BusinessDetailPage() {
             <CardContent className="space-y-4 p-6">
               <h2 className="text-xl font-bold">Želiš istaknuti svoj profil?</h2>
               <p className="text-sm leading-6 text-white/75">
-                Kad krenemo s prioritetnim pozicijama, najbolje optimizirani profili imat će najveću
-                vidljivost u kategoriji i na kampanjama.
+                Prioritetni prikaz, bolja pozicija u kategoriji i više poziva od lokalnih kupaca.
               </p>
-              <Link href="/registracija">
-                <Button className="w-full bg-orange-500 text-white hover:bg-orange-600">
-                  Zatraži prioritetni prikaz
-                </Button>
-              </Link>
+              <Button asChild className="w-full bg-orange-500 text-white hover:bg-orange-600">
+                <Link href="/promoviranje">Pogledaj planove</Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/70">
+            <CardContent className="space-y-3 p-6">
+              <div className="flex items-center gap-2">
+                <UserCheck className="h-5 w-5 text-primary" />
+                <h2 className="text-base font-bold">Ovo je vaše poslovanje?</h2>
+              </div>
+              <p className="text-sm leading-6 text-muted-foreground">
+                Preuzmite kontrolu nad profilom, ažurirajte podatke i povećajte vidljivost.
+              </p>
+              <Button asChild variant="outline" className="w-full">
+                <Link href="/promoviranje">Prijavite vlasništvo</Link>
+              </Button>
             </CardContent>
           </Card>
         </div>

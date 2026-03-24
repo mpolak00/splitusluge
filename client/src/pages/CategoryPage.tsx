@@ -196,7 +196,7 @@ export default function CategoryPage() {
       </section>
 
       {/* Sticky search/filter bar */}
-      <div className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur">
+      <div className="sticky top-14 z-30 border-b border-border bg-background/95 backdrop-blur">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center gap-3">
             <div className="relative flex-1">
