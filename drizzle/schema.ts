@@ -97,3 +97,75 @@ export const platformReviews = mysqlTable("platformReviews", {
 
 export type PlatformReview = typeof platformReviews.$inferSelect;
 export type InsertPlatformReview = typeof platformReviews.$inferInsert;
+
+// Analytics - page views
+export const pageViews = mysqlTable("pageViews", {
+  id: int("id").autoincrement().primaryKey(),
+  path: varchar("path", { length: 500 }).notNull(),
+  categorySlug: varchar("categorySlug", { length: 255 }),
+  businessId: int("businessId"),
+  referrer: varchar("referrer", { length: 1000 }),
+  userAgent: varchar("userAgent", { length: 500 }),
+  ip: varchar("ip", { length: 45 }),
+  country: varchar("country", { length: 100 }),
+  city: varchar("city", { length: 100 }),
+  device: varchar("device", { length: 50 }),
+  language: varchar("language", { length: 10 }),
+  sessionId: varchar("sessionId", { length: 100 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type PageView = typeof pageViews.$inferSelect;
+export type InsertPageView = typeof pageViews.$inferInsert;
+
+// Analytics - click events
+export const clickEvents = mysqlTable("clickEvents", {
+  id: int("id").autoincrement().primaryKey(),
+  eventType: varchar("eventType", { length: 50 }).notNull(),
+  businessId: int("businessId"),
+  businessName: varchar("businessName", { length: 255 }),
+  categorySlug: varchar("categorySlug", { length: 255 }),
+  sessionId: varchar("sessionId", { length: 100 }),
+  ip: varchar("ip", { length: 45 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ClickEvent = typeof clickEvents.$inferSelect;
+export type InsertClickEvent = typeof clickEvents.$inferInsert;
+
+// Analytics - search queries
+export const searchQueries = mysqlTable("searchQueries", {
+  id: int("id").autoincrement().primaryKey(),
+  query: varchar("query", { length: 500 }).notNull(),
+  resultsCount: int("resultsCount").default(0),
+  categorySlug: varchar("categorySlug", { length: 255 }),
+  sessionId: varchar("sessionId", { length: 100 }),
+  ip: varchar("ip", { length: 45 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type SearchQuery = typeof searchQueries.$inferSelect;
+export type InsertSearchQuery = typeof searchQueries.$inferInsert;
+
+// Business scanner results
+export const businessScans = mysqlTable("businessScans", {
+  id: int("id").autoincrement().primaryKey(),
+  businessId: int("businessId").notNull(),
+  hasWebsite: int("hasWebsite").default(0),
+  hasGoogleSite: int("hasGoogleSite").default(0),
+  websiteUrl: varchar("websiteUrl", { length: 1000 }),
+  websiteStatus: varchar("websiteStatus", { length: 50 }),
+  hasSocialMedia: int("hasSocialMedia").default(0),
+  socialLinks: text("socialLinks"),
+  lastScannedAt: timestamp("lastScannedAt").defaultNow().notNull(),
+  miniSiteGenerated: int("miniSiteGenerated").default(0),
+  miniSiteUrl: varchar("miniSiteUrl", { length: 1000 }),
+  outreachStatus: varchar("outreachStatus", { length: 50 }).default("none"),
+  outreachSentAt: timestamp("outreachSentAt"),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type BusinessScan = typeof businessScans.$inferSelect;
+export type InsertBusinessScan = typeof businessScans.$inferInsert;

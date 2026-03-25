@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { ALL_BUSINESSES_PATH, getBusinessPath } from "@shared/paths";
 import { buildBaseStructuredData, buildSeoPayload, SERVICE_AREAS } from "@shared/seo";
@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useFuzzySearch } from "@/hooks/useFuzzySearch";
 import { calculateWeightedScore, getAverageRating, getRatingValue, sortBusinessesByWeighted } from "@/lib/directory";
 import { trpc } from "@/lib/trpc";
+import { usePageTracking, useTrackClick, useTrackSearch } from "@/hooks/useAnalytics";
 
 function openGoogleMaps(name: string, address?: string | null) {
   const query = `${name} ${address || ""}`.trim();
@@ -19,6 +20,9 @@ function openGoogleMaps(name: string, address?: string | null) {
 
 export default function HomeNew() {
   const [searchTerm, setSearchTerm] = useState("");
+  usePageTracking();
+  const trackClick = useTrackClick();
+  const trackSearch = useTrackSearch();
 
   const categoriesQuery = trpc.services.getAllCategories.useQuery();
   const businessesQuery = trpc.services.getAllBusinesses.useQuery({

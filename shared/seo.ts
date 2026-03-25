@@ -70,6 +70,21 @@ const CATEGORY_ALIASES: Record<string, string> = {
   ciscenje: "servisi-za-ciscenje",
   prijevoz: "prijevoz-i-selidbe",
   stomatolog: "stomatolozi",
+  "apartmani-ciscenje": "ciscenje-apartmana",
+  brodovi: "pranje-brodova",
+  taxi: "taxi-i-transfer",
+  transfer: "taxi-i-transfer",
+  plovila: "iznajmljivanje-plovila",
+  charter: "iznajmljivanje-plovila",
+  bazeni: "bazeni-i-odrzavanje",
+  pool: "bazeni-i-odrzavanje",
+  foto: "fotografija",
+  fotograf: "fotografija",
+  vodic: "turisticki-vodici",
+  guide: "turisticki-vodici",
+  tepih: "pranje-tepiha",
+  security: "sigurnosni-sustavi",
+  web: "web-dizajn",
 };
 
 const CATEGORY_CONTENT: Record<string, CategoryPageCopy> = {
@@ -224,6 +239,141 @@ const CATEGORY_CONTENT: Record<string, CategoryPageCopy> = {
     faq: [
       { question: "Jesu li dostupni izvodaci za manje i vece radove?", answer: "Da. Ovdje se mogu naci izvodaci za zidanje, adaptacije i slicne gradevinske zahvate." },
       { question: "Kako odabrati zidara za adaptaciju?", answer: "Usporedite ocjene, lokaciju i opis usluga prije trazenja ponude." },
+    ],
+  },
+  "ciscenje-apartmana": {
+    title: "Ciscenje apartmana",
+    intro: "Profesionalne usluge ciscenja apartmana, kuca za odmor i smjestajnih objekata u Splitu. Idealno za vlasnike koji iznajmljuju turistima.",
+    keywords: ["ciscenje apartmana split", "apartment cleaning split", "turnover cleaning split", "ciscenje nakon gostiju split"],
+    faq: [
+      { question: "Koliko kosta ciscenje apartmana u Splitu?", answer: "Cijene variraju ovisno o velicini apartmana, prosjecno 30-80 EUR po ciscenju." },
+      { question: "Nude li servisi ciscenje izmedu gostiju?", answer: "Da. Vecina servisa nudi turnover cleaning - brzo ciscenje izmedu odlaska i dolaska gostiju." },
+    ],
+  },
+  "pranje-brodova": {
+    title: "Pranje i ciscenje brodova",
+    intro: "Usluge pranja, poliranja i detaljnog ciscenja brodova, jahti i plovila u Splitu i okolici.",
+    keywords: ["pranje brodova split", "boat cleaning split", "ciscenje jahti split", "yacht cleaning split", "boat detailing split"],
+    faq: [
+      { question: "Koje vrste brodova se mogu oprati?", answer: "Servisi nude pranje svih vrsta plovila - od manjih camaca do jahti i jedrilica." },
+      { question: "Ukljucuje li usluga i poliranje?", answer: "Da. Vecina servisa nudi kompletnu uslugu ukljucujuci pranje, poliranje i zastitu trupa." },
+    ],
+  },
+  "taxi-i-transfer": {
+    title: "Taxi i transfer usluge",
+    intro: "Taxi sluzbe, aerodromski transferi i privatni prijevoz za turiste i lokalno stanovnistvo u Splitu.",
+    keywords: ["taxi split", "transfer split airport", "airport transfer split", "privatni prijevoz split", "taxi service split"],
+    faq: [
+      { question: "Koliko kosta transfer do zracne luke?", answer: "Transfer Split centar - zracna luka obicno kosta 30-40 EUR, ovisno o lokaciji polaska." },
+      { question: "Mogu li rezervirati transfer unaprijed?", answer: "Da. Vecina prijevoznika omogucuje online ili telefonsku rezervaciju unaprijed." },
+    ],
+  },
+  "iznajmljivanje-plovila": {
+    title: "Iznajmljivanje plovila",
+    intro: "Najam brodova, jedrilica, glisera i jet ski-eva u Splitu za dnevne izlete i charter.",
+    keywords: ["najam broda split", "boat rental split", "charter split", "jet ski split", "rent a boat split"],
+    faq: [
+      { question: "Trebam li dozvolu za upravljanje brodom?", answer: "Za brodove snage iznad 5 kW potrebna je dozvola. Za manje camce obicno nije." },
+      { question: "Mogu li iznajmiti brod sa skipperom?", answer: "Da. Vecina charter kuca nudi opciju s profesionalnim skipperom." },
+    ],
+  },
+  "klima-servis-apartmani": {
+    title: "Hitni klima servis za apartmane",
+    intro: "Hitne popravke, montaza i servis klima uredaja za apartmane i smjestajne objekte u turistickoj sezoni.",
+    keywords: ["hitni klima servis split", "emergency ac repair split", "klima popravka apartman split", "air conditioning split"],
+    faq: [
+      { question: "Rade li hitni servisi vikendom?", answer: "Da. Vecina hitnih klima servisa radi i vikendom tijekom turisticke sezone." },
+      { question: "Koliko brzo mogu doci?", answer: "Hitni servisi obicno dolaze u roku od 2-4 sata, ovisno o lokaciji i dostupnosti." },
+    ],
+  },
+  "pest-control": {
+    title: "Dezinsekcija i deratizacija",
+    intro: "Usluge dezinsekcije, deratizacije i zastite od stetocina za apartmane, kuce i poslovne prostore u Splitu.",
+    keywords: ["dezinsekcija split", "pest control split", "deratizacija split", "zastita od insekata split"],
+    faq: [
+      { question: "Koje stetocine su najcesce u Splitu?", answer: "Tijekom ljeta najcesci su komarci, mravi i zigavci. Zimi se pojacava problem s misevima." },
+      { question: "Je li tretman siguran za djecu i kucne ljubimce?", answer: "Da. Profesionalni servisi koriste ekologicka i sigurna sredstva." },
+    ],
+  },
+  "bazeni-i-odrzavanje": {
+    title: "Odrzavanje bazena",
+    intro: "Servis, ciscenje i odrzavanje bazena za privatne objekte, apartmane i hotele u Splitu i okolici.",
+    keywords: ["odrzavanje bazena split", "pool maintenance split", "ciscenje bazena split", "servis bazena split"],
+    faq: [
+      { question: "Koliko cesto treba servisirati bazen?", answer: "Tijekom ljetne sezone preporucuje se servis jednom tjedno, a izvan sezone jednom mjesecno." },
+      { question: "Sto ukljucuje redovno odrzavanje?", answer: "Ukljucuje kontrolu pH vrijednosti, ciscenje filtera, usisavanje dna i dodavanje kemikalija." },
+    ],
+  },
+  fotografija: {
+    title: "Fotografske usluge",
+    intro: "Profesionalno fotografiranje nekretnina, apartmana, drone snimanje i turisticka fotografija u Splitu.",
+    keywords: ["fotograf split", "photographer split", "drone photography split", "fotografiranje apartmana split", "event photographer split"],
+    faq: [
+      { question: "Nude li snimanje dronom?", answer: "Da. Mnogi fotografi nude profesionalno drone snimanje za nekretnine i evente." },
+      { question: "Koliko kosta fotografiranje apartmana?", answer: "Profesionalno fotografiranje apartmana obicno kosta 100-300 EUR, ovisno o velicini i paketu." },
+    ],
+  },
+  catering: {
+    title: "Catering i dostava hrane",
+    intro: "Catering usluge za evente, vjencanja, privatne zabave i korporativna okupljanja u Splitu.",
+    keywords: ["catering split", "food delivery split", "catering za vjencanja split", "party catering split"],
+    faq: [
+      { question: "Koji je minimalni broj osoba za catering?", answer: "Ovisi o cateringu, ali vecina radi za grupe od 10+ osoba." },
+      { question: "Nude li vegetarijanske opcije?", answer: "Da. Gotovo svi caterings nude vegetarijanske, veganske i posebne dijetne opcije." },
+    ],
+  },
+  "turisticki-vodici": {
+    title: "Turisticki vodici",
+    intro: "Licencirani turisticki vodici za razgledavanje Splita, Dioklecijanove palace, otoka i okolice.",
+    keywords: ["turisticki vodic split", "tour guide split", "split city tour", "guided tour split", "razgledavanje splita"],
+    faq: [
+      { question: "Jesu li dostupni vodici na engleskom jeziku?", answer: "Da. Vecina vodica govori engleski, a mnogi i talijanski, njemacki ili francuski." },
+      { question: "Koje ture su najpopularnije?", answer: "Najpopularnije su tura Dioklecijanove palace, walking tour starog grada i izleti na otoke." },
+    ],
+  },
+  "pranje-tepiha": {
+    title: "Pranje tepiha i namjestaja",
+    intro: "Dubinsko pranje tepiha, madraca, sofa i namjestaja za apartmane i domove u Splitu.",
+    keywords: ["pranje tepiha split", "carpet cleaning split", "dubinsko pranje split", "ciscenje namjestaja split"],
+    faq: [
+      { question: "Koliko traje pranje tepiha?", answer: "Pranje traje 1-2 sata, a susenje 4-8 sati ovisno o materijalu." },
+      { question: "Dolaze li na adresu?", answer: "Da. Vecina servisa nudi mobilnu uslugu na vasoj adresi." },
+    ],
+  },
+  kljucar: {
+    title: "Kljucar",
+    intro: "Hitne usluge kljucara za otvaranje vrata, izradu kljuceva i zamjenu brava u Splitu.",
+    keywords: ["kljucar split", "locksmith split", "otvaranje vrata split", "izrada kljuceva split", "hitni kljucar split"],
+    faq: [
+      { question: "Rade li kljucari non-stop?", answer: "Da. Vecina kljucara u Splitu nudi hitnu uslugu 0-24, posebno tijekom turisticke sezone." },
+      { question: "Koliko kosta otvaranje vrata?", answer: "Cijena ovisi o tipu brave i dobu dana, obicno 50-150 EUR." },
+    ],
+  },
+  "odvoz-otpada": {
+    title: "Odvoz otpada i rusenje",
+    intro: "Odvoz glomaznog otpada, gradjevinskog suta i rusenje za adaptacije u Splitu i okolici.",
+    keywords: ["odvoz otpada split", "waste removal split", "odvoz suta split", "glomazni otpad split"],
+    faq: [
+      { question: "Sto sve mogu odvesti?", answer: "Servisi obicno odvoze namjestaj, gradjevinski sut, elektricni otpad i glomazni otpad." },
+      { question: "Trebam li prijaviti odvoz?", answer: "Za manje kolicine ne, ali za vece kolicine suta potrebna je prijava komunalnom drustvu." },
+    ],
+  },
+  "sigurnosni-sustavi": {
+    title: "Sigurnosni sustavi",
+    intro: "Ugradnja kamera, alarma i sigurnosnih sustava za apartmane, kuce i poslovne prostore u Splitu.",
+    keywords: ["sigurnosni sustavi split", "security cameras split", "alarmi split", "video nadzor split"],
+    faq: [
+      { question: "Koje sustave je najbolje ugraditi u apartman?", answer: "Za apartmane se najcesce ugraduju pametne brave, kamere i alarmni sustavi s daljinskim pristupom." },
+      { question: "Mogu li pratiti kamere preko mobitela?", answer: "Da. Moderni sustavi omogucuju pracenje putem mobilne aplikacije u realnom vremenu." },
+    ],
+  },
+  "web-dizajn": {
+    title: "Web dizajn i izrada stranica",
+    intro: "Izrada web stranica, web shopova i digitalnog marketinga za lokalne biznise u Splitu.",
+    keywords: ["web dizajn split", "izrada web stranica split", "web developer split", "web design split"],
+    faq: [
+      { question: "Koliko kosta izrada web stranice?", answer: "Jednostavna web stranica kosta od 300-1000 EUR, a web shop od 1000-3000 EUR." },
+      { question: "Koliko traje izrada?", answer: "Jednostavna stranica 1-2 tjedna, slozeniji projekti 4-8 tjedana." },
     ],
   },
 };
@@ -580,6 +730,7 @@ export function buildSitemapXml(categorySlugs: string[], dynamicEntries: Sitemap
   const today = new Date().toISOString().slice(0, 10);
   const staticRoutes: SitemapEntry[] = [
     { path: "", changefreq: "weekly", priority: "1.0" },
+    { path: "/en", changefreq: "weekly", priority: "0.9" },
     { path: "/mapa", changefreq: "weekly", priority: "0.8" },
     { path: ALL_BUSINESSES_PATH, changefreq: "daily", priority: "0.9" },
     { path: "/registracija", changefreq: "monthly", priority: "0.7" },
@@ -587,10 +738,14 @@ export function buildSitemapXml(categorySlugs: string[], dynamicEntries: Sitemap
     { path: "/uvjeti", changefreq: "monthly", priority: "0.4" },
   ];
 
-  const categoryRoutes: SitemapEntry[] = Array.from(new Set(categorySlugs.map(resolveCategorySlug)))
+  const resolvedSlugs = Array.from(new Set(categorySlugs.map(resolveCategorySlug)))
     .filter(Boolean)
-    .sort()
-    .map(slug => ({ path: `/usluga/${slug}`, changefreq: "weekly", priority: "0.8" }));
+    .sort();
+
+  const categoryRoutes: SitemapEntry[] = [
+    ...resolvedSlugs.map(slug => ({ path: `/usluga/${slug}`, changefreq: "weekly" as const, priority: "0.8" })),
+    ...resolvedSlugs.map(slug => ({ path: `/en/${slug}`, changefreq: "weekly" as const, priority: "0.7" })),
+  ];
 
   const urls = [...staticRoutes, ...categoryRoutes, ...dynamicEntries]
     .map(route => [

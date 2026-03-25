@@ -26,6 +26,7 @@ import {
   parseBusinessTags,
 } from "@/lib/directory";
 import { trpc } from "@/lib/trpc";
+import { usePageTracking, useTrackClick } from "@/hooks/useAnalytics";
 
 function openGoogleMaps(name: string, address?: string | null) {
   const query = `${name} ${address || ""}`.trim();
@@ -41,6 +42,8 @@ export default function CategoryPage() {
   const categorySlug = params?.slug || "";
   const categoryCopy = getCategoryCopy(categorySlug);
   const isFrizerski = categorySlug === "frizerski-saloni";
+  usePageTracking(categorySlug);
+  const trackClick = useTrackClick();
 
   const categoryQuery = trpc.services.getCategoryBySlug.useQuery(
     { slug: categorySlug },
