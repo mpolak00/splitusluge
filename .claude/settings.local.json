@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la /c/Users/Administrator/Desktop/split-usluge/*.config.* /c/Users/Administrator/Desktop/split-usluge/tsconfig.json)"
+    ]
+  }
+}

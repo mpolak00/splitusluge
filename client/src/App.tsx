@@ -10,13 +10,18 @@ import { PromoBanner } from "@/components/PromoBanner";
 import SeoHead from "@/components/SeoHead";
 import { SeoProvider } from "@/contexts/SeoContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import About from "@/pages/About";
+import AdminPanel from "@/pages/AdminPanel";
 import AllBusinesses from "@/pages/AllBusinesses";
 import BusinessDetailPage from "@/pages/BusinessDetailPage";
 import BusinessMap from "@/pages/BusinessMap";
 import BusinessRegistration from "@/pages/BusinessRegistration";
 import CategoryPage from "@/pages/CategoryPage";
+import CategoryEnglish from "@/pages/CategoryEnglish";
+import HomeEnglish from "@/pages/HomeEnglish";
 import HomeNew from "@/pages/HomeNew";
+import MiniSite from "@/pages/MiniSite";
 import NotFound from "@/pages/NotFound";
 import Promoviranje from "@/pages/Promoviranje";
 import Terms from "@/pages/Terms";
@@ -35,6 +40,8 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={HomeNew} />
+      <Route path="/en" component={HomeEnglish} />
+      <Route path="/en/:slug" component={CategoryEnglish} />
       <Route path="/mapa" component={BusinessMap} />
       <Route path="/svi-obrci" component={LegacyAllBusinessesRedirect} />
       <Route path={ALL_BUSINESSES_PATH} component={AllBusinesses} />
@@ -45,6 +52,8 @@ function Router() {
       <Route path="/poslovanje/:id/:slug" component={BusinessDetailPage} />
       <Route path="/o-nama" component={About} />
       <Route path="/uvjeti" component={Terms} />
+      <Route path="/admin" component={AdminPanel} />
+      <Route path="/preview/:id" component={MiniSite} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -54,16 +63,18 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
-        <SeoProvider>
-          <TooltipProvider>
-            <SeoHead />
-            <Toaster />
-            <Header />
-            <Router />
-            <Footer />
-            <PromoBanner />
-          </TooltipProvider>
-        </SeoProvider>
+        <LanguageProvider>
+          <SeoProvider>
+            <TooltipProvider>
+              <SeoHead />
+              <Toaster />
+              <Header />
+              <Router />
+              <Footer />
+              <PromoBanner />
+            </TooltipProvider>
+          </SeoProvider>
+        </LanguageProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );

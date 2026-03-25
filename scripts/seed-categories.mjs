@@ -70,6 +70,96 @@ const seedCategories = [
     description: "Uređenje i održavanje vrtova",
     icon: "leaf",
   },
+  {
+    name: "Čišćenje apartmana",
+    slug: "ciscenje-apartmana",
+    description: "Profesionalno čišćenje apartmana i smještajnih objekata",
+    icon: "home",
+  },
+  {
+    name: "Pranje brodova",
+    slug: "pranje-brodova",
+    description: "Pranje, poliranje i čišćenje brodova i jahti",
+    icon: "anchor",
+  },
+  {
+    name: "Taxi i transfer",
+    slug: "taxi-i-transfer",
+    description: "Taxi službe i aerodromski transferi",
+    icon: "car",
+  },
+  {
+    name: "Iznajmljivanje plovila",
+    slug: "iznajmljivanje-plovila",
+    description: "Najam brodova, jedrilica i jet ski-eva",
+    icon: "ship",
+  },
+  {
+    name: "Hitni klima servis",
+    slug: "klima-servis-apartmani",
+    description: "Hitne popravke klima uređaja za apartmane",
+    icon: "thermometer",
+  },
+  {
+    name: "Dezinsekcija i deratizacija",
+    slug: "pest-control",
+    description: "Dezinsekcija, deratizacija i zaštita od štetočina",
+    icon: "bug",
+  },
+  {
+    name: "Održavanje bazena",
+    slug: "bazeni-i-odrzavanje",
+    description: "Servis i čišćenje bazena",
+    icon: "waves",
+  },
+  {
+    name: "Fotografske usluge",
+    slug: "fotografija",
+    description: "Profesionalno fotografiranje i drone snimanje",
+    icon: "camera",
+  },
+  {
+    name: "Catering i dostava hrane",
+    slug: "catering",
+    description: "Catering za evente i privatne zabave",
+    icon: "utensils",
+  },
+  {
+    name: "Turistički vodiči",
+    slug: "turisticki-vodici",
+    description: "Licencirani turistički vodiči",
+    icon: "compass",
+  },
+  {
+    name: "Pranje tepiha i namještaja",
+    slug: "pranje-tepiha",
+    description: "Dubinsko pranje tepiha, madraca i namještaja",
+    icon: "wind",
+  },
+  {
+    name: "Ključar",
+    slug: "kljucar",
+    description: "Hitne usluge ključara i zamjena brava",
+    icon: "key",
+  },
+  {
+    name: "Odvoz otpada",
+    slug: "odvoz-otpada",
+    description: "Odvoz glomaznog otpada i građevinskog šuta",
+    icon: "trash-2",
+  },
+  {
+    name: "Sigurnosni sustavi",
+    slug: "sigurnosni-sustavi",
+    description: "Ugradnja kamera, alarma i video nadzora",
+    icon: "shield",
+  },
+  {
+    name: "Web dizajn",
+    slug: "web-dizajn",
+    description: "Izrada web stranica za lokalne biznise",
+    icon: "globe",
+  },
 ];
 
 async function seed() {

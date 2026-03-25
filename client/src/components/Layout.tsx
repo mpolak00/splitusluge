@@ -2,14 +2,16 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { services } from "@/lib/data";
-import { Menu, X, Search, MapPin, Plus, Info, FileText } from "lucide-react";
+import { Menu, X, Search, MapPin, Plus, Info, FileText, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { lang, setLang, t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-background font-sans text-foreground flex flex-col md:flex-row">
@@ -153,14 +155,23 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </Link>
         </div>
         
-        <div className="p-4 border-t border-sidebar-border mt-auto">
+        <div className="p-4 border-t border-sidebar-border mt-auto space-y-3">
            <div className="bg-sidebar-accent/50 rounded-lg p-4 flex flex-col gap-2">
               <div className="flex items-center gap-2 text-sm font-medium text-foreground">
                  <MapPin className="h-4 w-4 text-primary" />
-                 <span>Lokalno u Splitu</span>
+                 <span>{t("nav.local")}</span>
               </div>
-              <p className="text-xs text-muted-foreground">Pronađite najbolje lokalne stručnjake u vašem kvartu.</p>
+              <p className="text-xs text-muted-foreground">{t("nav.localDesc")}</p>
            </div>
+           <Button
+             variant="ghost"
+             size="sm"
+             className="w-full justify-start gap-2 text-xs"
+             onClick={() => setLang(lang === "hr" ? "en" : "hr")}
+           >
+             <Globe className="h-4 w-4" />
+             {t("lang.switch")}
+           </Button>
         </div>
       </aside>
 
@@ -168,8 +179,19 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <main className="flex-1 min-w-0">
         {children}
         <footer className="bg-muted/30 border-t border-border py-12 px-6 mt-auto">
-          <div className="container mx-auto text-center text-sm text-muted-foreground">
-            <p>&copy; 2024 Split Usluge. Sva prava zadržana.</p>
+          <div className="container mx-auto text-center text-sm text-muted-foreground space-y-3">
+            <div className="flex items-center justify-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="gap-1.5 text-xs"
+                onClick={() => setLang(lang === "hr" ? "en" : "hr")}
+              >
+                <Globe className="h-3.5 w-3.5" />
+                {t("lang.switch")}
+              </Button>
+            </div>
+            <p>&copy; 2024 Split Usluge. {t("footer.rights")}</p>
           </div>
         </footer>
       </main>
