@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useRoute } from "wouter";
-import { MapPin, Phone, Globe, Star, Clock, Navigation, Mail, CheckCircle, Shield, Award, Users } from "lucide-react";
+import { MapPin, Phone, Globe, Star, Clock, Navigation, Mail, CheckCircle, Shield, Award, Users, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
@@ -155,8 +155,121 @@ export default function MiniSite() {
     }
   } catch {}
 
+  const downloadHtml = useCallback(() => {
+    const phone = business.phone || "";
+    const categoryName = category?.name || "Lokalna usluga";
+    const html = `<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${business.name} - ${categoryName} Split</title>
+<meta name="description" content="${business.name} - ${categoryName} u Splitu. ${business.address || ""}. Kontakt: ${phone}.">
+<meta property="og:title" content="${business.name}">
+<meta property="og:description" content="${categoryName} u Splitu - ${business.address || ""}">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:system-ui,sans-serif;color:#1e293b;background:#f8fafc}
+  .hero{background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;padding:60px 20px;text-align:center}
+  .hero h1{font-size:2.2rem;font-weight:800;margin-bottom:12px}
+  .hero .tagline{color:rgba(255,255,255,.7);font-size:1.1rem;margin-bottom:24px}
+  .badge{display:inline-block;background:rgba(255,255,255,.15);padding:6px 16px;border-radius:20px;font-size:.8rem;margin-bottom:20px;text-transform:uppercase;letter-spacing:.1em}
+  .cta-btn{display:inline-block;background:#f97316;color:#fff;padding:16px 36px;border-radius:12px;text-decoration:none;font-size:1.1rem;font-weight:700;margin:8px}
+  .cta-btn.secondary{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3)}
+  section{max-width:700px;margin:0 auto;padding:40px 20px}
+  .card{background:#fff;border-radius:16px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:20px}
+  h2{font-size:1.6rem;font-weight:700;margin-bottom:16px;color:#0f172a}
+  .info-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f1f5f9}
+  .info-row:last-child{border:none}
+  .info-icon{width:20px;text-align:center;color:#f97316;font-size:1.1rem}
+  .info-label{font-weight:600;min-width:100px;color:#475569;font-size:.9rem}
+  .services{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+  .service-item{background:#f8fafc;border-radius:10px;padding:16px;text-align:center;border:1px solid #e2e8f0}
+  .service-item::before{content:"✓";display:block;font-size:1.4rem;color:#22c55e;margin-bottom:8px}
+  .footer{background:#0f172a;color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.85rem}
+  .footer a{color:#f97316;text-decoration:none}
+  @media(max-width:600px){.hero h1{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="badge">${categoryName}</div>
+  <h1>${business.name}</h1>
+  <div class="tagline">${template.tagline}</div>
+  ${phone ? `<a href="tel:${phone}" class="cta-btn">📞 ${phone}</a>` : ""}
+  ${business.address ? `<a href="https://maps.google.com/?q=${encodeURIComponent(business.address)}" target="_blank" class="cta-btn secondary">📍 Lokacija</a>` : ""}
+</div>
+
+<section>
+  <div class="card">
+    <h2>Kontakt informacije</h2>
+    ${phone ? `<div class="info-row"><span class="info-icon">📞</span><span class="info-label">Telefon</span><a href="tel:${phone}">${phone}</a></div>` : ""}
+    ${business.email ? `<div class="info-row"><span class="info-icon">✉️</span><span class="info-label">Email</span><a href="mailto:${business.email}">${business.email}</a></div>` : ""}
+    ${business.address ? `<div class="info-row"><span class="info-icon">📍</span><span class="info-label">Adresa</span>${business.address}</div>` : ""}
+    ${business.website ? `<div class="info-row"><span class="info-icon">🌐</span><span class="info-label">Web</span><a href="${business.website}" target="_blank">${business.website}</a></div>` : ""}
+  </div>
+
+  <div class="card">
+    <h2>Naše usluge</h2>
+    <div class="services">
+      ${template.sellingPoints.map(p => `<div class="service-item">${p}</div>`).join("")}
+    </div>
+  </div>
+
+  ${openingHours.length > 0 ? `<div class="card"><h2>Radno vrijeme</h2>${openingHours.map(h => `<div class="info-row"><span class="info-icon">🕐</span>${h}</div>`).join("")}</div>` : ""}
+
+  ${business.latitude && business.longitude ? `
+  <div class="card">
+    <h2>Lokacija</h2>
+    <a href="https://www.google.com/maps/@${business.latitude},${business.longitude},17z" target="_blank" style="display:block;background:#dbeafe;border-radius:10px;padding:32px;text-align:center;text-decoration:none;color:#1d4ed8">
+      <div style="font-size:2rem;margin-bottom:8px">📍</div>
+      <strong>Otvori na Google Maps</strong><br>
+      <span style="font-size:.9rem;opacity:.7">${business.address || ""}</span>
+    </a>
+  </div>` : ""}
+</section>
+
+<div class="footer">
+  <p>&copy; ${new Date().getFullYear()} ${business.name} · Sva prava pridržana</p>
+  <p style="margin-top:8px">Web stranica izrada: <a href="https://split-usluge.hr" target="_blank">Split Usluge</a></p>
+</div>
+
+${phone ? `<a href="tel:${phone}" style="position:fixed;bottom:20px;right:20px;background:#22c55e;color:#fff;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:1.5rem;box-shadow:0 4px 16px rgba(34,197,94,.4);z-index:999">📞</a>` : ""}
+</body>
+</html>`;
+    const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${business.name.toLowerCase().replace(/\s+/g, "-")}-web.html`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [business, category, template, openingHours]);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
+      {/* Admin download bar */}
+      <div className="bg-slate-900 text-white px-4 py-2 flex items-center justify-between text-sm">
+        <span className="text-white/60">Preview: <span className="text-white font-medium">{business.name}</span></span>
+        <div className="flex gap-2">
+          <Button size="sm" variant="outline" className="border-white/20 text-white hover:bg-white/10 h-7 text-xs gap-1"
+            onClick={downloadHtml}>
+            <Download className="h-3.5 w-3.5" /> Preuzmi HTML
+          </Button>
+          <Button size="sm" variant="outline" className="border-white/20 text-white hover:bg-white/10 h-7 text-xs gap-1"
+            onClick={() => {
+              const previewUrl = window.location.href;
+              if (business.phone) {
+                const phone = business.phone.replace(/\D/g, "");
+                const msg = encodeURIComponent(`Pozdrav! Napravili smo preview vaše web stranice: ${previewUrl}\n\nZanima li vas profesionalna web stranica od 300 EUR? Održavanje 75 EUR/mj. - Split Usluge`);
+                window.open(`https://wa.me/385${phone.replace(/^0/, "")}?text=${msg}`);
+              }
+            }}>
+            WhatsApp ponuda
+          </Button>
+        </div>
+      </div>
+
       {/* Hero - Template specific */}
       <div className={`bg-gradient-to-br ${template.gradient} text-white relative overflow-hidden`}>
         <div className={`absolute inset-0 ${template.heroPattern}`} />

@@ -6,10 +6,11 @@ import { Input } from "@/components/ui/input";
 import {
   BarChart3, Eye, Globe, Lock, LogOut, MousePointerClick, Search,
   TrendingUp, Users, FileText, Scan, ExternalLink, Phone, MapPin,
-  Download, RefreshCw, ChevronLeft, ChevronRight, Filter, Wand2, Copy, CheckCircle
+  Download, RefreshCw, ChevronLeft, ChevronRight, Filter, Wand2, Copy, CheckCircle,
+  PhoneCall, Server, MessageSquare, Mail
 } from "lucide-react";
 
-type AdminTab = "dashboard" | "categories" | "searches" | "clicks" | "reports" | "scanner" | "outreach" | "prompts";
+type AdminTab = "dashboard" | "categories" | "searches" | "clicks" | "reports" | "scanner" | "outreach" | "prompts" | "aicall" | "hosting";
 
 function getSessionId() {
   let id = sessionStorage.getItem("su_session");
@@ -121,6 +122,8 @@ export default function AdminPanel() {
             { id: "scanner", label: "Scanner", icon: Scan },
             { id: "outreach", label: "Outreach", icon: ExternalLink },
             { id: "prompts", label: "AI Promptovi", icon: Wand2 },
+            { id: "aicall", label: "AI Poziv", icon: PhoneCall },
+            { id: "hosting", label: "Hosting & Deploy", icon: Server },
           ] as { id: AdminTab; label: string; icon: any }[]).map(tab => (
             <Button
               key={tab.id}
@@ -143,6 +146,8 @@ export default function AdminPanel() {
         {activeTab === "scanner" && <ScannerTab adminPassword={adminPassword} />}
         {activeTab === "outreach" && <OutreachTab adminPassword={adminPassword} />}
         {activeTab === "prompts" && <PromptsTab adminPassword={adminPassword} />}
+        {activeTab === "aicall" && <AiCallTab adminPassword={adminPassword} />}
+        {activeTab === "hosting" && <HostingTab />}
       </div>
     </div>
   );
@@ -590,24 +595,52 @@ function ScannerTab({ adminPassword }: { adminPassword: string }) {
                         <td className="py-2">{b.rating || "-"} ({b.reviewCount || 0})</td>
                         <td className="py-2 flex gap-1">
                           <Button variant="outline" size="sm" className="text-xs h-7"
-                            onClick={() => {
-                              window.open(`/preview/${b.id}`, "_blank");
-                            }}
+                            onClick={() => window.open(`/preview/${b.id}`, "_blank")}
                           >
                             Preview
                           </Button>
-                          <Button variant="outline" size="sm" className="text-xs h-7"
-                            onClick={() => {
-                              const previewUrl = `${window.location.origin}/preview/${b.id}`;
-                              const subject = encodeURIComponent(`Web stranica za ${b.name}`);
-                              const body = encodeURIComponent(
-                                `Poštovani ${b.name},\n\nPrimijetili smo da nemate web stranicu. Nudimo izradu profesionalne web stranice za lokalne biznise u Splitu.\n\nPripremili smo besplatni preview kako bi Vaša web stranica mogla izgledati:\n${previewUrl}\n\n✅ Moderna, responzivna web stranica\n✅ Google optimizacija (SEO)\n✅ Održavanje i hosting\n✅ Od 199 EUR jednokratno\n\nSrdačan pozdrav,\nSplit Usluge tim`
-                              );
-                              window.open(`mailto:${b.email || ""}?subject=${subject}&body=${body}`);
-                            }}
-                          >
-                            Pošalji ponudu
-                          </Button>
+                          {b.email && (
+                            <Button variant="outline" size="sm" className="text-xs h-7 text-blue-600"
+                              onClick={() => {
+                                const previewUrl = `${window.location.origin}/preview/${b.id}`;
+                                const subject = encodeURIComponent(`Web stranica za ${b.name}`);
+                                const body = encodeURIComponent(
+                                  `Poštovani ${b.name},\n\nPrimijetili smo da nemate web stranicu. Nudimo izradu profesionalne web stranice za lokalne biznise u Splitu.\n\nPripremili smo besplatni preview kako bi Vaša web stranica mogla izgledati:\n${previewUrl}\n\n✅ Moderna, mobilna web stranica\n✅ Google SEO optimizacija\n✅ Hosting i održavanje u cijeni\n✅ Od 300 EUR jednokratno + 75 EUR/mj\n\nSrdačan pozdrav,\nSplit Usluge`
+                                );
+                                window.open(`mailto:${b.email}?subject=${subject}&body=${body}`);
+                              }}
+                            >
+                              Email
+                            </Button>
+                          )}
+                          {b.phone && (
+                            <Button variant="outline" size="sm" className="text-xs h-7 text-green-600"
+                              onClick={() => {
+                                const previewUrl = `${window.location.origin}/preview/${b.id}`;
+                                const phone = b.phone!.replace(/\D/g, "");
+                                const msg = encodeURIComponent(
+                                  `Pozdrav! Vidim da ${b.name} nema web stranicu. Pripremili smo besplatni preview kako bi izgledala: ${previewUrl}\n\nWeb stranica od 300 EUR + hosting 75 EUR/mj. Zanima li Vas? - Split Usluge`
+                                );
+                                window.open(`https://wa.me/385${phone.replace(/^0/, "")}?text=${msg}`);
+                              }}
+                            >
+                              WhatsApp
+                            </Button>
+                          )}
+                          {b.phone && (
+                            <Button variant="outline" size="sm" className="text-xs h-7 text-purple-600"
+                              onClick={() => {
+                                const phone = b.phone!;
+                                const previewUrl = `${window.location.origin}/preview/${b.id}`;
+                                const msg = encodeURIComponent(
+                                  `Pozdrav! Web stranica za ${b.name}: ${previewUrl} - 300 EUR + hosting 75 EUR/mj. Kontakt: Split Usluge`
+                                );
+                                window.open(`sms:${phone}?body=${msg}`);
+                              }}
+                            >
+                              SMS
+                            </Button>
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -908,6 +941,372 @@ Format everything clearly with headers and copy-paste ready content.`;
           )}
         </CardContent>
       </Card>
+    </div>
+  );
+}
+
+function AiCallTab({ adminPassword }: { adminPassword: string }) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedBusiness, setSelectedBusiness] = useState<any>(null);
+  const [scriptType, setScriptType] = useState<"cold" | "followup" | "closing">("cold");
+  const [copied, setCopied] = useState(false);
+
+  const businessesQuery = trpc.admin.getAllBusinessesAdmin.useQuery(
+    { adminPassword, limit: 10000, offset: 0 },
+    { enabled: !!adminPassword }
+  );
+
+  const allBusinesses = businessesQuery.data?.businesses || [];
+  const filtered = useMemo(() => {
+    if (!searchTerm) return allBusinesses.slice(0, 20);
+    const q = searchTerm.toLowerCase();
+    return allBusinesses.filter((b: any) =>
+      b.name.toLowerCase().includes(q) || (b.address || "").toLowerCase().includes(q) || (b.phone || "").includes(q)
+    ).slice(0, 20);
+  }, [allBusinesses, searchTerm]);
+
+  const generateScript = (business: any, type: string) => {
+    const previewUrl = `${window.location.origin}/preview/${business.id}`;
+    const name = business.name;
+    const phone = business.phone || "???";
+
+    if (type === "cold") {
+      return `--- HLADNI POZIV: ${name} (${phone}) ---
+
+PRIPREMA:
+- Otvori preview stranicu: ${previewUrl}
+- Provjeri ocjenu: ${business.rating || "N/A"} (${business.reviewCount || 0} recenzija)
+- Adresa: ${business.address || "N/A"}
+- Web: ${business.website || "NEMA"}
+
+SKRIPT:
+"Dobar dan, mogu li govoriti s vlasnikom/odgovornom osobom za ${name}?"
+
+[čekaj]
+
+"Dobar dan, zovem se [TVOJE IME] iz Split Usluge. Kratko ću Vam se predstaviti - radimo lokalni poslovni portal za Split i primijetili smo da ${name} nema vlastitu web stranicu."
+
+"Napravili smo besplatni PREVIEW kako bi Vaša stranica mogla izgledati - mogu Vam poslati link sada na WhatsApp?"
+
+[ako DA]
+"Odlično! Šaljem Vam sad: ${previewUrl}"
+"Stranica se može aktivirati već za 48 sati, s Vašim brojem telefona i radnim vremenom."
+"Paket Start je 300 EUR jednokratno + 75 EUR/mj za hosting i održavanje."
+"Zanima li Vas?"
+
+[ako NIJE ZAINTERESIRAN]
+"Razumijem, bez brige. Mogu li Vam poslati informacije emailom za budućnost?"
+"Hvala na Vašem vremenu i ugodan dan!"
+
+BILJEŠKE: ___________________`;
+    }
+
+    if (type === "followup") {
+      return `--- FOLLOW-UP POZIV: ${name} (${phone}) ---
+
+Kontaktirali smo ih prethodno. Preview: ${previewUrl}
+
+"Dobar dan, zovem se [IME] iz Split Usluge, kontaktirao/la sam Vas prošlog tjedna oko web stranice za ${name}."
+
+"Samo sam htio/htjela provjeriti jeste li imali priliku pogledati preview koji smo Vam poslali?"
+
+[ako su vidjeli]
+"Odlično! Imate li možda kakvih pitanja? Možemo sve prilagoditi - boje, tekst, slike, radno vrijeme..."
+"Ako se odlučite ove sezone, možemo to aktivirati za 48 sati, idealno za turiste koji traže usluge u Splitu."
+
+[ako nisu vidjeli]
+"Nema problema, šaljem Vam ponovo: ${previewUrl}"
+"Recite mi samo kad Vam odgovara i javim se."
+
+CILJ: Dogovoriti termin za prezentaciju ili potvrdu narudžbe.`;
+    }
+
+    return `--- CLOSING POZIV: ${name} (${phone}) ---
+
+Interested lead! Preview: ${previewUrl}
+
+"Dobar dan! Zovem se [IME] iz Split Usluge, pratim Vaš interes za web stranicu za ${name}."
+
+"Mogu Vam potvrditi: paket web stranice je 300 EUR jednokratno, a hosting i SEO optimizacija je 75 EUR/mj."
+
+"Za tu cijenu dobivate:"
+"✅ Kompletnu web stranicu s Vašim podacima"
+"✅ Vaš telefon kao klikabilan broj"
+"✅ Google optimizaciju za lokalne pretrage"
+"✅ Stranica online za 48 sati"
+"✅ Besplatne izmjene prvih 30 dana"
+
+"Možemo li to aktivirati danas? Trebam samo Vašu potvrdu emaila/WhatsApp i pola sata za završne prilagodbe."
+
+ZATVORI PRODAJU: Traži potvrdu narudžbe ili uplatu!
+Plaćanje: PayPal / Virman / Kartica (Stripe)`;
+  };
+
+  const currentScript = selectedBusiness ? generateScript(selectedBusiness, scriptType) : "";
+
+  const copyScript = useCallback(() => {
+    navigator.clipboard.writeText(currentScript);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }, [currentScript]);
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <PhoneCall className="h-5 w-5" /> Generator skripti za prodajni poziv
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Odaberi biznis i generiraj personaliziranu skriptu za prodajni poziv na hrvatskom.
+          </p>
+
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Pretraži biznise po imenu, adresi ili broju..."
+              className="pl-10"
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+            />
+          </div>
+
+          <div className="max-h-48 overflow-y-auto border rounded-lg divide-y">
+            {filtered.map((b: any) => (
+              <button
+                key={b.id}
+                className={`w-full text-left px-4 py-2 text-sm hover:bg-muted/50 transition-colors ${selectedBusiness?.id === b.id ? "bg-primary/10 font-medium" : ""}`}
+                onClick={() => setSelectedBusiness(b)}
+              >
+                <span className="font-medium">{b.name}</span>
+                {b.phone && <span className="ml-2 text-green-600 text-xs">{b.phone}</span>}
+                {b.address && <span className="text-muted-foreground ml-2 text-xs">— {b.address}</span>}
+                {!b.website && <span className="ml-2 text-xs bg-red-100 text-red-600 px-1 rounded">Bez weba</span>}
+              </button>
+            ))}
+            {filtered.length === 0 && (
+              <p className="text-sm text-muted-foreground text-center py-4">Nema rezultata</p>
+            )}
+          </div>
+
+          {selectedBusiness && (
+            <>
+              <div className="bg-muted/30 rounded-lg p-3 text-sm space-y-1">
+                <p><strong>{selectedBusiness.name}</strong></p>
+                {selectedBusiness.phone && (
+                  <p className="flex items-center gap-2">
+                    <Phone className="h-3.5 w-3.5 text-green-600" />
+                    <a href={`tel:${selectedBusiness.phone}`} className="text-blue-600">{selectedBusiness.phone}</a>
+                  </p>
+                )}
+                {selectedBusiness.email && (
+                  <p className="flex items-center gap-2">
+                    <Mail className="h-3.5 w-3.5" /> {selectedBusiness.email}
+                  </p>
+                )}
+                {selectedBusiness.address && (
+                  <p className="flex items-center gap-2 text-muted-foreground">
+                    <MapPin className="h-3.5 w-3.5" /> {selectedBusiness.address}
+                  </p>
+                )}
+                <p>
+                  Preview:{" "}
+                  <a href={`/preview/${selectedBusiness.id}`} target="_blank" className="text-blue-600 underline" rel="noreferrer">
+                    {window.location.origin}/preview/{selectedBusiness.id}
+                  </a>
+                </p>
+              </div>
+
+              <div className="flex gap-2 flex-wrap">
+                {([
+                  { id: "cold", label: "Hladni poziv" },
+                  { id: "followup", label: "Follow-up" },
+                  { id: "closing", label: "Closing" },
+                ] as const).map(t => (
+                  <Button key={t.id} variant={scriptType === t.id ? "default" : "outline"} size="sm" onClick={() => setScriptType(t.id)}>
+                    {t.label}
+                  </Button>
+                ))}
+                {selectedBusiness.phone && (
+                  <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white gap-1 ml-auto"
+                    onClick={() => window.open(`tel:${selectedBusiness.phone}`)}>
+                    <Phone className="h-4 w-4" /> Pozovi odmah
+                  </Button>
+                )}
+              </div>
+
+              <div className="relative">
+                <pre className="bg-muted p-4 rounded-lg text-xs whitespace-pre-wrap max-h-[500px] overflow-y-auto font-mono">
+                  {currentScript}
+                </pre>
+                <Button size="sm" className="absolute top-2 right-2 gap-1" onClick={copyScript}>
+                  {copied ? <><CheckCircle className="h-3 w-3" /> Kopirano!</> : <><Copy className="h-3 w-3" /> Kopiraj</>}
+                </Button>
+              </div>
+            </>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <MessageSquare className="h-4 w-4" /> Savjeti za prodajni poziv
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-3 md:grid-cols-2 text-sm">
+            {[
+              { title: "Najbit poziv ujutro", desc: "Pozivaj između 9:00 i 11:00 ili 14:00-16:00. Izbjegavaj ponedjeljak ujutro i petak poslijepodne." },
+              { title: "Preview kao hook", desc: "Odmah ponudi da pošalješ besplatni preview. To je konkretna vrijednost, ne samo pitch." },
+              { title: "Kratko i jasno", desc: "Poziv ne treba biti duži od 3 minute. Cilj je zakazati slanje previewa ili kratki meeting." },
+              { title: "WhatsApp > Email", desc: "Poruke na WhatsApp imaju 80%+ open rate. Email je backup, WhatsApp je primarni kanal." },
+              { title: "Pratite razgovor", desc: "Koristi Outreach tab za bilježenje statusa - tko je zainteresiran, tko je odbio, tko čeka." },
+              { title: "Turistička sezona", desc: "Naglasi da je idealno imati web stranicu PRIJE sezone - to je tvoj best argument." },
+            ].map((tip, i) => (
+              <div key={i} className="rounded-lg border bg-muted/30 p-3">
+                <p className="font-medium">{tip.title}</p>
+                <p className="text-muted-foreground text-xs mt-1">{tip.desc}</p>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function HostingTab() {
+  const [copied, setCopied] = useState<string | null>(null);
+
+  const copyText = (text: string, key: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(key);
+    setTimeout(() => setCopied(null), 2000);
+  };
+
+  const sections = [
+    {
+      title: "🚀 Opcija 1: Vercel (BESPLATNO - preporučeno)",
+      steps: [
+        "1. Idi na vercel.com i napravi besplatan account (GitHub login)",
+        "2. Klikni 'New Project' → 'Import Git Repository'",
+        "3. Poveži sa GitHub repom: mpolak00/splitusluge",
+        "4. Postavi Environment Variables:\n   DATABASE_URL=mysql://...\n   NODE_ENV=production",
+        "5. Klikni Deploy - Vercel automatski builduje i deploya",
+        "6. Dobiješ besplatan URL: splitusluge.vercel.app",
+        "7. Za custom domenu: Settings → Domains → Add → split-usluge.hr",
+      ],
+      tip: "Vercel je besplatan za hobbyiste (100GB bandwidth/mj). Jedini trošak je domena (~10-15 EUR/god).",
+    },
+    {
+      title: "🌐 Opcija 2: Netlify (BESPLATNO)",
+      steps: [
+        "1. Idi na netlify.com → besplatan account",
+        "2. 'New site from Git' → poveži GitHub repo",
+        "3. Build command: pnpm build",
+        "4. Publish directory: dist",
+        "5. Environment variables postavi u Site Settings",
+        "6. Custom domena u Domain Management",
+      ],
+      tip: "Netlify nudi 100GB besplatno. Dobra alternativa ako Vercel ne radi.",
+    },
+    {
+      title: "💻 Opcija 3: Railway (ima besplatan tier)",
+      steps: [
+        "1. railway.app → New Project → Deploy from GitHub",
+        "2. Odaberi repo",
+        "3. Railway automatski detektira Node.js projekt",
+        "4. Dodaj MySQL bazu: Add → Database → MySQL",
+        "5. Kopiraj DATABASE_URL u environment variables",
+        "6. Deploy!",
+      ],
+      tip: "Railway je idealan jer ima MySQL bazu uključenu. Besplatni tier ima 500h/mj.",
+    },
+    {
+      title: "📋 Što reći AI asistentu za deploy Vercel",
+      steps: [],
+      prompt: `Trebam deployati moju web aplikaciju na Vercel. Projekt je React + Node.js fullstack app u repozitoriju mpolak00/splitusluge na GitHub-u.
+
+Aplikacija koristi:
+- React 19 + Vite (frontend)
+- Express.js + tRPC (backend)
+- MySQL baza (Drizzle ORM)
+
+Trebaš mi:
+1. Provjeriti da je vercel.json ispravno konfiguriran
+2. Deployati na Vercel koristeći Vercel CLI ili web sučelje
+3. Postaviti environment variables (DATABASE_URL)
+4. Testirati da aplikacija radi na produkcijskom URL-u
+
+Evo sadržaja vercel.json: [paste vercel.json]`,
+    },
+    {
+      title: "🔑 Domena - gdje kupiti",
+      steps: [
+        "domains.google.com - Jednostavno, pouzdano, od 12$/god",
+        "namecheap.com - Jeftiniji, .com od 8$/god, .hr nije dostupno",
+        "CARNET (carnet.hr) - Jedino mjesto za .hr domene, ~150kn/god",
+        "Preporučena domena: split-usluge.hr ili splitusluge.com",
+        "Nakon kupnje: dodaj A record koji pokazuje na Vercel IP",
+        "Vercel automatski generira SSL certifikat (HTTPS) besplatno",
+      ],
+      tip: "Za turistički biznis u Splitu, .hr domena je bolja za lokalni SEO. split-usluge.hr je idealna.",
+    },
+    {
+      title: "💰 Ukupni troškovi",
+      steps: [
+        "Hosting (Vercel/Netlify): 0 EUR/mj (besplatno)",
+        "Domena .hr (CARNET): ~20 EUR/god",
+        "Domena .com (Namecheap): ~8 USD/god",
+        "MySQL baza (PlanetScale Free): 0 EUR/mj",
+        "MySQL baza (Railway starter): 0 EUR/mj (500h limit)",
+        "MySQL baza (DigitalOcean MySQL): 15 USD/mj (plaćeno)",
+        "═══════════════════════════",
+        "MINIMUM: ~20 EUR/god (samo domena, sve ostalo besplatno!)",
+      ],
+      tip: "Jedini stvarni trošak je domena. Sve ostalo može biti besplatno na početku.",
+    },
+  ];
+
+  return (
+    <div className="space-y-6">
+      {sections.map((section, i) => (
+        <Card key={i}>
+          <CardHeader>
+            <CardTitle className="text-base">{section.title}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {section.steps.length > 0 && (
+              <ol className="space-y-2">
+                {section.steps.map((step, j) => (
+                  <li key={j} className="text-sm flex gap-2">
+                    <span className="text-muted-foreground shrink-0 font-mono">{j + 1}.</span>
+                    <span className="whitespace-pre-wrap">{step.replace(/^\d+\.\s/, "")}</span>
+                  </li>
+                ))}
+              </ol>
+            )}
+            {section.prompt && (
+              <div className="relative">
+                <pre className="bg-muted p-4 rounded-lg text-xs whitespace-pre-wrap max-h-64 overflow-y-auto">
+                  {section.prompt}
+                </pre>
+                <Button size="sm" className="absolute top-2 right-2 gap-1" onClick={() => copyText(section.prompt!, `prompt-${i}`)}>
+                  {copied === `prompt-${i}` ? <><CheckCircle className="h-3 w-3" /> OK!</> : <><Copy className="h-3 w-3" /> Kopiraj</>}
+                </Button>
+              </div>
+            )}
+            {section.tip && (
+              <div className="bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800 rounded-lg p-3 text-sm text-orange-800 dark:text-orange-200">
+                💡 {section.tip}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 }
