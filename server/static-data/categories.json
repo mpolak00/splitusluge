@@ -98,5 +98,125 @@
     "imageUrl": null,
     "createdAt": "2026-01-29T00:00:00.000Z",
     "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 11,
+    "name": "Čišćenje apartmana",
+    "slug": "ciscenje-apartmana",
+    "description": "Profesionalno čišćenje apartmana i smještajnih objekata, turnover cleaning između gostiju",
+    "icon": "home",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 12,
+    "name": "Pranje brodova i jahti",
+    "slug": "pranje-brodova",
+    "description": "Profesionalno pranje, poliranje i detaljna njega brodova, jedrilica i jahti",
+    "icon": "anchor",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 13,
+    "name": "Transfer aerodrom",
+    "slug": "transfer-aerodrom",
+    "description": "Privatni transferi do aerodroma Split i Kaštela, taxi i shuttle usluge",
+    "icon": "car",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 14,
+    "name": "Rent-a-car",
+    "slug": "rent-a-car",
+    "description": "Iznajmljivanje automobila, skutera i bicikala za turiste u Splitu",
+    "icon": "car",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 15,
+    "name": "Organizacija izleta",
+    "slug": "izleti",
+    "description": "Dnevni izleti, ture po otocima, Plitvicama i Dubrovniku",
+    "icon": "compass",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 16,
+    "name": "Turistički vodiči",
+    "slug": "turisticki-vodici",
+    "description": "Licencirani turistički vodiči za obilazak Dioklecijanove palače i okolice",
+    "icon": "globe",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 17,
+    "name": "Najam skutera i bicikala",
+    "slug": "najam-skutera-bicikala",
+    "description": "Iznajmljivanje elektroskutera, klasičnih skutera i bicikala za turiste",
+    "icon": "bike",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 18,
+    "name": "Čuvanje kućnih ljubimaca",
+    "slug": "cuvanje-ljubimaca",
+    "description": "Pet sitting, šetanje pasa i čuvanje kućnih ljubimaca dok ste na odmoru",
+    "icon": "heart",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 19,
+    "name": "Fotografija i snimanje",
+    "slug": "fotografija",
+    "description": "Fotografiranje vjenčanja, eventa, nekretnina i drone snimanje u Splitu",
+    "icon": "camera",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 20,
+    "name": "Klimatizacija - servis",
+    "slug": "klimatizacija",
+    "description": "Hitni servis klima uređaja, montaža i punjenje freona u apartmanima i hotelima",
+    "icon": "wind",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 21,
+    "name": "Skipper i charter",
+    "slug": "skipper-charter",
+    "description": "Licencirani skipperi i charter usluge za najam brodova i jedrilica",
+    "icon": "ship",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 22,
+    "name": "Održavanje bazena",
+    "slug": "odrzavanje-bazena",
+    "description": "Servis, čišćenje i kemijsko balansiranje privatnih i hotelskih bazena",
+    "icon": "waves",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
   }
 ]

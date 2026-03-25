@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useFuzzySearch } from "@/hooks/useFuzzySearch";
 import { calculateWeightedScore, getAverageRating, getRatingValue, sortBusinessesByWeighted } from "@/lib/directory";
+import { getBusinessImage } from "@/lib/category-images";
 import { trpc } from "@/lib/trpc";
 import { usePageTracking, useTrackClick, useTrackSearch } from "@/hooks/useAnalytics";
 
@@ -42,6 +43,12 @@ export default function HomeNew() {
 
     return counts;
   }, [allBusinesses]);
+
+  const categorySlugMap = useMemo(() => {
+    const map: Record<number, string> = {};
+    categories.forEach(c => { map[c.id] = c.slug; });
+    return map;
+  }, [categories]);
 
   const categorySummaries = useMemo(
     () =>
@@ -214,14 +221,13 @@ export default function HomeNew() {
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 {filteredBusinesses.map(business => (
                   <Card key={business.id} className="overflow-hidden border-border/70 transition-all hover:-translate-y-0.5 hover:shadow-lg">
-                    <div className="h-44 bg-muted">
-                      {business.imageUrl ? (
-                        <img src={business.imageUrl} alt={business.name} className="h-full w-full object-cover" />
-                      ) : (
-                        <div className="flex h-full items-center justify-center text-muted-foreground">
-                          Nema fotografije
-                        </div>
-                      )}
+                    <div className="h-44 bg-muted overflow-hidden">
+                      <img
+                        src={getBusinessImage(business.id, categorySlugMap[business.categoryId] || "", business.imageUrl)}
+                        alt={business.name}
+                        className="h-full w-full object-cover"
+                        loading="lazy"
+                      />
                     </div>
                     <CardContent className="space-y-4 p-5">
                       <div className="flex items-start justify-between gap-3">
@@ -392,14 +398,13 @@ export default function HomeNew() {
                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                   {featuredBusinesses.map(business => (
                     <Card key={business.id} className="overflow-hidden border-border/70 transition-all hover:-translate-y-0.5 hover:shadow-lg">
-                      <div className="h-44 bg-muted">
-                        {business.imageUrl ? (
-                          <img src={business.imageUrl} alt={business.name} className="h-full w-full object-cover" />
-                        ) : (
-                          <div className="flex h-full items-center justify-center text-muted-foreground">
-                            Nema fotografije
-                          </div>
-                        )}
+                      <div className="h-44 bg-muted overflow-hidden">
+                        <img
+                          src={getBusinessImage(business.id, categorySlugMap[business.categoryId] || "", business.imageUrl)}
+                          alt={business.name}
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
                       </div>
                       <CardContent className="space-y-4 p-5">
                         <div className="flex items-start justify-between gap-3">

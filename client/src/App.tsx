@@ -23,6 +23,7 @@ import HomeEnglish from "@/pages/HomeEnglish";
 import HomeNew from "@/pages/HomeNew";
 import MiniSite from "@/pages/MiniSite";
 import NotFound from "@/pages/NotFound";
+import Paketi from "@/pages/Paketi";
 import Promoviranje from "@/pages/Promoviranje";
 import Terms from "@/pages/Terms";
 
@@ -53,6 +54,7 @@ function Router() {
       <Route path="/o-nama" component={About} />
       <Route path="/uvjeti" component={Terms} />
       <Route path="/admin" component={AdminPanel} />
+      <Route path="/paketi" component={Paketi} />
       <Route path="/preview/:id" component={MiniSite} />
       <Route component={NotFound} />
     </Switch>
