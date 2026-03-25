@@ -1,226 +1,186 @@
-# Split Usluge - Lokalna Instalacija
+# Split Usluge — Deploy na Vercel (5 minuta)
 
-## Brzi start (3 koraka)
-
-### 1. Instalacija zavisnosti
-```bash
-pnpm install
-```
-
-### 2. Postavljanje baze podataka
-Trebate MySQL bazu. Ako nemate lokalnu MySQL instalaciju, možete koristiti Docker:
-
-```bash
-docker run --name mysql-split -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=split_usluge -p 3306:3306 -d mysql:8
-```
-
-Zatim postavite `DATABASE_URL` u `.env.local`:
-```
-DATABASE_URL=mysql://root:root@localhost:3306/split_usluge
-```
-
-### 3. Pokretanje
-```bash
-pnpm dev
-```
-
-Aplikacija će biti dostupna na `http://localhost:3000`
+> **Važno:** Aplikacija radi BEZ baze podataka — koristi statičke podatke kao fallback.
+> Možeš deployati odmah, bazu dodati kasnije.
 
 ---
 
-## Detaljne upute
+## 🚀 VERCEL DEPLOY (bez baze — odmah online)
 
-### Okruženje (.env.local)
+### Korak 1: Vercel račun
+1. Idi na **vercel.com** → "Sign Up" → **Continue with GitHub**
+2. Autorizi Vercel da pristupi tvojim repozitorijima
 
-Kreirajte `.env.local` datoteku sa sljedećim varijablama:
+### Korak 2: Importaj projekt
+1. Klikni **"Add New Project"**
+2. Nadi `mpolak00/splitusluge` u listi i klikni **Import**
+3. Vercel automatski detektira postavke iz `vercel.json`
 
-```env
-# OBAVEZNO
-DATABASE_URL=mysql://korisnik:lozinka@localhost:3306/split_usluge
-JWT_SECRET=tajni-kljuc-za-sesije
+### Korak 3: Environment Variables
+Klikni **"Environment Variables"** i dodaj:
 
-# Za Google Maps (koristite Manus proxy ili vašu API ključ)
-BUILT_IN_FORGE_API_KEY=vasa-api-kljuc
-BUILT_IN_FORGE_API_URL=https://api.manus.im
+| Key | Value | Napomena |
+|-----|-------|----------|
+| `NODE_ENV` | `production` | Obavezno |
+| `DATABASE_URL` | *(ostavi prazno za sad)* | Dodaj kasnije |
+| `JWT_SECRET` | `neki-random-string-30-znakova` | Generiraj nasumično |
+| `SITE_URL` | `https://tvoj-projekt.vercel.app` | Tvoj Vercel URL |
 
-# Opciono - za OAuth
-VITE_OAUTH_PORTAL_URL=https://auth.manus.im
-OAUTH_SERVER_URL=https://api.manus.im
-VITE_APP_ID=vasa-app-id
-OWNER_NAME=Vase Ime
-OWNER_OPEN_ID=vasa-open-id
+### Korak 4: Deploy
+Klikni **"Deploy"** — čekaj ~2 minute. Gotovo!
 
-# Opciono - za frontend
-VITE_APP_TITLE=Split Usluge
-VITE_APP_LOGO=/logo.svg
-VITE_FRONTEND_FORGE_API_KEY=vasa-frontend-kljuc
-VITE_FRONTEND_FORGE_API_URL=https://api.manus.im
-```
+✅ Stranica radi na: `https://splitusluge.vercel.app` (ili slično)
 
-### Inicijalizacija baze
+---
 
+## 🗄️ DODAVANJE BAZE PODATAKA (za admin analitiku)
+
+Bez baze, admin panel prikazuje 0 za statistike, ali sve ostalo radi.
+Za pravu analitiku potrebna je MySQL baza.
+
+### Opcija A: Railway (besplatno, najlakše)
+
+1. Idi na **railway.app** → New Project
+2. Klikni **"Add a Service"** → **"Database"** → **"MySQL"**
+3. Klikni na bazu → tab **"Connect"** → kopiraj **"MySQL URL"**
+4. Idi na Vercel → projekt → **Settings → Environment Variables**
+5. Dodaj `DATABASE_URL` = *zalijepljeni URL*
+6. Klikni **Redeploy**
+
+### Opcija B: TiDB Serverless (MySQL compatible, potpuno besplatno)
+
+1. Idi na **tidbcloud.com** → Create Free Cluster → **Serverless**
+2. Region: Europe (Frankfurt)
+3. Connect → zatraži "Connection String for MySQL"
+4. Kopiraj URL, dodaj u Vercel kao `DATABASE_URL`
+5. Redeploy
+
+### Inicijalizacija baze (jednom)
+
+Nakon što postaviš `DATABASE_URL`, pokreni lokalno:
 ```bash
-# Kreiraj tablice
 pnpm db:push
-
-# Popuni kategorije
-npx tsx scripts/seed-categories.mjs
-
-# (Opciono) Prikupi biznise iz Google Maps
-npx tsx scripts/fetch-places-optimized.mjs
+node scripts/seed-categories.mjs
 ```
 
-### Pokretanje u dev modu
+Ili ako nemaš lokalni setup, ovo će automatski raditi pri prvom deployu.
+
+---
+
+## 🌐 CUSTOM DOMENA
+
+### Kupnja domene
+- **split-usluge.hr** → carnet.hr (~20 EUR/god) — **preporučeno za lokalni SEO**
+- **splitusluge.com** → namecheap.com (~8 USD/god)
+- **splitusluge.eu** → eurid.eu (~15 EUR/god)
+
+### Postavljanje na Vercel
+1. Vercel → projekt → **Settings → Domains**
+2. Unesi `split-usluge.hr` → Add
+3. Vercel ti da DNS record (npr. `A 76.76.21.21` ili CNAME)
+4. Idi na registrar (CARNET/Namecheap) → DNS management
+5. Dodaj record koji ti Vercel dao
+6. Čekaj 10-60 minuta → domena aktiva
+
+**SSL certifikat**: Vercel automatski generira HTTPS, ništa ne trebaš raditi.
+
+---
+
+## ⚡ LOKALNI RAZVOJ
 
 ```bash
+# 1. Instaliraj zavisnosti
+pnpm install
+
+# 2. Kreiraj .env.local
+cp .env.example .env.local
+# Uredi .env.local po potrebi
+
+# 3. Pokretanje
+pnpm dev
+# → http://localhost:3000
+```
+
+### S bazom lokalno (Docker):
+```bash
+docker run --name mysql-split \
+  -e MYSQL_ROOT_PASSWORD=root \
+  -e MYSQL_DATABASE=split_usluge \
+  -p 3306:3306 -d mysql:8
+
+# U .env.local:
+# DATABASE_URL=mysql://root:root@localhost:3306/split_usluge
+
+pnpm db:push
+node scripts/seed-categories.mjs
 pnpm dev
 ```
 
-Server će biti dostupan na `http://localhost:3000`
+---
 
-### Build za produkciju
+## 🔐 ADMIN PANEL
+
+URL: `/admin`
+Lozinka: `white1413`
+
+Tabovi:
+- **Pregled** — statistike (pregledi, klikovi, pretrage)
+- **Kategorije** — najpopularnije kategorije
+- **Pretrage** — što korisnici traže
+- **Klikovi** — klikovi na telefon/web/mapu
+- **Izvještaji** — generiraj PDF izvještaj za klijente
+- **Scanner** — biznisi bez web stranice (Email/WhatsApp/SMS outreach)
+- **AI Poziv** — personalizirane skripte za prodajni poziv
+- **AI Promptovi** — prompts za ChatGPT/Claude za izradu web stranica
+- **Hosting & Deploy** — ove upute + troškovi
+
+---
+
+## 📦 PAKETI ZA KLIJENTE
+
+URL: `/paketi`
+
+| Paket | Cijena |
+|-------|--------|
+| Oglas Basic | 25 EUR/mj |
+| Oglas Premium | 50 EUR/mj |
+| Web Starter | 300 EUR + 75 EUR/mj |
+| Web Pro | 400 EUR + 75 EUR/mj |
+
+---
+
+## 🛠️ DOSTUPNE SKRIPTE
 
 ```bash
-pnpm build
-pnpm start
+pnpm dev          # Razvoj (localhost:3000)
+pnpm build        # Build za produkciju
+pnpm start        # Pokreni produkciju
+pnpm db:push      # Kreiraj/ažuriraj tablice u bazi
+pnpm check        # TypeScript provjera
+pnpm test         # Testovi
+pnpm format       # Prettier formatiranje
 ```
 
 ---
 
-## Struktura projekta
+## 🆘 ČESTI PROBLEMI
 
-```
-split-usluge/
-├── client/                    # React frontend
-│   ├── src/
-│   │   ├── pages/            # Stranice
-│   │   │   ├── Home.tsx       # Početna stranica
-│   │   │   ├── BusinessMap.tsx # Mapa sa bizniima
-│   │   │   └── ServicePage.tsx # Detalji usluge
-│   │   ├── components/        # React komponente
-│   │   │   ├── Map.tsx        # Google Maps komponenta
-│   │   │   ├── Layout.tsx     # Layout wrapper
-│   │   │   └── ...
-│   │   ├── lib/
-│   │   │   ├── trpc.ts        # tRPC klijent
-│   │   │   └── data.ts        # Statički podaci
-│   │   ├── App.tsx            # Glavna aplikacija
-│   │   ├── main.tsx           # Entry point
-│   │   └── index.css          # Globalni stilovi
-│   ├── public/                # Statički assets
-│   └── index.html             # HTML template
-├── server/                    # Express backend
-│   ├── routers/              # tRPC routeri
-│   │   └── services.ts       # Services router
-│   ├── db.ts                 # Database helpers
-│   ├── routers.ts            # Glavni router
-│   └── _core/                # Framework kod
-├── drizzle/                  # Database
-│   ├── schema.ts             # Database schema
-│   ├── migrations/           # SQL migracije
-│   └── relations.ts          # Drizzle relacije
-├── scripts/                  # Utility skripte
-│   ├── seed-categories.mjs
-│   ├── fetch-places-optimized.mjs
-│   └── count-businesses.mjs
-├── package.json
-├── tsconfig.json
-├── vite.config.ts
-├── drizzle.config.ts
-├── README.md                 # Dokumentacija
-└── SETUP.md                  # Ova datoteka
-```
+**"Build failed" na Vercel**
+→ Provjeri da su sve ENV varijable postavljene (barem `NODE_ENV=production`)
 
----
+**"Cannot connect to database"**
+→ Provjeri `DATABASE_URL` format: `mysql://user:pass@host:3306/dbname`
+→ Aplikacija radi i bez baze (statički podaci)
 
-## Dostupne skripte
+**Admin panel prikazuje 0 za statistike**
+→ Normalno bez baze. Postavi `DATABASE_URL` za prave podatke.
 
+**"Port 3000 already in use"**
 ```bash
-# Development
-pnpm dev              # Pokreni dev server
-
-# Build
-pnpm build            # Build za produkciju
-pnpm start            # Pokreni produkciju
-
-# Database
-pnpm db:push          # Kreiraj/ažuriraj bazu
-
-# Testing
-pnpm test             # Pokreni testove
-
-# Formatting
-pnpm format           # Format koda sa Prettier
-
-# Type checking
-pnpm check            # TypeScript check
-```
-
----
-
-## API Endpointi (tRPC)
-
-Dostupni su sljedeći API endpointi:
-
-```typescript
-// Kategorije
-trpc.services.getAllCategories.useQuery()
-trpc.services.getCategoryBySlug.useQuery({ slug: "vulkanizeri" })
-
-// Biznisi
-trpc.services.getBusinessesByCategory.useQuery({ categoryId: 1, limit: 50 })
-trpc.services.getBusinessesByCity.useQuery({ city: "Split", limit: 100 })
-trpc.services.searchBusinesses.useQuery({ query: "frizer", limit: 20 })
-trpc.services.getBusinessById.useQuery({ id: 1 })
-
-// Autentifikacija
-trpc.auth.me.useQuery()
-trpc.auth.logout.useMutation()
-```
-
----
-
-## Troubleshooting
-
-### "Cannot connect to database"
-- Provjerite da je MySQL pokrenut
-- Provjerite `DATABASE_URL` u `.env.local`
-- Provjerite kredencijale (korisnik/lozinka)
-
-### "Google Maps nije učitan"
-- Provjerite `BUILT_IN_FORGE_API_KEY`
-- Provjerite `VITE_FRONTEND_FORGE_API_KEY`
-- Provjerite da su URLs ispravni
-
-### "Port 3000 je već u upotrebi"
-```bash
-# Koristite drugi port
 PORT=3001 pnpm dev
 ```
 
-### "node_modules problemi"
+**Vite nije pronađen**
 ```bash
-# Očistite i reinstalirajte
-rm -rf node_modules pnpm-lock.yaml
 pnpm install
 ```
-
----
-
-## Sljedeći koraci
-
-1. **Prikupite biznise** - Pokreni `scripts/fetch-places-optimized.mjs`
-2. **Testirajte mapu** - Idi na `/mapa` i provjeri da li se biznisi prikazuju
-3. **Prilagodite dizajn** - Uredi `client/src/index.css` za boje i stilove
-4. **Dodajte nove stranice** - Kreiraj nove datoteke u `client/src/pages/`
-5. **Deployajte** - Koristite `pnpm build` i `pnpm start`
-
----
-
-## Podrška
-
-Za pitanja ili probleme, provjerite:
-- `README.md` - Opća dokumentacija
-- `drizzle/schema.ts` - Struktura baze
-- `server/routers.ts` - API procedure
-- `client/src/App.tsx` - Rute aplikacije
