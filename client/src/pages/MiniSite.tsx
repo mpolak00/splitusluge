@@ -261,7 +261,7 @@ ${phone ? `<a href="tel:${phone}" style="position:fixed;bottom:20px;right:20px;b
               const previewUrl = window.location.href;
               if (business.phone) {
                 const phone = business.phone.replace(/\D/g, "");
-                const msg = encodeURIComponent(`Pozdrav! Napravili smo preview vaše web stranice: ${previewUrl}\n\nZanima li vas profesionalna web stranica od 199 EUR? - Split Usluge`);
+                const msg = encodeURIComponent(`Pozdrav! Napravili smo preview vaše web stranice: ${previewUrl}\n\nZanima li vas profesionalna web stranica od 300 EUR? Održavanje 75 EUR/mj. - Split Usluge`);
                 window.open(`https://wa.me/385${phone.replace(/^0/, "")}?text=${msg}`);
               }
             }}>

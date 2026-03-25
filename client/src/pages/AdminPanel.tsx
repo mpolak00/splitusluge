@@ -605,7 +605,7 @@ function ScannerTab({ adminPassword }: { adminPassword: string }) {
                                 const previewUrl = `${window.location.origin}/preview/${b.id}`;
                                 const subject = encodeURIComponent(`Web stranica za ${b.name}`);
                                 const body = encodeURIComponent(
-                                  `Poštovani ${b.name},\n\nPrimijetili smo da nemate web stranicu. Nudimo izradu profesionalne web stranice za lokalne biznise u Splitu.\n\nPripremili smo besplatni preview kako bi Vaša web stranica mogla izgledati:\n${previewUrl}\n\n✅ Moderna, mobilna web stranica\n✅ Google SEO optimizacija\n✅ Hosting i održavanje u cijeni\n✅ Od 199 EUR jednokratno + 29 EUR/mj\n\nSrdačan pozdrav,\nSplit Usluge`
+                                  `Poštovani ${b.name},\n\nPrimijetili smo da nemate web stranicu. Nudimo izradu profesionalne web stranice za lokalne biznise u Splitu.\n\nPripremili smo besplatni preview kako bi Vaša web stranica mogla izgledati:\n${previewUrl}\n\n✅ Moderna, mobilna web stranica\n✅ Google SEO optimizacija\n✅ Hosting i održavanje u cijeni\n✅ Od 300 EUR jednokratno + 75 EUR/mj\n\nSrdačan pozdrav,\nSplit Usluge`
                                 );
                                 window.open(`mailto:${b.email}?subject=${subject}&body=${body}`);
                               }}
@@ -619,7 +619,7 @@ function ScannerTab({ adminPassword }: { adminPassword: string }) {
                                 const previewUrl = `${window.location.origin}/preview/${b.id}`;
                                 const phone = b.phone!.replace(/\D/g, "");
                                 const msg = encodeURIComponent(
-                                  `Pozdrav! Vidim da ${b.name} nema web stranicu. Pripremili smo besplatni preview kako bi izgledala: ${previewUrl}\n\nWeb stranica od 199 EUR + hosting 29 EUR/mj. Zanima li Vas? - Split Usluge`
+                                  `Pozdrav! Vidim da ${b.name} nema web stranicu. Pripremili smo besplatni preview kako bi izgledala: ${previewUrl}\n\nWeb stranica od 300 EUR + hosting 75 EUR/mj. Zanima li Vas? - Split Usluge`
                                 );
                                 window.open(`https://wa.me/385${phone.replace(/^0/, "")}?text=${msg}`);
                               }}
@@ -633,7 +633,7 @@ function ScannerTab({ adminPassword }: { adminPassword: string }) {
                                 const phone = b.phone!;
                                 const previewUrl = `${window.location.origin}/preview/${b.id}`;
                                 const msg = encodeURIComponent(
-                                  `Pozdrav! Web stranica za ${b.name}: ${previewUrl} - 199 EUR + hosting 29eur/mj. Kontakt: Split Usluge`
+                                  `Pozdrav! Web stranica za ${b.name}: ${previewUrl} - 300 EUR + hosting 75 EUR/mj. Kontakt: Split Usluge`
                                 );
                                 window.open(`sms:${phone}?body=${msg}`);
                               }}
@@ -991,7 +991,7 @@ SKRIPT:
 [ako DA]
 "Odlično! Šaljem Vam sad: ${previewUrl}"
 "Stranica se može aktivirati već za 48 sati, s Vašim brojem telefona i radnim vremenom."
-"Paket Start je 199 EUR jednokratno + 29 EUR mjesečno za hosting i održavanje."
+"Paket Start je 300 EUR jednokratno + 75 EUR/mj za hosting i održavanje."
 "Zanima li Vas?"
 
 [ako NIJE ZAINTERESIRAN]
@@ -1027,7 +1027,7 @@ Interested lead! Preview: ${previewUrl}
 
 "Dobar dan! Zovem se [IME] iz Split Usluge, pratim Vaš interes za web stranicu za ${name}."
 
-"Mogu Vam potvrditi: paket web stranice je 199 EUR jednokratno, a hosting i SEO optimizacija je 29 EUR/mj."
+"Mogu Vam potvrditi: paket web stranice je 300 EUR jednokratno, a hosting i SEO optimizacija je 75 EUR/mj."
 
 "Za tu cijenu dobivate:"
 "✅ Kompletnu web stranicu s Vašim podacima"
