@@ -4,6 +4,7 @@ import { systemRouter } from "./_core/systemRouter.js";
 import { publicProcedure, router } from "./_core/trpc.js";
 import { servicesRouter } from "./routers/services.js";
 import { businessesRouter } from "./routers/businesses.js";
+import { contactsRouter } from "./routers/contacts.js";
 import { reviewsRouter } from "./routers/reviews.js";
 import { adminRouter } from "./routers/admin.js";
 import { analyticsRouter } from "./routers/analytics.js";
@@ -23,6 +24,7 @@ export const appRouter = router({
   }),
   services: servicesRouter,
   businesses: businessesRouter,
+  contacts: contactsRouter,
   reviews: reviewsRouter,
   admin: adminRouter,
   analytics: analyticsRouter,

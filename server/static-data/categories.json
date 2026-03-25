@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "name": "Vulkanizeri",
+    "slug": "vulkanizeri",
+    "description": "Popravka i zamjena guma, vulkanizacija",
+    "icon": "tire",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "name": "Automehaničari",
+    "slug": "automehanicari",
+    "description": "Servis i popravka automobila",
+    "icon": "wrench",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 3,
+    "name": "Vodoinstalateri",
+    "slug": "vodoinstalateri",
+    "description": "Instalacija i popravka vodovodnih sustava",
+    "icon": "droplet",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 4,
+    "name": "Električari",
+    "slug": "elektricari",
+    "description": "Električne instalacije i popravke",
+    "icon": "zap",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 5,
+    "name": "Servisi za čišćenje",
+    "slug": "servisi-za-ciscenje",
+    "description": "Čišćenje domova i poslovnih prostora",
+    "icon": "sparkles",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 6,
+    "name": "Stolari",
+    "slug": "stolari",
+    "description": "Stolarske usluge i izrada namještaja",
+    "icon": "hammer",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 7,
+    "name": "Frizerski saloni",
+    "slug": "frizerski-saloni",
+    "description": "Frizerske usluge za muškarce i žene",
+    "icon": "scissors",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 8,
+    "name": "Stomatolozi",
+    "slug": "stomatolozi",
+    "description": "Stomatološke usluge i liječenje zuba",
+    "icon": "tooth",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 9,
+    "name": "Prijevoz i selidbe",
+    "slug": "prijevoz-i-selidbe",
+    "description": "Usluge prijevoza i selidbi",
+    "icon": "truck",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  },
+  {
+    "id": 10,
+    "name": "Vrtlari i uređenje vrtova",
+    "slug": "vrtlari",
+    "description": "Uređenje i održavanje vrtova",
+    "icon": "leaf",
+    "imageUrl": null,
+    "createdAt": "2026-01-29T00:00:00.000Z",
+    "updatedAt": "2026-01-29T00:00:00.000Z"
+  }
+]

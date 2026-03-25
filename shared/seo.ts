@@ -60,10 +60,10 @@ export const DEFAULT_OG_IMAGE = "/images/hero-split.jpg";
 export const SERVICE_AREAS = [
   "Split",
   "Solin",
-  "Kastela",
+  "Kaštela",
+  "Trogir",
+  "Omiš",
   "Podstrana",
-  "Dugopolje",
-  "Omis",
 ];
 
 const CATEGORY_ALIASES: Record<string, string> = {

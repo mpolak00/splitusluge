@@ -60,7 +60,7 @@ export default function AllBusinesses() {
 
   const seoPayload = useMemo(() => {
     const title = "Svi obrti i lokalne usluge u Splitu | Split Usluge";
-    const description = `Pregledaj ${filteredBusinesses.length || allBusinesses.length} lokalnih poslovanja u Splitu i okolici. Usporedi kategorije, profile, kontakte i lokacije na jednom mjestu.`;
+    const description = `Pregledajte ${filteredBusinesses.length || allBusinesses.length} lokalnih poslovanja u Splitu i okolici. Usporedite kategorije, profile, kontakte i lokacije na jednom mjestu.`;
     const siteUrl = typeof window !== "undefined" ? window.location.origin : undefined;
     const breadcrumbs = [
       { name: "Naslovnica", path: "/" },
@@ -111,7 +111,7 @@ export default function AllBusinesses() {
               Svi obrti i lokalne usluge u Splitu na jednom mjestu
             </h1>
             <p className="max-w-3xl text-lg leading-8 text-white/80">
-              Ovo je centralni imenik Split Usluge. Ovdje možeš filtrirati kategorije, usporediti profile
+              Ovo je centralni imenik Split Usluge. Ovdje možete filtrirati kategorije, usporediti profile
               poslovanja i otvoriti detaljne stranice za svaki lokalni biznis.
             </p>
             <div className="grid gap-4 md:grid-cols-3">
@@ -236,7 +236,7 @@ export default function AllBusinesses() {
                       className="h-12 rounded-xl bg-red-600 text-sm font-extrabold uppercase tracking-wide text-white shadow-lg shadow-red-600/30 hover:bg-red-700"
                     >
                       <MapPin className="h-5 w-5" />
-                      Mapa
+                      Lokacija
                     </Button>
                   </div>
 
@@ -252,11 +252,19 @@ export default function AllBusinesses() {
                       </p>
                     )}
 
+                    {business.phone && (
+                      <p className="flex items-center gap-2 text-sm font-medium text-foreground">
+                        <Phone className="h-4 w-4 text-emerald-600" />
+                        <a href={`tel:${business.phone}`} className="hover:text-emerald-600">{business.phone}</a>
+                      </p>
+                    )}
+
                     <div className="flex flex-wrap items-center gap-3 text-sm">
                       {getRatingValue(business) > 0 ? (
                         <div className="inline-flex items-center gap-1 rounded-full bg-yellow-400/15 px-3 py-1.5 font-semibold text-yellow-700">
                           <Star className="h-4 w-4 fill-current" />
-                          {getRatingValue(business).toFixed(1)} recenzije
+                          {getRatingValue(business).toFixed(1)}
+                          {business.reviewCount ? <span className="text-xs font-normal">({business.reviewCount})</span> : null}
                         </div>
                       ) : (
                         <div className="inline-flex items-center gap-1 rounded-full bg-muted px-3 py-1.5 font-medium text-muted-foreground">
@@ -293,7 +301,7 @@ export default function AllBusinesses() {
             <CardContent className="p-10 text-center">
               <p className="text-lg font-medium">Nema rezultata za odabrane filtre.</p>
               <p className="mt-2 text-muted-foreground">
-                Očisti pretragu ili odaberi drugu kategoriju.
+                Očistite pretragu ili odaberite drugu kategoriju.
               </p>
             </CardContent>
           </Card>
