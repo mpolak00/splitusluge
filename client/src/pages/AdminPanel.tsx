@@ -523,20 +523,28 @@ function normalizePhone(phone: string): string {
   return clean;
 }
 
-function buildWhatsAppMsg(name: string, previewUrl: string): string {
-  return `Poštovani ${name},\n\nPrimijetili smo da nemate web stranicu. Pripremili smo besplatni preview za Vas:\n${previewUrl}\n\nNudimo izradu profesionalne stranice od 199 EUR + besplatni hosting.\n\nJavite nam se za više info!\nSplit Usluge tim`;
+function buildWhatsAppMsg(name: string, previewUrl: string, hasWebsite: boolean): string {
+  if (hasWebsite) {
+    return `Poštovani,\n\njavljam se iz Split Usluge, lokalnog imenika za Split.\n\nVaš biznis "${name}" je uvršten u naš imenik. Nudimo:\n\n🌐 Profesionalna web stranica — od 199€\n📱 Prilagođena za mobitele\n🔍 SEO optimizacija za Google\n📞 AI agent koji odgovara na pozive 24/7\n\nPogledajte preview:\n${previewUrl}\n\nBesplatna izrada + hosting. Jedini trošak je domena (~12€/god).\n\nZainteresirani? Javite se!\nkondor1413@gmail.com`;
+  }
+  return `Poštovani,\n\njavljam se iz Split Usluge. Primijetili smo da "${name}" nema web stranicu.\n\nDanas 70% ljudi traži usluge na Google-u. Bez web stranice gubite klijente.\n\nNapravili smo Vam besplatni preview:\n${previewUrl}\n\n✅ Izrada BESPLATNA\n✅ Hosting BESPLATAN\n✅ Jedini trošak: domena ~12€/god\n✅ Gotovo za 24h\n\nIli nadogradite:\n📦 Standard — 199€ (SEO + Google Ads priprema)\n📦 Premium — 399€ (sve + AI telefonski agent)\n\nJavite se za info!\nkondor1413@gmail.com`;
 }
 
-function buildEmailBody(name: string, previewUrl: string): string {
-  return `Poštovani ${name},\n\nPrimijetili smo da nemate web stranicu. Pripremili smo besplatni preview kako bi Vaša stranica mogla izgledati:\n${previewUrl}\n\n✅ Moderna, responzivna web stranica\n✅ Google optimizacija (SEO)\n✅ Hosting i održavanje uključeno\n✅ STARTER paket: BESPLATNO\n✅ STANDARD paket: 199 EUR + 29 EUR/mj\n\nSrdačan pozdrav,\nSplit Usluge tim`;
+function buildEmailBody(name: string, previewUrl: string, hasWebsite: boolean): string {
+  if (hasWebsite) {
+    return `Poštovani,\n\nJavljam se iz Split Usluge — lokalnog online imenika za Split i okolicu.\n\nVaš biznis "${name}" je dio našeg imenika, i pripremili smo personalizirani preview moderne web stranice za Vas:\n${previewUrl}\n\nŠto nudimo:\n✅ Profesionalna, mobilno prilagođena stranica\n✅ SEO optimizacija (da Vas klijenti nađu na Google-u)\n✅ Hosting i održavanje uključeno\n\nPaketi:\n🟢 Starter — BESPLATAN (izrada + hosting, samo domena ~12€/god)\n🟡 Standard — 199€ jednokratno + 29€/mj (SEO, Google Ads priprema, analytics)\n🔴 Premium — 399€ + 49€/mj (sve + AI telefonski agent na hrvatskom)\n\nPogledajte preview i javite nam se!\n\nSrdačan pozdrav,\nSplit Usluge tim\nkondor1413@gmail.com`;
+  }
+  return `Poštovani,\n\nJavljam se iz Split Usluge. Primijetili smo da "${name}" trenutno nema web stranicu.\n\n📊 70% korisnika traži lokalne usluge na Google-u\n📊 Biznisi sa web stranicom dobivaju 3x više poziva\n📊 Bez web prisutnosti, gubite klijente konkurenciji\n\nNapravili smo Vam besplatni preview stranice:\n${previewUrl}\n\nPaketi:\n🟢 Starter — BESPLATAN (izrada + hosting, samo domena ~12€/god)\n🟡 Standard — 199€ + 29€/mj (SEO, Google priprema, analytics)\n🔴 Premium — 399€ + 49€/mj (sve + AI telefonski agent 24/7)\n\nPogledajte preview — stranica može biti online za 24h!\n\nSrdačan pozdrav,\nSplit Usluge tim\nkondor1413@gmail.com`;
 }
 
 function buildSmsMsg(name: string, previewUrl: string): string {
-  return `${name}, napravili smo besplatni preview web stranice za Vas: ${previewUrl} - Split Usluge`;
+  return `${name} — napravili smo besplatni preview web stranice za Vaš biznis: ${previewUrl} Javite se na kondor1413@gmail.com — Split Usluge`;
 }
 
 function ScannerTab({ adminPassword }: { adminPassword: string }) {
   const [categoryId, setCategoryId] = useState<number | undefined>();
+  const [noWebsiteOnly, setNoWebsiteOnly] = useState(false);
+  const [searchFilter, setScanSearch] = useState("");
   const [page, setPage] = useState(0);
   const [sentIds, setSentIds] = useState<Set<string>>(new Set());
   const pageSize = 12;
@@ -546,6 +554,8 @@ function ScannerTab({ adminPassword }: { adminPassword: string }) {
     adminPassword,
     categoryId,
     hasPhone: true,
+    noWebsiteOnly,
+    search: searchFilter || undefined,
     limit: pageSize,
     offset: page * pageSize,
   });
@@ -553,7 +563,7 @@ function ScannerTab({ adminPassword }: { adminPassword: string }) {
 
   const data = scanQuery.data;
 
-  const handleOutreach = useCallback((businessId: number, channel: string, url: string, businessName: string) => {
+  const handleOutreach = useCallback((businessId: number, channel: string, url: string) => {
     logOutreach.mutate({
       adminPassword,
       businessId,
@@ -566,7 +576,19 @@ function ScannerTab({ adminPassword }: { adminPassword: string }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-4 items-end flex-wrap">
+      {/* Pricing reminder */}
+      <Card className="border-orange-200 bg-orange-50">
+        <CardContent className="p-4">
+          <div className="flex flex-wrap gap-4 text-sm">
+            <div><span className="font-bold text-green-700">🟢 Starter:</span> BESPLATNO <span className="text-muted-foreground">(domena ~12€/god)</span></div>
+            <div><span className="font-bold text-yellow-700">🟡 Standard:</span> 199€ + 29€/mj <span className="text-muted-foreground">(SEO, Analytics)</span></div>
+            <div><span className="font-bold text-red-700">🔴 Premium:</span> 399€ + 49€/mj <span className="text-muted-foreground">(+ AI agent)</span></div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Filters */}
+      <div className="flex gap-3 items-end flex-wrap">
         <div>
           <label className="text-xs text-muted-foreground block mb-1">Kategorija</label>
           <select
@@ -580,8 +602,26 @@ function ScannerTab({ adminPassword }: { adminPassword: string }) {
             ))}
           </select>
         </div>
-        <div className="text-sm text-muted-foreground">
-          <strong>{data?.total || 0}</strong> biznisa bez web stranice (s telefonom)
+        <div>
+          <label className="text-xs text-muted-foreground block mb-1">Pretraži</label>
+          <Input
+            placeholder="Naziv biznisa..."
+            className="h-9 w-48"
+            value={searchFilter}
+            onChange={e => { setScanSearch(e.target.value); setPage(0); }}
+          />
+        </div>
+        <Button
+          size="sm"
+          variant={noWebsiteOnly ? "default" : "outline"}
+          onClick={() => { setNoWebsiteOnly(!noWebsiteOnly); setPage(0); }}
+          className="h-9"
+        >
+          <Globe className="h-4 w-4 mr-1" />
+          {noWebsiteOnly ? "Samo bez weba ✓" : "Svi biznisi"}
+        </Button>
+        <div className="text-sm text-muted-foreground ml-auto">
+          <strong>{data?.total || 0}</strong> biznisa {noWebsiteOnly ? "bez web stranice" : "ukupno"} (s telefonom)
         </div>
       </div>
 
@@ -591,8 +631,9 @@ function ScannerTab({ adminPassword }: { adminPassword: string }) {
             {data.businesses.map((b) => {
               const previewUrl = `${window.location.origin}/preview/${b.id}`;
               const phone = b.phone ? normalizePhone(b.phone) : "";
-              const waUrl = phone ? `https://wa.me/${phone.replace("+", "")}?text=${encodeURIComponent(buildWhatsAppMsg(b.name, previewUrl))}` : "";
-              const emailUrl = b.email ? `mailto:${b.email}?subject=${encodeURIComponent(`Web stranica za ${b.name}`)}&body=${encodeURIComponent(buildEmailBody(b.name, previewUrl))}` : "";
+              const hasWeb = !!(b.website && b.website.length > 0 && !b.website.includes("sites.google") && !b.website.includes("business.site"));
+              const waUrl = phone ? `https://wa.me/${phone.replace("+", "")}?text=${encodeURIComponent(buildWhatsAppMsg(b.name, previewUrl, hasWeb))}` : "";
+              const emailUrl = b.email ? `mailto:${b.email}?subject=${encodeURIComponent(`Profesionalna web stranica za ${b.name} — besplatni preview`)}&body=${encodeURIComponent(buildEmailBody(b.name, previewUrl, hasWeb))}` : "";
               const smsUrl = phone ? `sms:${phone}?body=${encodeURIComponent(buildSmsMsg(b.name, previewUrl))}` : "";
 
               let hours: string[] = [];
@@ -648,21 +689,21 @@ function ScannerTab({ adminPassword }: { adminPassword: string }) {
                       </Button>
                       {waUrl && (
                         <Button size="sm" className="text-xs h-8 bg-green-600 hover:bg-green-700 text-white"
-                          onClick={() => handleOutreach(b.id, "whatsapp", waUrl, b.name)}
+                          onClick={() => handleOutreach(b.id, "whatsapp", waUrl)}
                         >
                           {sentIds.has(`${b.id}-whatsapp`) ? <><CheckCircle className="h-3 w-3 mr-1" /> Poslano</> : <><MessageCircle className="h-3 w-3 mr-1" /> WhatsApp</>}
                         </Button>
                       )}
                       {emailUrl && (
                         <Button size="sm" variant="outline" className="text-xs h-8"
-                          onClick={() => handleOutreach(b.id, "email", emailUrl, b.name)}
+                          onClick={() => handleOutreach(b.id, "email", emailUrl)}
                         >
                           {sentIds.has(`${b.id}-email`) ? <><CheckCircle className="h-3 w-3 mr-1" /> Poslano</> : <><Mail className="h-3 w-3 mr-1" /> Email</>}
                         </Button>
                       )}
                       {smsUrl && (
                         <Button size="sm" variant="outline" className="text-xs h-8"
-                          onClick={() => handleOutreach(b.id, "sms", smsUrl, b.name)}
+                          onClick={() => handleOutreach(b.id, "sms", smsUrl)}
                         >
                           {sentIds.has(`${b.id}-sms`) ? <><CheckCircle className="h-3 w-3 mr-1" /> Poslano</> : <><Send className="h-3 w-3 mr-1" /> SMS</>}
                         </Button>

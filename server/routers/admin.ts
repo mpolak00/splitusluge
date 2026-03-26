@@ -401,6 +401,8 @@ export const adminRouter = router({
     .input(adminAuth.extend({
       categoryId: z.number().optional(),
       hasPhone: z.boolean().optional(),
+      noWebsiteOnly: z.boolean().optional(),
+      search: z.string().optional(),
       limit: z.number().default(30),
       offset: z.number().default(0),
     }))
@@ -411,19 +413,27 @@ export const adminRouter = router({
 
       const conditions = [
         eq(businesses.isActive, 1),
-        or(
-          isNull(businesses.website),
-          eq(businesses.website, ""),
-          like(businesses.website, "%sites.google.com%"),
-          like(businesses.website, "%business.site%"),
-        ),
       ];
+
+      if (input.noWebsiteOnly) {
+        conditions.push(
+          or(
+            isNull(businesses.website),
+            eq(businesses.website, ""),
+            like(businesses.website, "%sites.google.com%"),
+            like(businesses.website, "%business.site%"),
+          )!,
+        );
+      }
 
       if (input.categoryId) {
         conditions.push(eq(businesses.categoryId, input.categoryId));
       }
       if (input.hasPhone) {
         conditions.push(sql`${businesses.phone} IS NOT NULL AND ${businesses.phone} != ''`);
+      }
+      if (input.search) {
+        conditions.push(like(businesses.name, `%${input.search}%`));
       }
 
       const whereClause = and(...conditions);
