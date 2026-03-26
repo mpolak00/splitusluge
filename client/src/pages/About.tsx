@@ -92,6 +92,24 @@ export default function About() {
             </div>
           </section>
 
+          {/* Contact Section */}
+          <section className="space-y-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+              Kontakt
+            </h2>
+            <div className="bg-card p-6 rounded-lg border border-border space-y-3">
+              <p className="text-lg text-muted-foreground">
+                Za sva pitanja, prijedloge ili poslovnu suradnju, kontaktirajte nas:
+              </p>
+              <a href="mailto:kondor1413@gmail.com" className="inline-flex items-center gap-2 text-lg font-semibold text-primary hover:underline">
+                kondor1413@gmail.com
+              </a>
+              <p className="text-sm text-muted-foreground">
+                Odgovaramo u roku od 24 sata.
+              </p>
+            </div>
+          </section>
+
           {/* Call to Action */}
           <section className="bg-primary text-primary-foreground p-8 rounded-lg text-center space-y-4">
             <h2 className="text-2xl md:text-3xl font-bold">
@@ -100,13 +118,23 @@ export default function About() {
             <p className="text-lg opacity-90">
               Pridružite se našoj mreži i dođite do novih klijenata
             </p>
-            <Button
-              variant="secondary"
-              size="lg"
-              onClick={() => navigate("/registracija")}
-            >
-              Besplatna Registracija
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button
+                variant="secondary"
+                size="lg"
+                onClick={() => navigate("/registracija")}
+              >
+                Besplatna Registracija
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-white/30 text-white hover:bg-white/10"
+                onClick={() => navigate("/prijava")}
+              >
+                Moja djelatnost
+              </Button>
+            </div>
           </section>
         </div>
       </main>

@@ -89,30 +89,27 @@ export default function AdminPanel() {
     <div className="min-h-screen bg-background">
       {/* Admin Header */}
       <header className="bg-card border-b border-border sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-primary rounded flex items-center justify-center">
               <span className="text-primary-foreground font-bold text-lg">S</span>
             </div>
-            <span className="font-bold text-lg">Admin Panel</span>
+            <span className="font-bold text-lg">Admin</span>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-sm">
-              <span className="text-muted-foreground">Period:</span>
-              <Input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="w-36 h-8 text-xs" />
-              <span className="text-muted-foreground">-</span>
-              <Input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="w-36 h-8 text-xs" />
-            </div>
-            <Button variant="ghost" size="sm" onClick={() => { setIsLoggedIn(false); setAdminPassword(""); }}>
-              <LogOut className="h-4 w-4 mr-1" /> Odjava
-            </Button>
+          <div className="flex items-center gap-2 order-3 w-full sm:order-2 sm:w-auto">
+            <Input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="flex-1 sm:w-36 h-8 text-xs" />
+            <span className="text-muted-foreground text-xs">-</span>
+            <Input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="flex-1 sm:w-36 h-8 text-xs" />
           </div>
+          <Button variant="ghost" size="sm" className="order-2 sm:order-3" onClick={() => { setIsLoggedIn(false); setAdminPassword(""); }}>
+            <LogOut className="h-4 w-4" />
+          </Button>
         </div>
       </header>
 
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Tabs */}
-        <div className="flex gap-1 mb-6 overflow-x-auto pb-2">
+        <div className="flex gap-1 mb-6 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-none">
           {([
             { id: "dashboard", label: "Pregled", icon: BarChart3 },
             { id: "categories", label: "Kategorije", icon: TrendingUp },

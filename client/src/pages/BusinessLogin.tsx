@@ -18,7 +18,7 @@ export default function BusinessLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-background py-12 px-4">
+    <div className="min-h-screen bg-background py-8 sm:py-12 px-4">
       <div className="max-w-md mx-auto space-y-6">
         <div className="text-center space-y-2">
           <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
@@ -215,13 +215,13 @@ function OwnerDashboard({ token, onLogout }: { token: string; onLogout: () => vo
   return (
     <div className="min-h-screen bg-background">
       <header className="bg-card border-b sticky top-0 z-50">
-        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Store className="h-5 w-5 text-primary" />
-            <span className="font-bold">Moja djelatnost</span>
+        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <Store className="h-5 w-5 text-primary flex-shrink-0" />
+            <span className="font-bold truncate">Moja djelatnost</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">{data?.owner.name}</span>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <span className="text-sm text-muted-foreground hidden sm:inline">{data?.owner.name}</span>
             <Button variant="ghost" size="sm" onClick={onLogout}><LogOut className="h-4 w-4" /></Button>
           </div>
         </div>
@@ -237,8 +237,8 @@ function OwnerDashboard({ token, onLogout }: { token: string; onLogout: () => vo
         {/* Business Card */}
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">{business.name}</CardTitle>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <CardTitle className="flex items-center gap-2 text-xl">{business.name}</CardTitle>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={() => window.open(`/preview/${business.id}`, "_blank")}>
                   <Globe className="h-4 w-4 mr-1" /> Preview
@@ -257,7 +257,7 @@ function OwnerDashboard({ token, onLogout }: { token: string; onLogout: () => vo
                   <label className="text-xs text-muted-foreground">Opis</label>
                   <textarea className="w-full border rounded p-2 text-sm min-h-[80px] bg-background" value={editData.description} onChange={e => setEditData(p => ({ ...p, description: e.target.value }))} />
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid sm:grid-cols-2 gap-3">
                   <div><label className="text-xs text-muted-foreground">Telefon</label><Input value={editData.phone} onChange={e => setEditData(p => ({ ...p, phone: e.target.value }))} /></div>
                   <div><label className="text-xs text-muted-foreground">Email</label><Input value={editData.email} onChange={e => setEditData(p => ({ ...p, email: e.target.value }))} /></div>
                   <div><label className="text-xs text-muted-foreground">Adresa</label><Input value={editData.address} onChange={e => setEditData(p => ({ ...p, address: e.target.value }))} /></div>

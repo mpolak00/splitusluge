@@ -82,13 +82,17 @@ export function Header() {
                   </Link>
                 );
               })}
-              <div className="pt-3">
+              <div className="pt-3 space-y-2">
                 <Button asChild className="w-full bg-orange-500 text-white hover:bg-orange-600">
                   <Link href="/promoviranje" onClick={() => setOpen(false)}>
                     <Megaphone className="mr-2 h-4 w-4" />
                     Promoviraj se
                   </Link>
                 </Button>
+              </div>
+              <div className="mt-6 pt-4 border-t border-white/10">
+                <p className="text-xs text-white/40 mb-2">Kontakt</p>
+                <a href="mailto:kondor1413@gmail.com" className="text-sm text-white/70 hover:text-white">kondor1413@gmail.com</a>
               </div>
             </div>
           </SheetContent>

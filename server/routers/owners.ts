@@ -6,6 +6,7 @@ import { eq, and, desc } from "drizzle-orm";
 import crypto from "crypto";
 
 const OWNER_EMAIL = "kondor1413@gmail.com";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "white1413";
 
 function hashPassword(password: string): string {
   return crypto.createHash("sha256").update(password).digest("hex");
@@ -156,7 +157,7 @@ export const ownersRouter = router({
   getPendingClaims: publicProcedure
     .input(z.object({ adminPassword: z.string() }))
     .query(async ({ input }) => {
-      if (input.adminPassword !== "white1413") throw new Error("Unauthorized");
+      if (input.adminPassword !== ADMIN_PASSWORD) throw new Error("Unauthorized");
       const db = await getDb();
       if (!db) return [];
 
@@ -184,7 +185,7 @@ export const ownersRouter = router({
       approved: z.boolean(),
     }))
     .mutation(async ({ input }) => {
-      if (input.adminPassword !== "white1413") throw new Error("Unauthorized");
+      if (input.adminPassword !== ADMIN_PASSWORD) throw new Error("Unauthorized");
       const db = await getDb();
       if (!db) return { success: false };
 
