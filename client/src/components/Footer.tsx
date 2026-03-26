@@ -75,6 +75,8 @@ export function Footer() {
               <h4 className="mb-3 text-sm font-bold uppercase tracking-widest text-white/50">Za biznise</h4>
               <ul className="space-y-2 text-sm">
                 <li><Link href="/promoviranje" className="text-white/70 hover:text-white">Promoviranje</Link></li>
+                <li><Link href="/prijava" className="text-white/70 hover:text-white">Moja djelatnost</Link></li>
+                <li><Link href="/paketi" className="text-white/70 hover:text-white">Web paketi</Link></li>
                 <li><Link href="/registracija" className="text-white/70 hover:text-white">Dodaj biznis</Link></li>
               </ul>
             </div>
@@ -89,12 +91,12 @@ export function Footer() {
               <h4 className="mb-3 text-sm font-bold uppercase tracking-widest text-white/50">Kontakt</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <a href="mailto:info@split-usluge.com" className="flex items-center gap-2 text-white/70 hover:text-white">
-                    <Mail className="h-3.5 w-3.5" /> info@split-usluge.com
+                  <a href="mailto:kondor1413@gmail.com" className="flex items-center gap-2 text-white/70 hover:text-white">
+                    <Mail className="h-3.5 w-3.5" /> kondor1413@gmail.com
                   </a>
                 </li>
                 <li>
-                  <a href="tel:+385000000000" className="flex items-center gap-2 text-white/70 hover:text-white">
+                  <a href="mailto:kondor1413@gmail.com" className="flex items-center gap-2 text-white/70 hover:text-white">
                     <Phone className="h-3.5 w-3.5" /> Kontaktirajte nas
                   </a>
                 </li>

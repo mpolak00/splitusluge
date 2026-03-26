@@ -218,3 +218,44 @@ export const servicePurchases = mysqlTable("servicePurchases", {
 
 export type ServicePurchase = typeof servicePurchases.$inferSelect;
 export type InsertServicePurchase = typeof servicePurchases.$inferInsert;
+
+// Business owners - claim & login system
+export const businessOwners = mysqlTable("businessOwners", {
+  id: int("id").autoincrement().primaryKey(),
+  businessId: int("businessId").notNull(),
+  email: varchar("email", { length: 320 }).notNull(),
+  passwordHash: varchar("passwordHash", { length: 255 }).notNull(),
+  name: varchar("name", { length: 255 }),
+  phone: varchar("phone", { length: 50 }),
+  isVerified: int("isVerified").default(0), // 0=pending, 1=verified by admin
+  verificationToken: varchar("verificationToken", { length: 255 }),
+  sessionToken: varchar("sessionToken", { length: 255 }),
+  lastLoginAt: timestamp("lastLoginAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type BusinessOwner = typeof businessOwners.$inferSelect;
+export type InsertBusinessOwner = typeof businessOwners.$inferInsert;
+
+// AI Voice Agent subscriptions
+export const voiceAgentSubs = mysqlTable("voiceAgentSubs", {
+  id: int("id").autoincrement().primaryKey(),
+  businessId: int("businessId").notNull(),
+  plan: varchar("plan", { length: 50 }).notNull(), // basic, pro, enterprise
+  monthlyMinutes: int("monthlyMinutes").default(100),
+  usedMinutes: int("usedMinutes").default(0),
+  agentName: varchar("agentName", { length: 255 }),
+  agentVoice: varchar("agentVoice", { length: 50 }).default("female"),
+  agentLanguage: varchar("agentLanguage", { length: 10 }).default("hr"),
+  greeting: text("greeting"),
+  services: text("services"), // JSON array of services for booking
+  workingHours: text("workingHours"), // JSON working hours config
+  status: varchar("status", { length: 50 }).default("pending"), // pending, active, paused, cancelled
+  stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 255 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type VoiceAgentSub = typeof voiceAgentSubs.$inferSelect;
+export type InsertVoiceAgentSub = typeof voiceAgentSubs.$inferInsert;
