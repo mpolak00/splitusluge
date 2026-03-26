@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { ALL_BUSINESSES_PATH, getBusinessPath } from "@shared/paths";
 import { buildBaseStructuredData, buildSeoPayload, SERVICE_AREAS } from "@shared/seo";
-import { ArrowRight, Globe, Map, MapPin, Phone, Search, ShieldCheck, Star, Store } from "lucide-react";
+import { ArrowRight, Globe, Map, MapPin, MessageCircle, Phone, Search, ShieldCheck, Star, Store } from "lucide-react";
 import { usePageSeo } from "@/hooks/usePageSeo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -250,27 +250,28 @@ export default function HomeNew() {
                         )}
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2">
-                        {business.phone ? (
+                      <div className="flex flex-wrap gap-2">
+                        {business.phone && (
                           <Button asChild size="sm">
                             <a href={`tel:${business.phone}`}>
                               <Phone className="mr-2 h-4 w-4" />
                               Pozovi
                             </a>
                           </Button>
-                        ) : (
+                        )}
+                        {business.phone && (
+                          <Button asChild size="sm" variant="outline" className="border-green-200 text-green-700 hover:bg-green-50">
+                            <a href={`https://wa.me/${business.phone.replace(/[^0-9+]/g, "").replace(/^0/, "+385")}`} target="_blank" rel="noopener noreferrer">
+                              <MessageCircle className="mr-2 h-4 w-4" />
+                              WhatsApp
+                            </a>
+                          </Button>
+                        )}
+                        {!business.phone && (
                           <Button asChild size="sm" variant="outline">
                             <Link href={getBusinessPath(business)}>Profil</Link>
                           </Button>
                         )}
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => openGoogleMaps(business.name, business.address)}
-                        >
-                          <MapPin className="mr-2 h-4 w-4" />
-                          Mapa
-                        </Button>
                       </div>
                     </CardContent>
                   </Card>

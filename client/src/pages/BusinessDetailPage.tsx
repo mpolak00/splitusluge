@@ -7,7 +7,7 @@ import {
   buildSeoPayload,
   SERVICE_AREAS,
 } from "@shared/seo";
-import { ArrowLeft, Clock, Globe, MapPin, Navigation, Phone, Star, Tag, UserCheck } from "lucide-react";
+import { ArrowLeft, Clock, Globe, Mail, MapPin, MessageCircle, Navigation, Phone, Star, Tag, UserCheck } from "lucide-react";
 import { usePageSeo } from "@/hooks/usePageSeo";
 import { trpc } from "@/lib/trpc";
 import {
@@ -432,6 +432,24 @@ export default function BusinessDetailPage() {
                   </Button>
                 )}
 
+                {business.phone && (
+                  <Button asChild variant="outline" className="w-full bg-green-50 border-green-200 text-green-700 hover:bg-green-100">
+                    <a href={`https://wa.me/${business.phone.replace(/[^0-9+]/g, "").replace(/^0/, "+385")}`} target="_blank" rel="noopener noreferrer">
+                      <MessageCircle className="mr-2 h-4 w-4" />
+                      WhatsApp poruka
+                    </a>
+                  </Button>
+                )}
+
+                {business.email && (
+                  <Button asChild variant="outline" className="w-full">
+                    <a href={`mailto:${business.email}`}>
+                      <Mail className="mr-2 h-4 w-4" />
+                      Pošalji email
+                    </a>
+                  </Button>
+                )}
+
                 {business.website && (
                   <Button asChild variant="outline" className="w-full">
                     <a href={business.website} target="_blank" rel="noopener noreferrer">
@@ -477,7 +495,7 @@ export default function BusinessDetailPage() {
                 Preuzmite kontrolu nad profilom, ažurirajte podatke i povećajte vidljivost.
               </p>
               <Button asChild variant="outline" className="w-full">
-                <Link href="/promoviranje">Prijavite vlasništvo</Link>
+                <Link href="/prijava">Preuzmite djelatnost</Link>
               </Button>
             </CardContent>
           </Card>
