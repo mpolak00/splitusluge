@@ -186,3 +186,35 @@ export const contactSubmissions = mysqlTable("contactSubmissions", {
 
 export type ContactSubmission = typeof contactSubmissions.$inferSelect;
 export type InsertContactSubmission = typeof contactSubmissions.$inferInsert;
+
+// Outreach log - tracks all outreach attempts per business
+export const outreachLog = mysqlTable("outreachLog", {
+  id: int("id").autoincrement().primaryKey(),
+  businessId: int("businessId").notNull(),
+  channel: varchar("channel", { length: 50 }).notNull(), // whatsapp, email, sms, call, ai_call
+  message: text("message"),
+  previewUrl: varchar("previewUrl", { length: 1000 }),
+  status: varchar("status", { length: 50 }).default("sent"), // sent, delivered, responded, converted, failed
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type OutreachLogEntry = typeof outreachLog.$inferSelect;
+export type InsertOutreachLogEntry = typeof outreachLog.$inferInsert;
+
+// Service purchases - Stripe-ready
+export const servicePurchases = mysqlTable("servicePurchases", {
+  id: int("id").autoincrement().primaryKey(),
+  businessId: int("businessId").notNull(),
+  plan: varchar("plan", { length: 50 }).notNull(), // starter, standard, premium
+  setupFee: int("setupFee").default(0),
+  monthlyFee: int("monthlyFee").default(0),
+  stripeCustomerId: varchar("stripeCustomerId", { length: 255 }),
+  stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 255 }),
+  status: varchar("status", { length: 50 }).default("pending"), // pending, active, cancelled, expired
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ServicePurchase = typeof servicePurchases.$inferSelect;
+export type InsertServicePurchase = typeof servicePurchases.$inferInsert;

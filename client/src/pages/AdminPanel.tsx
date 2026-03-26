@@ -6,10 +6,11 @@ import { Input } from "@/components/ui/input";
 import {
   BarChart3, Eye, Globe, Lock, LogOut, MousePointerClick, Search,
   TrendingUp, Users, FileText, Scan, ExternalLink, Phone, MapPin,
-  Download, RefreshCw, ChevronLeft, ChevronRight, Filter, Wand2, Copy, CheckCircle
+  Download, RefreshCw, ChevronLeft, ChevronRight, Filter, Wand2, Copy, CheckCircle,
+  MessageCircle, Mail, Star, Clock, Send, PhoneCall, Server, CreditCard, Bot
 } from "lucide-react";
 
-type AdminTab = "dashboard" | "categories" | "searches" | "clicks" | "reports" | "scanner" | "outreach" | "prompts";
+type AdminTab = "dashboard" | "categories" | "searches" | "clicks" | "reports" | "scanner" | "outreach" | "prompts" | "hosting" | "ai-calls" | "clients";
 
 function getSessionId() {
   let id = sessionStorage.getItem("su_session");
@@ -121,6 +122,9 @@ export default function AdminPanel() {
             { id: "scanner", label: "Scanner", icon: Scan },
             { id: "outreach", label: "Outreach", icon: ExternalLink },
             { id: "prompts", label: "AI Promptovi", icon: Wand2 },
+            { id: "hosting", label: "Hosting", icon: Server },
+            { id: "ai-calls", label: "AI Pozivi", icon: Bot },
+            { id: "clients", label: "Klijenti", icon: CreditCard },
           ] as { id: AdminTab; label: string; icon: any }[]).map(tab => (
             <Button
               key={tab.id}
@@ -143,6 +147,9 @@ export default function AdminPanel() {
         {activeTab === "scanner" && <ScannerTab adminPassword={adminPassword} />}
         {activeTab === "outreach" && <OutreachTab adminPassword={adminPassword} />}
         {activeTab === "prompts" && <PromptsTab adminPassword={adminPassword} />}
+        {activeTab === "hosting" && <HostingTab />}
+        {activeTab === "ai-calls" && <AICallsTab adminPassword={adminPassword} />}
+        {activeTab === "clients" && <ClientsTab adminPassword={adminPassword} />}
       </div>
     </div>
   );
@@ -508,133 +515,182 @@ Split Usluge tim`}
   );
 }
 
+function normalizePhone(phone: string): string {
+  let clean = phone.replace(/[\s\-\(\)]/g, "");
+  if (clean.startsWith("0")) clean = "+385" + clean.slice(1);
+  if (!clean.startsWith("+")) clean = "+385" + clean;
+  return clean;
+}
+
+function buildWhatsAppMsg(name: string, previewUrl: string): string {
+  return `Poštovani ${name},\n\nPrimijetili smo da nemate web stranicu. Pripremili smo besplatni preview za Vas:\n${previewUrl}\n\nNudimo izradu profesionalne stranice od 199 EUR + besplatni hosting.\n\nJavite nam se za više info!\nSplit Usluge tim`;
+}
+
+function buildEmailBody(name: string, previewUrl: string): string {
+  return `Poštovani ${name},\n\nPrimijetili smo da nemate web stranicu. Pripremili smo besplatni preview kako bi Vaša stranica mogla izgledati:\n${previewUrl}\n\n✅ Moderna, responzivna web stranica\n✅ Google optimizacija (SEO)\n✅ Hosting i održavanje uključeno\n✅ STARTER paket: BESPLATNO\n✅ STANDARD paket: 199 EUR + 29 EUR/mj\n\nSrdačan pozdrav,\nSplit Usluge tim`;
+}
+
+function buildSmsMsg(name: string, previewUrl: string): string {
+  return `${name}, napravili smo besplatni preview web stranice za Vas: ${previewUrl} - Split Usluge`;
+}
+
 function ScannerTab({ adminPassword }: { adminPassword: string }) {
   const [categoryId, setCategoryId] = useState<number | undefined>();
   const [page, setPage] = useState(0);
-  const pageSize = 30;
+  const [sentIds, setSentIds] = useState<Set<string>>(new Set());
+  const pageSize = 12;
 
   const categoriesQuery = trpc.services.getAllCategories.useQuery();
-  const scanQuery = trpc.admin.getBusinessesWithoutWebsite.useQuery({
+  const scanQuery = trpc.admin.getBusinessesForOutreach.useQuery({
     adminPassword,
     categoryId,
+    hasPhone: true,
     limit: pageSize,
     offset: page * pageSize,
   });
+  const logOutreach = trpc.admin.logOutreach.useMutation();
 
   const data = scanQuery.data;
 
+  const handleOutreach = useCallback((businessId: number, channel: string, url: string, businessName: string) => {
+    logOutreach.mutate({
+      adminPassword,
+      businessId,
+      channel,
+      previewUrl: `${window.location.origin}/preview/${businessId}`,
+    });
+    setSentIds(prev => new Set(prev).add(`${businessId}-${channel}`));
+    window.open(url, "_blank");
+  }, [adminPassword, logOutreach]);
+
   return (
     <div className="space-y-4">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-sm font-medium flex items-center gap-2">
-            <Scan className="h-4 w-4" /> Biznisi bez web stranice
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex gap-4 items-end flex-wrap">
-            <div>
-              <label className="text-xs text-muted-foreground block mb-1">Filtriraj po kategoriji</label>
-              <select
-                className="border rounded px-3 py-2 text-sm bg-background"
-                value={categoryId || ""}
-                onChange={e => { setCategoryId(e.target.value ? Number(e.target.value) : undefined); setPage(0); }}
-              >
-                <option value="">Sve kategorije</option>
-                {categoriesQuery.data?.map(c => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
-                ))}
-              </select>
-            </div>
-            <div className="text-sm text-muted-foreground">
-              Ukupno: <strong>{data?.total || 0}</strong> biznisa bez web stranice
-            </div>
+      <div className="flex gap-4 items-end flex-wrap">
+        <div>
+          <label className="text-xs text-muted-foreground block mb-1">Kategorija</label>
+          <select
+            className="border rounded px-3 py-2 text-sm bg-background"
+            value={categoryId || ""}
+            onChange={e => { setCategoryId(e.target.value ? Number(e.target.value) : undefined); setPage(0); }}
+          >
+            <option value="">Sve kategorije</option>
+            {categoriesQuery.data?.map(c => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
+        </div>
+        <div className="text-sm text-muted-foreground">
+          <strong>{data?.total || 0}</strong> biznisa bez web stranice (s telefonom)
+        </div>
+      </div>
+
+      {data && data.businesses.length > 0 ? (
+        <>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {data.businesses.map((b) => {
+              const previewUrl = `${window.location.origin}/preview/${b.id}`;
+              const phone = b.phone ? normalizePhone(b.phone) : "";
+              const waUrl = phone ? `https://wa.me/${phone.replace("+", "")}?text=${encodeURIComponent(buildWhatsAppMsg(b.name, previewUrl))}` : "";
+              const emailUrl = b.email ? `mailto:${b.email}?subject=${encodeURIComponent(`Web stranica za ${b.name}`)}&body=${encodeURIComponent(buildEmailBody(b.name, previewUrl))}` : "";
+              const smsUrl = phone ? `sms:${phone}?body=${encodeURIComponent(buildSmsMsg(b.name, previewUrl))}` : "";
+
+              let hours: string[] = [];
+              try { if (b.openingHours) { const p = JSON.parse(b.openingHours); if (Array.isArray(p)) hours = p; } } catch {}
+
+              return (
+                <Card key={b.id} className="overflow-hidden border-border/70">
+                  <CardContent className="p-4 space-y-3">
+                    {/* Header */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-bold text-sm truncate">{b.name}</h3>
+                        <span className="text-xs text-primary font-medium">{b.categoryName}</span>
+                      </div>
+                      {b.rating && (
+                        <div className="flex items-center gap-1 shrink-0 bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded text-xs font-bold">
+                          <Star className="h-3 w-3 fill-current" /> {b.rating}
+                          {(b.reviewCount ?? 0) > 0 && <span className="font-normal">({b.reviewCount})</span>}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Details */}
+                    <div className="space-y-1 text-xs text-muted-foreground">
+                      {b.address && (
+                        <p className="flex items-center gap-1.5"><MapPin className="h-3 w-3 text-primary shrink-0" /> {b.address}</p>
+                      )}
+                      {b.phone && (
+                        <p className="flex items-center gap-1.5"><Phone className="h-3 w-3 text-green-600 shrink-0" /> {b.phone}</p>
+                      )}
+                      {b.email && (
+                        <p className="flex items-center gap-1.5"><Mail className="h-3 w-3 text-blue-600 shrink-0" /> {b.email}</p>
+                      )}
+                      {hours.length > 0 && (
+                        <p className="flex items-center gap-1.5"><Clock className="h-3 w-3 shrink-0" /> {hours[0]}</p>
+                      )}
+                      <p className="flex items-center gap-1.5">
+                        <Globe className="h-3 w-3 text-red-500 shrink-0" />
+                        {b.website ? (
+                          <span className="text-orange-600">{b.website.includes("sites.google") ? "Google Site" : "Basic/Parked"}</span>
+                        ) : (
+                          <span className="text-red-500 font-medium">Nema web stranice</span>
+                        )}
+                      </p>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button size="sm" variant="outline" className="text-xs h-8"
+                        onClick={() => window.open(`/preview/${b.id}`, "_blank")}
+                      >
+                        <Eye className="h-3 w-3 mr-1" /> Preview
+                      </Button>
+                      {waUrl && (
+                        <Button size="sm" className="text-xs h-8 bg-green-600 hover:bg-green-700 text-white"
+                          onClick={() => handleOutreach(b.id, "whatsapp", waUrl, b.name)}
+                        >
+                          {sentIds.has(`${b.id}-whatsapp`) ? <><CheckCircle className="h-3 w-3 mr-1" /> Poslano</> : <><MessageCircle className="h-3 w-3 mr-1" /> WhatsApp</>}
+                        </Button>
+                      )}
+                      {emailUrl && (
+                        <Button size="sm" variant="outline" className="text-xs h-8"
+                          onClick={() => handleOutreach(b.id, "email", emailUrl, b.name)}
+                        >
+                          {sentIds.has(`${b.id}-email`) ? <><CheckCircle className="h-3 w-3 mr-1" /> Poslano</> : <><Mail className="h-3 w-3 mr-1" /> Email</>}
+                        </Button>
+                      )}
+                      {smsUrl && (
+                        <Button size="sm" variant="outline" className="text-xs h-8"
+                          onClick={() => handleOutreach(b.id, "sms", smsUrl, b.name)}
+                        >
+                          {sentIds.has(`${b.id}-sms`) ? <><CheckCircle className="h-3 w-3 mr-1" /> Poslano</> : <><Send className="h-3 w-3 mr-1" /> SMS</>}
+                        </Button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
 
-          {data && data.businesses.length > 0 ? (
-            <>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b">
-                      <th className="text-left py-2 font-medium">Naziv</th>
-                      <th className="text-left py-2 font-medium">Adresa</th>
-                      <th className="text-left py-2 font-medium">Telefon</th>
-                      <th className="text-left py-2 font-medium">Web</th>
-                      <th className="text-left py-2 font-medium">Ocjena</th>
-                      <th className="text-left py-2 font-medium">Akcije</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.businesses.map((b) => (
-                      <tr key={b.id} className="border-b border-border/50 hover:bg-muted/30">
-                        <td className="py-2 font-medium">{b.name}</td>
-                        <td className="py-2 text-muted-foreground text-xs">{b.address}</td>
-                        <td className="py-2">
-                          {b.phone ? (
-                            <a href={`tel:${b.phone}`} className="text-blue-600 flex items-center gap-1 text-xs">
-                              <Phone className="h-3 w-3" /> {b.phone}
-                            </a>
-                          ) : "-"}
-                        </td>
-                        <td className="py-2">
-                          {b.website ? (
-                            <span className="text-xs text-orange-600">
-                              {b.website.includes("sites.google") || b.website.includes("business.site")
-                                ? "Google Site" : "Parked/Basic"}
-                            </span>
-                          ) : (
-                            <span className="text-xs text-red-500 font-medium">Nema</span>
-                          )}
-                        </td>
-                        <td className="py-2">{b.rating || "-"} ({b.reviewCount || 0})</td>
-                        <td className="py-2 flex gap-1">
-                          <Button variant="outline" size="sm" className="text-xs h-7"
-                            onClick={() => {
-                              window.open(`/preview/${b.id}`, "_blank");
-                            }}
-                          >
-                            Preview
-                          </Button>
-                          <Button variant="outline" size="sm" className="text-xs h-7"
-                            onClick={() => {
-                              const previewUrl = `${window.location.origin}/preview/${b.id}`;
-                              const subject = encodeURIComponent(`Web stranica za ${b.name}`);
-                              const body = encodeURIComponent(
-                                `Poštovani ${b.name},\n\nPrimijetili smo da nemate web stranicu. Nudimo izradu profesionalne web stranice za lokalne biznise u Splitu.\n\nPripremili smo besplatni preview kako bi Vaša web stranica mogla izgledati:\n${previewUrl}\n\n✅ Moderna, responzivna web stranica\n✅ Google optimizacija (SEO)\n✅ Održavanje i hosting\n✅ Od 199 EUR jednokratno\n\nSrdačan pozdrav,\nSplit Usluge tim`
-                              );
-                              window.open(`mailto:${b.email || ""}?subject=${subject}&body=${body}`);
-                            }}
-                          >
-                            Pošalji ponudu
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Pagination */}
-              <div className="flex items-center justify-between">
-                <Button variant="outline" size="sm" disabled={page === 0} onClick={() => setPage(p => p - 1)}>
-                  <ChevronLeft className="h-4 w-4" /> Prethodna
-                </Button>
-                <span className="text-sm text-muted-foreground">
-                  Stranica {page + 1} od {Math.ceil((data.total || 1) / pageSize)}
-                </span>
-                <Button variant="outline" size="sm" disabled={(page + 1) * pageSize >= (data.total || 0)} onClick={() => setPage(p => p + 1)}>
-                  Sljedeća <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </>
-          ) : (
-            <p className="text-muted-foreground text-sm text-center py-8">
-              {scanQuery.isLoading ? "Učitavanje..." : "Nema rezultata"}
-            </p>
-          )}
-        </CardContent>
-      </Card>
+          {/* Pagination */}
+          <div className="flex items-center justify-between">
+            <Button variant="outline" size="sm" disabled={page === 0} onClick={() => setPage(p => p - 1)}>
+              <ChevronLeft className="h-4 w-4" /> Prethodna
+            </Button>
+            <span className="text-sm text-muted-foreground">
+              Stranica {page + 1} od {Math.ceil((data.total || 1) / pageSize)}
+            </span>
+            <Button variant="outline" size="sm" disabled={(page + 1) * pageSize >= (data.total || 0)} onClick={() => setPage(p => p + 1)}>
+              Sljedeća <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </>
+      ) : (
+        <p className="text-muted-foreground text-sm text-center py-8">
+          {scanQuery.isLoading ? "Učitavanje..." : "Nema rezultata"}
+        </p>
+      )}
     </div>
   );
 }
@@ -733,12 +789,20 @@ function PromptsTab({ adminPassword }: { adminPassword: string }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBusiness, setSelectedBusiness] = useState<any>(null);
   const [promptType, setPromptType] = useState<"full" | "landing" | "wordpress">("full");
-  const [copied, setCopied] = useState(false);
+  const [htmlLang, setHtmlLang] = useState<"hr" | "en">("hr");
+  const [copied, setCopied] = useState("");
 
   const businessesQuery = trpc.admin.getAllBusinessesAdmin.useQuery(
     { adminPassword, limit: 10000, offset: 0 },
     { enabled: !!adminPassword }
   );
+
+  const htmlQuery = trpc.admin.generateMiniSiteHtml.useQuery(
+    { adminPassword, businessId: selectedBusiness?.id || 0, language: htmlLang },
+    { enabled: !!selectedBusiness }
+  );
+
+  const logOutreach = trpc.admin.logOutreach.useMutation();
 
   const allBusinesses = businessesQuery.data?.businesses || [];
   const filtered = useMemo(() => {
@@ -824,87 +888,639 @@ Format everything clearly with headers and copy-paste ready content.`;
 
   const currentPrompt = selectedBusiness ? generatePrompt(selectedBusiness, promptType) : "";
 
-  const copyToClipboard = useCallback(() => {
-    navigator.clipboard.writeText(currentPrompt);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }, [currentPrompt]);
+  const copyText = useCallback((text: string, key: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(key);
+    setTimeout(() => setCopied(""), 2000);
+  }, []);
+
+  const downloadHtml = useCallback(() => {
+    if (!htmlQuery.data?.html) return;
+    const blob = new Blob([htmlQuery.data.html], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${selectedBusiness?.name?.replace(/\s+/g, "-").toLowerCase() || "site"}-${htmlLang}.html`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [htmlQuery.data, selectedBusiness, htmlLang]);
+
+  // Pre-built outreach messages
+  const whatsAppOffer = selectedBusiness ? `Poštovani ${selectedBusiness.name},
+
+Primijetili smo da nemate web stranicu. Napravili smo besplatnu probnu stranicu za Vas — pogledajte:
+${window.location.origin}/preview/${selectedBusiness.id}
+
+Nudimo:
+✅ BESPLATNO - Probna stranica (ova koju vidite)
+✅ STANDARD - 199 EUR jednokratno + 29 EUR/mj (profesionalna stranica, bez našeg brenda, kontakt forma, Google Analytics)
+✅ PREMIUM - 399 EUR + 59 EUR/mj (full custom + SEO + blog + prioritetni prikaz)
+
+Hosting je besplatan za sve pakete! Jedini trošak za Vas je domena (~10 EUR/god).
+
+Javite nam se za više info!
+Split Usluge tim` : "";
+
+  const emailOffer = selectedBusiness ? `Poštovani,
+
+Pišemo Vam u ime Split Usluge, lokalnog imenika usluga za Split i okolicu.
+
+Primijetili smo da ${selectedBusiness.name} trenutno nema web stranicu, a mi smo pripremili besplatnu probnu verziju:
+${window.location.origin}/preview/${selectedBusiness.id}
+
+Ova stranica uključuje Vaše podatke, radno vrijeme, kontakt, Google ocjenu (${selectedBusiness.rating || "N/A"}) i lokaciju.
+
+NAŠI PAKETI:
+🆓 STARTER (besplatno) — Probna stranica s našim brendom
+📋 STANDARD (199 EUR + 29 EUR/mj) — Profesionalna stranica, kontakt forma, Google Analytics, bez našeg brenda
+⭐ PREMIUM (399 EUR + 59 EUR/mj) — Full custom dizajn + SEO optimizacija + blog + održavanje + prioritetni prikaz
+
+Hosting je besplatan. Jedini dodatni trošak: domena (~10 EUR/godišnje).
+
+Možemo početi odmah — javite nam se na ovaj mail ili pozovite nas.
+
+Srdačan pozdrav,
+Split Usluge tim
+${window.location.origin}` : "";
 
   return (
     <div className="space-y-6">
+      {/* Business selector */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Wand2 className="h-5 w-5" /> AI Prompt Generator
+            <Wand2 className="h-5 w-5" /> AI Prompt Generator + Generiranje stranice
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm text-muted-foreground">
-            Odaberi biznis i generiraj detaljan prompt za AI (ChatGPT/Claude) koji će napraviti kompletnu web stranicu.
-          </p>
-
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Pretraži biznise..."
-              className="pl-10"
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-            />
+            <Input placeholder="Pretraži biznise..." className="pl-10" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
           </div>
 
           <div className="max-h-48 overflow-y-auto border rounded-lg divide-y">
             {filtered.map((b: typeof filtered[number]) => (
-              <button
-                key={b.id}
-                className={`w-full text-left px-4 py-2 text-sm hover:bg-muted/50 transition-colors ${selectedBusiness?.id === b.id ? "bg-primary/10 font-medium" : ""}`}
-                onClick={() => setSelectedBusiness(b)}
-              >
+              <button key={b.id} className={`w-full text-left px-4 py-2 text-sm hover:bg-muted/50 transition-colors ${selectedBusiness?.id === b.id ? "bg-primary/10 font-medium" : ""}`} onClick={() => setSelectedBusiness(b)}>
                 <span>{b.name}</span>
-                {b.address && <span className="text-muted-foreground ml-2">— {b.address}</span>}
+                {b.phone && <span className="text-green-600 ml-2 text-xs">{b.phone}</span>}
+                {b.address && <span className="text-muted-foreground ml-2 text-xs">— {b.address}</span>}
               </button>
             ))}
-            {filtered.length === 0 && (
-              <p className="text-sm text-muted-foreground text-center py-4">Nema rezultata</p>
-            )}
+            {filtered.length === 0 && <p className="text-sm text-muted-foreground text-center py-4">Nema rezultata</p>}
           </div>
+        </CardContent>
+      </Card>
 
-          {selectedBusiness && (
-            <>
+      {selectedBusiness && (
+        <>
+          {/* Business info card */}
+          <Card className="border-primary/30">
+            <CardContent className="p-4">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="font-bold text-lg">{selectedBusiness.name}</h3>
+                  <div className="flex flex-wrap gap-3 mt-2 text-xs text-muted-foreground">
+                    {selectedBusiness.phone && <span className="flex items-center gap-1"><Phone className="h-3 w-3 text-green-600" /> {selectedBusiness.phone}</span>}
+                    {selectedBusiness.email && <span className="flex items-center gap-1"><Mail className="h-3 w-3 text-blue-600" /> {selectedBusiness.email}</span>}
+                    {selectedBusiness.address && <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {selectedBusiness.address}</span>}
+                    {selectedBusiness.rating && <span className="flex items-center gap-1"><Star className="h-3 w-3 text-yellow-500" /> {selectedBusiness.rating} ({selectedBusiness.reviewCount || 0})</span>}
+                  </div>
+                </div>
+                <Button size="sm" variant="outline" onClick={() => window.open(`/preview/${selectedBusiness.id}`, "_blank")}>
+                  <Eye className="h-3 w-3 mr-1" /> Preview
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick outreach - one click send */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                <Send className="h-4 w-4" /> Pošalji ponudu — samo klikni
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid md:grid-cols-3 gap-3">
+                {selectedBusiness.phone && (
+                  <Button className="bg-green-600 hover:bg-green-700 text-white h-auto py-3 flex-col gap-1"
+                    onClick={() => {
+                      const phone = normalizePhone(selectedBusiness.phone!).replace("+", "");
+                      logOutreach.mutate({ adminPassword, businessId: selectedBusiness.id, channel: "whatsapp", previewUrl: `${window.location.origin}/preview/${selectedBusiness.id}` });
+                      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(whatsAppOffer)}`, "_blank");
+                    }}>
+                    <MessageCircle className="h-5 w-5" />
+                    <span className="text-xs">WhatsApp ponuda</span>
+                    <span className="text-[10px] opacity-70">{selectedBusiness.phone}</span>
+                  </Button>
+                )}
+                {selectedBusiness.email && (
+                  <Button variant="outline" className="h-auto py-3 flex-col gap-1"
+                    onClick={() => {
+                      logOutreach.mutate({ adminPassword, businessId: selectedBusiness.id, channel: "email", previewUrl: `${window.location.origin}/preview/${selectedBusiness.id}` });
+                      window.open(`mailto:${selectedBusiness.email}?subject=${encodeURIComponent(`Besplatna web stranica za ${selectedBusiness.name}`)}&body=${encodeURIComponent(emailOffer)}`, "_blank");
+                    }}>
+                    <Mail className="h-5 w-5" />
+                    <span className="text-xs">Email ponuda</span>
+                    <span className="text-[10px] text-muted-foreground">{selectedBusiness.email}</span>
+                  </Button>
+                )}
+                {selectedBusiness.phone && (
+                  <Button variant="outline" className="h-auto py-3 flex-col gap-1"
+                    onClick={() => {
+                      const phone = normalizePhone(selectedBusiness.phone!);
+                      logOutreach.mutate({ adminPassword, businessId: selectedBusiness.id, channel: "sms" });
+                      window.open(`sms:${phone}?body=${encodeURIComponent(`${selectedBusiness.name}, napravili smo besplatnu web stranicu za Vas: ${window.location.origin}/preview/${selectedBusiness.id} - Split Usluge`)}`, "_blank");
+                    }}>
+                    <Send className="h-5 w-5" />
+                    <span className="text-xs">SMS ponuda</span>
+                  </Button>
+                )}
+              </div>
+
+              {/* Copy messages */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium">WhatsApp/SMS poruka:</span>
+                  <Button variant="ghost" size="sm" className="text-xs h-6" onClick={() => copyText(whatsAppOffer, "wa")}>
+                    {copied === "wa" ? <><CheckCircle className="h-3 w-3 mr-1" /> Kopirano</> : <><Copy className="h-3 w-3 mr-1" /> Kopiraj</>}
+                  </Button>
+                </div>
+                <pre className="bg-muted p-3 rounded text-[11px] whitespace-pre-wrap max-h-32 overflow-y-auto">{whatsAppOffer}</pre>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium">Email poruka:</span>
+                  <Button variant="ghost" size="sm" className="text-xs h-6" onClick={() => copyText(emailOffer, "email")}>
+                    {copied === "email" ? <><CheckCircle className="h-3 w-3 mr-1" /> Kopirano</> : <><Copy className="h-3 w-3 mr-1" /> Kopiraj</>}
+                  </Button>
+                </div>
+                <pre className="bg-muted p-3 rounded text-[11px] whitespace-pre-wrap max-h-32 overflow-y-auto">{emailOffer}</pre>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* HTML Generator - download ready site */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                <Download className="h-4 w-4" /> Generiraj HTML stranicu — spremno za deploy
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-xs text-muted-foreground">
+                Generiraj kompletnu HTML stranicu personaliziranu za ovaj biznis. Samo preuzmi i uploadaj na besplatni hosting.
+              </p>
+              <div className="flex gap-2">
+                <Button size="sm" variant={htmlLang === "hr" ? "default" : "outline"} onClick={() => setHtmlLang("hr")}>Hrvatski</Button>
+                <Button size="sm" variant={htmlLang === "en" ? "default" : "outline"} onClick={() => setHtmlLang("en")}>English</Button>
+              </div>
+              <div className="flex gap-2">
+                <Button onClick={downloadHtml} disabled={!htmlQuery.data?.html || htmlQuery.isLoading}>
+                  <Download className="h-4 w-4 mr-2" />
+                  {htmlQuery.isLoading ? "Generiranje..." : `Preuzmi ${selectedBusiness.name}.html`}
+                </Button>
+                <Button variant="outline" onClick={() => { if (htmlQuery.data?.html) copyText(htmlQuery.data.html, "html"); }} disabled={!htmlQuery.data?.html}>
+                  {copied === "html" ? <><CheckCircle className="h-3 w-3 mr-1" /> Kopirano</> : <><Copy className="h-3 w-3 mr-1" /> Kopiraj HTML</>}
+                </Button>
+              </div>
+              {htmlQuery.data?.html && (
+                <details className="text-xs">
+                  <summary className="cursor-pointer text-muted-foreground hover:text-foreground">Prikaži HTML ({Math.round(htmlQuery.data.html.length / 1024)} KB)</summary>
+                  <pre className="bg-muted p-3 rounded mt-2 max-h-64 overflow-auto whitespace-pre-wrap">{htmlQuery.data.html.slice(0, 5000)}...</pre>
+                </details>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* AI Prompt */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm font-medium">AI Prompt za ChatGPT/Claude</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
               <div className="flex gap-2">
                 {([
                   { id: "full", label: "Full Website" },
                   { id: "landing", label: "Landing Page" },
                   { id: "wordpress", label: "WordPress Setup" },
                 ] as const).map(t => (
-                  <Button
-                    key={t.id}
-                    variant={promptType === t.id ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setPromptType(t.id)}
-                  >
-                    {t.label}
-                  </Button>
+                  <Button key={t.id} variant={promptType === t.id ? "default" : "outline"} size="sm" onClick={() => setPromptType(t.id)}>{t.label}</Button>
                 ))}
               </div>
-
               <div className="relative">
-                <pre className="bg-muted p-4 rounded-lg text-xs whitespace-pre-wrap max-h-96 overflow-y-auto">
-                  {currentPrompt}
-                </pre>
-                <Button
-                  size="sm"
-                  className="absolute top-2 right-2 gap-1"
-                  onClick={copyToClipboard}
-                >
-                  {copied ? <><CheckCircle className="h-3 w-3" /> Kopirano!</> : <><Copy className="h-3 w-3" /> Kopiraj</>}
+                <pre className="bg-muted p-4 rounded-lg text-xs whitespace-pre-wrap max-h-96 overflow-y-auto">{currentPrompt}</pre>
+                <Button size="sm" className="absolute top-2 right-2 gap-1" onClick={() => copyText(currentPrompt, "prompt")}>
+                  {copied === "prompt" ? <><CheckCircle className="h-3 w-3" /> Kopirano!</> : <><Copy className="h-3 w-3" /> Kopiraj</>}
                 </Button>
               </div>
+            </CardContent>
+          </Card>
+        </>
+      )}
+    </div>
+  );
+}
 
-              <p className="text-xs text-muted-foreground">
-                Kopiraj prompt i zalijepi u ChatGPT ili Claude. AI će generirati kompletnu web stranicu spremnu za deploy.
-              </p>
-            </>
+function HostingTab() {
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Server className="h-5 w-5" /> Besplatni Hosting — Upute
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Generirana HTML stranica se može besplatno hostati. Jedini trošak za klijenta je domena (~10 EUR/godišnje).
+          </p>
+        </CardContent>
+      </Card>
+
+      <div className="grid md:grid-cols-2 gap-4">
+        <Card>
+          <CardContent className="p-5 space-y-3">
+            <h3 className="font-bold flex items-center gap-2">1. Netlify (Preporučeno)</h3>
+            <ol className="text-sm space-y-2 list-decimal list-inside text-muted-foreground">
+              <li>Idi na <strong>netlify.com</strong> i registriraj se besplatno</li>
+              <li>Klikni <strong>"Add new site" → "Deploy manually"</strong></li>
+              <li>Drag & drop generiranu HTML datoteku</li>
+              <li>Stranica je online za 10 sekundi!</li>
+              <li>Za custom domenu: <strong>Domain settings → Add domain</strong></li>
+              <li>SSL/HTTPS automatski besplatno</li>
+            </ol>
+            <div className="bg-muted p-3 rounded text-xs font-mono">
+              # Ili putem CLI:<br/>
+              npm i -g netlify-cli<br/>
+              netlify deploy --prod --dir=./
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-5 space-y-3">
+            <h3 className="font-bold flex items-center gap-2">2. Vercel</h3>
+            <ol className="text-sm space-y-2 list-decimal list-inside text-muted-foreground">
+              <li>Idi na <strong>vercel.com</strong> i registriraj se</li>
+              <li>Klikni <strong>"Add New" → "Project"</strong></li>
+              <li>Uploadaj HTML datoteku u novi Git repo</li>
+              <li>Vercel automatski deploya</li>
+              <li>Custom domena: <strong>Settings → Domains</strong></li>
+            </ol>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-5 space-y-3">
+            <h3 className="font-bold flex items-center gap-2">3. Cloudflare Pages</h3>
+            <ol className="text-sm space-y-2 list-decimal list-inside text-muted-foreground">
+              <li>Idi na <strong>pages.cloudflare.com</strong></li>
+              <li>Klikni <strong>"Create a project" → "Direct upload"</strong></li>
+              <li>Uploadaj HTML datoteku</li>
+              <li>Besplatan SSL + globalni CDN</li>
+              <li>Najbrži od svih opcija</li>
+            </ol>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-5 space-y-3">
+            <h3 className="font-bold flex items-center gap-2">4. GitHub Pages</h3>
+            <ol className="text-sm space-y-2 list-decimal list-inside text-muted-foreground">
+              <li>Kreiraj novi GitHub repo</li>
+              <li>Uploadaj HTML kao <strong>index.html</strong></li>
+              <li><strong>Settings → Pages → Source: main branch</strong></li>
+              <li>Stranica dostupna na github.io</li>
+              <li>Za domenu: dodaj CNAME datoteku</li>
+            </ol>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card className="border-primary/30">
+        <CardContent className="p-5 space-y-3">
+          <h3 className="font-bold">Kupovina domene</h3>
+          <div className="grid md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <p className="font-medium">.hr domene (za lokalne biznise):</p>
+              <ul className="text-muted-foreground space-y-1 mt-1">
+                <li>• <strong>plus.hr</strong> — od 79 HRK/god (~10 EUR)</li>
+                <li>• <strong>avalon.hr</strong> — od 89 HRK/god</li>
+                <li>• Treba OIB vlasnika za .hr</li>
+              </ul>
+            </div>
+            <div>
+              <p className="font-medium">.com domene:</p>
+              <ul className="text-muted-foreground space-y-1 mt-1">
+                <li>• <strong>Namecheap</strong> — od $8.88/god</li>
+                <li>• <strong>Cloudflare</strong> — po nabavnoj cijeni (~$9/god)</li>
+                <li>• <strong>Porkbun</strong> — od $9.73/god</li>
+              </ul>
+            </div>
+          </div>
+          <div className="bg-green-50 dark:bg-green-950 rounded-lg p-4 mt-3">
+            <p className="text-sm font-bold text-green-800 dark:text-green-200">Ukupan trošak za klijenta:</p>
+            <p className="text-sm text-green-700 dark:text-green-300">Hosting: 0 EUR | Domena: ~10 EUR/god | Izrada: BESPLATNO (starter) ili od 199 EUR</p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function AICallsTab({ adminPassword }: { adminPassword: string }) {
+  const [copiedScript, setCopiedScript] = useState("");
+
+  const copyScript = useCallback((text: string, key: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedScript(key);
+    setTimeout(() => setCopiedScript(""), 2000);
+  }, []);
+
+  const introScript = `Dobar dan! Zovem u ime Split Usluge, lokalnog imenika usluga za Split i okolicu.
+
+Primijetili smo da [IME_BIZNISA] trenutno nema web stranicu, a mi smo pripremili besplatnu probnu verziju stranice s Vašim podacima — ocjenom, radnim vremenom, kontaktom i lokacijom.
+
+Želite li da Vam pošaljemo link na WhatsApp da pogledate?`;
+
+  const offerScript = `Odlično! Evo što nudimo:
+
+BESPLATNO — Probna stranica koju ste vidjeli, s našim brendom. Možete je koristiti odmah.
+
+STANDARD paket — 199 EUR jednokratno + 29 EUR mjesečno:
+- Profesionalna stranica bez našeg brenda
+- Kontakt forma za upite
+- Google Analytics praćenje
+- Hosting i SSL uključeni
+
+PREMIUM paket — 399 EUR + 59 EUR mjesečno:
+- Potpuno prilagođen dizajn
+- SEO optimizacija za Google
+- Blog sekcija
+- Prioritetni prikaz u našem imeniku
+- Mjesečno održavanje
+
+Hosting je besplatan za sve pakete. Jedini dodatni trošak je domena, oko 10 eura godišnje.`;
+
+  const closingScript = `Mogu Vam odmah aktivirati starter paket — potpuno besplatno. Ako Vam se svidi, možemo nadograditi na standard ili premium kad god želite.
+
+Što kažete? Mogu Vam poslati link na WhatsApp odmah.`;
+
+  const businessesQuery = trpc.admin.getBusinessesForOutreach.useQuery({
+    adminPassword,
+    hasPhone: true,
+    limit: 100,
+    offset: 0,
+  });
+
+  const exportCSV = useCallback(() => {
+    const businesses = businessesQuery.data?.businesses || [];
+    const csv = [
+      "Ime,Telefon,Kategorija,Ocjena,Preview URL",
+      ...businesses.map(b => `"${b.name}","${b.phone}","${b.categoryName}","${b.rating || ""}","${window.location.origin}/preview/${b.id}"`)
+    ].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "biznisi-za-pozive.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [businessesQuery.data]);
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Bot className="h-5 w-5" /> AI Agent pozivi — Skripta i upute
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Koristi AI voice agente za automatske pozive biznisima. Skripta na hrvatskom jeziku za prodaju web stranica.
+          </p>
+
+          <div className="bg-blue-50 dark:bg-blue-950 rounded-lg p-4 space-y-2">
+            <h4 className="font-bold text-sm">Preporučeni AI Voice platforme:</h4>
+            <ul className="text-sm space-y-1 text-muted-foreground">
+              <li>• <strong>Bland.ai</strong> — Najbolji za custom voice agente, podrška za više jezika</li>
+              <li>• <strong>Vapi.ai</strong> — Open-source friendly, dobra integracija</li>
+              <li>• <strong>Retell.ai</strong> — Jednostavan setup, dobar za početnike</li>
+              <li>• <strong>ElevenLabs</strong> — Za kloniranje glasa + Conversational AI</li>
+            </ul>
+          </div>
+
+          <div className="bg-amber-50 dark:bg-amber-950 rounded-lg p-4 space-y-2">
+            <h4 className="font-bold text-sm">Kako postaviti (Bland.ai primjer):</h4>
+            <ol className="text-sm space-y-1 list-decimal list-inside text-muted-foreground">
+              <li>Registriraj se na bland.ai (free trial dostupan)</li>
+              <li>Kreiraj novog agenta → Odaberi jezik: <strong>Croatian</strong></li>
+              <li>Zalijepi donju skriptu kao "System Prompt"</li>
+              <li>Postavi <strong>voice: "female"</strong> ili <strong>"male"</strong></li>
+              <li>Exportaj CSV listu brojeva (gumb dolje) i importaj u Bland</li>
+              <li>Pokreni kampanju — agent zove automatski!</li>
+              <li>Rezultate (zainteresiran/nije) prati u Bland dashboardu</li>
+            </ol>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Scripts */}
+      {[
+        { key: "intro", title: "1. Uvod", script: introScript },
+        { key: "offer", title: "2. Ponuda paketa", script: offerScript },
+        { key: "closing", title: "3. Zaključivanje", script: closingScript },
+      ].map(s => (
+        <Card key={s.key}>
+          <CardContent className="p-4 space-y-2">
+            <div className="flex items-center justify-between">
+              <h4 className="font-bold text-sm">{s.title}</h4>
+              <Button variant="ghost" size="sm" className="text-xs h-6" onClick={() => copyScript(s.script, s.key)}>
+                {copiedScript === s.key ? <><CheckCircle className="h-3 w-3 mr-1" /> Kopirano</> : <><Copy className="h-3 w-3 mr-1" /> Kopiraj</>}
+              </Button>
+            </div>
+            <pre className="bg-muted p-3 rounded text-xs whitespace-pre-wrap">{s.script}</pre>
+          </CardContent>
+        </Card>
+      ))}
+
+      {/* Export */}
+      <Card>
+        <CardContent className="p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <h4 className="font-bold text-sm">Lista brojeva za pozive</h4>
+              <p className="text-xs text-muted-foreground">{businessesQuery.data?.total || 0} biznisa bez web stranice s telefonskim brojem</p>
+            </div>
+            <Button onClick={exportCSV}>
+              <Download className="h-4 w-4 mr-2" /> Exportaj CSV
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Full system prompt */}
+      <Card>
+        <CardContent className="p-4 space-y-2">
+          <div className="flex items-center justify-between">
+            <h4 className="font-bold text-sm">Kompletni System Prompt za AI agenta</h4>
+            <Button variant="ghost" size="sm" className="text-xs h-6" onClick={() => copyScript(
+              `Ti si ljubazni prodajni agent za Split Usluge, lokalni imenik usluga u Splitu, Hrvatska. Zoveš lokalne biznise koji nemaju web stranicu da im ponudiš besplatnu izradu probne web stranice.\n\nPRAVILA:\n- Govori na hrvatskom jeziku, ljubazno i profesionalno\n- Predstavi se i objasni zašto zoveš\n- Spomeni da si primijetio da nemaju web stranicu\n- Ponudi besplatnu probnu stranicu (STARTER paket)\n- Ako su zainteresirani, pitaj za WhatsApp broj da im pošalješ link\n- Ako pitaju za cijenu: STANDARD 199 EUR + 29 EUR/mj, PREMIUM 399 EUR + 59 EUR/mj\n- Naglasi da je hosting besplatan, jedini trošak je domena ~10 EUR/god\n- Budi kratak, ne duži poziv preko 2 minute\n- Ako kažu "ne hvala" — zahvali se i završi ljubazno\n\nINFORMACIJE O BIZNISU (zamijeni za svaki poziv):\n[IME]: {business_name}\n[KATEGORIJA]: {category}\n[PREVIEW_LINK]: {preview_url}`,
+              "system"
+            )}>
+              {copiedScript === "system" ? <><CheckCircle className="h-3 w-3 mr-1" /> Kopirano</> : <><Copy className="h-3 w-3 mr-1" /> Kopiraj</>}
+            </Button>
+          </div>
+          <pre className="bg-muted p-3 rounded text-[11px] whitespace-pre-wrap max-h-48 overflow-y-auto">
+{`Ti si ljubazni prodajni agent za Split Usluge, lokalni imenik usluga u Splitu, Hrvatska. Zoveš lokalne biznise koji nemaju web stranicu da im ponudiš besplatnu izradu probne web stranice.
+
+PRAVILA:
+- Govori na hrvatskom jeziku, ljubazno i profesionalno
+- Predstavi se i objasni zašto zoveš
+- Spomeni da si primijetio da nemaju web stranicu
+- Ponudi besplatnu probnu stranicu (STARTER paket)
+- Ako su zainteresirani, pitaj za WhatsApp broj da im pošalješ link
+- Ako pitaju za cijenu: STANDARD 199 EUR + 29 EUR/mj, PREMIUM 399 EUR + 59 EUR/mj
+- Naglasi da je hosting besplatan, jedini trošak je domena ~10 EUR/god
+- Budi kratak, ne duži poziv preko 2 minute
+- Ako kažu "ne hvala" — zahvali se i završi ljubazno
+
+INFORMACIJE O BIZNISU (zamijeni za svaki poziv):
+[IME]: {business_name}
+[KATEGORIJA]: {category}
+[PREVIEW_LINK]: {preview_url}`}
+          </pre>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function ClientsTab({ adminPassword }: { adminPassword: string }) {
+  const outreachStats = trpc.admin.getOutreachStats.useQuery({ adminPassword });
+  const outreachHistory = trpc.admin.getOutreachHistory.useQuery({ adminPassword, limit: 50 });
+
+  return (
+    <div className="space-y-6">
+      {/* Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-4 text-center">
+            <p className="text-2xl font-bold">{outreachStats.data?.total || 0}</p>
+            <p className="text-xs text-muted-foreground">Ukupno kontakata</p>
+          </CardContent>
+        </Card>
+        {outreachStats.data?.byChannel.map((ch, i) => (
+          <Card key={i}>
+            <CardContent className="p-4 text-center">
+              <p className="text-2xl font-bold">{ch.count}</p>
+              <p className="text-xs text-muted-foreground">{ch.channel}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Packages info */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <CreditCard className="h-4 w-4" /> Paketi za klijente
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="border rounded-lg p-4 space-y-2 bg-green-50 dark:bg-green-950">
+              <h4 className="font-bold text-green-800 dark:text-green-200">STARTER — Besplatno</h4>
+              <ul className="text-xs space-y-1 text-green-700 dark:text-green-300">
+                <li>• Generirana probna stranica</li>
+                <li>• Split Usluge branding</li>
+                <li>• Besplatan hosting</li>
+                <li>• Osnovno SEO</li>
+              </ul>
+              <p className="text-xs font-bold">Cijena: 0 EUR</p>
+              <p className="text-[10px] text-muted-foreground">Trošak: domena ~10 EUR/god (opcionalno)</p>
+            </div>
+            <div className="border-2 border-primary rounded-lg p-4 space-y-2 bg-blue-50 dark:bg-blue-950">
+              <h4 className="font-bold text-blue-800 dark:text-blue-200">STANDARD — Popularan</h4>
+              <ul className="text-xs space-y-1 text-blue-700 dark:text-blue-300">
+                <li>• Profesionalna web stranica</li>
+                <li>• Bez Split Usluge brenda</li>
+                <li>• Kontakt forma</li>
+                <li>• Google Analytics</li>
+                <li>• SSL + hosting uključen</li>
+              </ul>
+              <p className="text-xs font-bold">199 EUR jednokratno + 29 EUR/mj</p>
+            </div>
+            <div className="border rounded-lg p-4 space-y-2 bg-purple-50 dark:bg-purple-950">
+              <h4 className="font-bold text-purple-800 dark:text-purple-200">PREMIUM</h4>
+              <ul className="text-xs space-y-1 text-purple-700 dark:text-purple-300">
+                <li>• Full custom dizajn</li>
+                <li>• SEO optimizacija</li>
+                <li>• Blog sekcija</li>
+                <li>• Prioritetni prikaz u imeniku</li>
+                <li>• Mjesečno održavanje</li>
+                <li>• Social media setup</li>
+              </ul>
+              <p className="text-xs font-bold">399 EUR jednokratno + 59 EUR/mj</p>
+            </div>
+          </div>
+
+          <div className="mt-4 bg-muted rounded-lg p-4 space-y-2">
+            <h4 className="font-bold text-sm">Stripe integracija — priprema:</h4>
+            <ol className="text-xs space-y-1 list-decimal list-inside text-muted-foreground">
+              <li>Registriraj se na <strong>stripe.com</strong></li>
+              <li>Kreiraj 2 Products: "Standard Web Paket" i "Premium Web Paket"</li>
+              <li>Za svaki dodaj recurring price (29 EUR/mj i 59 EUR/mj)</li>
+              <li>Kopiraj API ključeve u <strong>.env</strong>: STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET</li>
+              <li>Kopiraj Price ID-eve: STRIPE_PRICE_STANDARD, STRIPE_PRICE_PREMIUM</li>
+              <li>Webhook endpoint: <strong>/api/stripe/webhook</strong></li>
+            </ol>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Outreach history */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-sm font-medium">Povijest kontaktiranja</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {outreachHistory.data && outreachHistory.data.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left py-2 font-medium">Business ID</th>
+                    <th className="text-left py-2 font-medium">Kanal</th>
+                    <th className="text-left py-2 font-medium">Status</th>
+                    <th className="text-left py-2 font-medium">Datum</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {outreachHistory.data.map(entry => (
+                    <tr key={entry.id} className="border-b border-border/50">
+                      <td className="py-2">{entry.businessId}</td>
+                      <td className="py-2">
+                        <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                          entry.channel === "whatsapp" ? "bg-green-100 text-green-800" :
+                          entry.channel === "email" ? "bg-blue-100 text-blue-800" :
+                          entry.channel === "sms" ? "bg-purple-100 text-purple-800" :
+                          "bg-gray-100 text-gray-800"
+                        }`}>{entry.channel}</span>
+                      </td>
+                      <td className="py-2 text-xs">{entry.status}</td>
+                      <td className="py-2 text-xs text-muted-foreground">
+                        {new Date(entry.createdAt).toLocaleDateString("hr")}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="text-muted-foreground text-sm text-center py-8">Još nema kontakata — koristi Scanner tab za slanje ponuda</p>
           )}
         </CardContent>
       </Card>
