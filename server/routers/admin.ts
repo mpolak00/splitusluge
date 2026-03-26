@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { publicProcedure, router } from "../_core/trpc.js";
 import { getDb } from "../db.js";
-import { businesses, categories, pageViews, clickEvents, searchQueries, businessScans } from "../../drizzle/schema.js";
+import { businesses, categories, pageViews, clickEvents, searchQueries, businessScans, outreachLog, servicePurchases } from "../../drizzle/schema.js";
 import { eq, desc, sql, and, gte, lte, count, isNull, or, like } from "drizzle-orm";
 
 const ADMIN_PASSWORD = "white1413";
@@ -394,5 +394,191 @@ export const adminRouter = router({
         businesses: results,
         total: totalResult?.count || 0,
       };
+    }),
+
+  // Get businesses with full details for outreach (joins categories)
+  getBusinessesForOutreach: publicProcedure
+    .input(adminAuth.extend({
+      categoryId: z.number().optional(),
+      hasPhone: z.boolean().optional(),
+      limit: z.number().default(30),
+      offset: z.number().default(0),
+    }))
+    .query(async ({ input }) => {
+      verifyAdmin(input.adminPassword);
+      const db = await getDb();
+      if (!db) return { businesses: [], total: 0 };
+
+      const conditions = [
+        eq(businesses.isActive, 1),
+        or(
+          isNull(businesses.website),
+          eq(businesses.website, ""),
+          like(businesses.website, "%sites.google.com%"),
+          like(businesses.website, "%business.site%"),
+        ),
+      ];
+
+      if (input.categoryId) {
+        conditions.push(eq(businesses.categoryId, input.categoryId));
+      }
+      if (input.hasPhone) {
+        conditions.push(sql`${businesses.phone} IS NOT NULL AND ${businesses.phone} != ''`);
+      }
+
+      const whereClause = and(...conditions);
+      const [totalResult] = await db.select({ count: count() }).from(businesses).where(whereClause);
+
+      const results = await db.select({
+        id: businesses.id,
+        name: businesses.name,
+        address: businesses.address,
+        phone: businesses.phone,
+        email: businesses.email,
+        website: businesses.website,
+        rating: businesses.rating,
+        reviewCount: businesses.reviewCount,
+        openingHours: businesses.openingHours,
+        latitude: businesses.latitude,
+        longitude: businesses.longitude,
+        description: businesses.description,
+        imageUrl: businesses.imageUrl,
+        categoryId: businesses.categoryId,
+        categoryName: categories.name,
+        categorySlug: categories.slug,
+      })
+        .from(businesses)
+        .leftJoin(categories, eq(businesses.categoryId, categories.id))
+        .where(whereClause)
+        .orderBy(desc(businesses.rating))
+        .limit(input.limit)
+        .offset(input.offset);
+
+      return {
+        businesses: results,
+        total: totalResult?.count || 0,
+      };
+    }),
+
+  // Log an outreach event
+  logOutreach: publicProcedure
+    .input(adminAuth.extend({
+      businessId: z.number(),
+      channel: z.string(),
+      message: z.string().optional(),
+      previewUrl: z.string().optional(),
+    }))
+    .mutation(async ({ input }) => {
+      verifyAdmin(input.adminPassword);
+      const db = await getDb();
+      if (!db) return { success: false };
+
+      await db.insert(outreachLog).values({
+        businessId: input.businessId,
+        channel: input.channel,
+        message: input.message || null,
+        previewUrl: input.previewUrl || null,
+      });
+
+      return { success: true };
+    }),
+
+  // Get outreach history for a business
+  getOutreachHistory: publicProcedure
+    .input(adminAuth.extend({
+      businessId: z.number().optional(),
+      limit: z.number().default(100),
+    }))
+    .query(async ({ input }) => {
+      verifyAdmin(input.adminPassword);
+      const db = await getDb();
+      if (!db) return [];
+
+      const conditions = [];
+      if (input.businessId) {
+        conditions.push(eq(outreachLog.businessId, input.businessId));
+      }
+
+      return await db.select().from(outreachLog)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .orderBy(desc(outreachLog.createdAt))
+        .limit(input.limit);
+    }),
+
+  // Get outreach stats
+  getOutreachStats: publicProcedure
+    .input(adminAuth)
+    .query(async ({ input }) => {
+      verifyAdmin(input.adminPassword);
+      const db = await getDb();
+      if (!db) return { total: 0, byChannel: [], byStatus: [] };
+
+      const [total] = await db.select({ count: count() }).from(outreachLog);
+      const byChannel = await db.select({
+        channel: outreachLog.channel,
+        count: count(),
+      }).from(outreachLog).groupBy(outreachLog.channel);
+      const byStatus = await db.select({
+        status: outreachLog.status,
+        count: count(),
+      }).from(outreachLog).groupBy(outreachLog.status);
+
+      return {
+        total: total?.count || 0,
+        byChannel,
+        byStatus,
+      };
+    }),
+
+  // Generate mini-site HTML (server-side)
+  generateMiniSiteHtml: publicProcedure
+    .input(adminAuth.extend({
+      businessId: z.number(),
+      language: z.enum(["hr", "en"]).default("hr"),
+    }))
+    .query(async ({ input }) => {
+      verifyAdmin(input.adminPassword);
+      const db = await getDb();
+      if (!db) return { html: "", business: null };
+
+      const [business] = await db.select().from(businesses).where(eq(businesses.id, input.businessId));
+      if (!business) return { html: "", business: null };
+
+      const [category] = business.categoryId
+        ? await db.select().from(categories).where(eq(categories.id, business.categoryId))
+        : [null];
+
+      // Dynamic import of the template generator
+      const { generateMiniSiteHtml } = await import("../templates/mini-site.js");
+      const html = generateMiniSiteHtml(business, category, input.language);
+
+      return { html, business };
+    }),
+
+  // Service purchases management
+  getServicePurchases: publicProcedure
+    .input(adminAuth.extend({
+      status: z.string().optional(),
+    }))
+    .query(async ({ input }) => {
+      verifyAdmin(input.adminPassword);
+      const db = await getDb();
+      if (!db) return [];
+
+      const conditions = [];
+      if (input.status) {
+        conditions.push(eq(servicePurchases.status, input.status));
+      }
+
+      return await db.select({
+        purchase: servicePurchases,
+        businessName: businesses.name,
+        businessPhone: businesses.phone,
+        businessEmail: businesses.email,
+      })
+        .from(servicePurchases)
+        .leftJoin(businesses, eq(servicePurchases.businessId, businesses.id))
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .orderBy(desc(servicePurchases.createdAt));
     }),
 });

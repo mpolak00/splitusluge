@@ -140,6 +140,61 @@ const CATEGORY_IMAGES: Record<string, string[]> = {
     "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&h=300&fit=crop&q=80",
     "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=400&h=300&fit=crop&q=80",
   ],
+  "taxi-i-transfer": [
+    "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1549317661-bd32c8ce0aca?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1511527844068-006b95d162c4?w=400&h=300&fit=crop&q=80",
+  ],
+  "iznajmljivanje-plovila": [
+    "https://images.unsplash.com/photo-1540946485063-a40da27545f8?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1530870110042-98b2cb110834?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=400&h=300&fit=crop&q=80",
+  ],
+  catering: [
+    "https://images.unsplash.com/photo-1555244162-803834f70033?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&h=300&fit=crop&q=80",
+  ],
+  "klima-servis-apartmani": [
+    "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1631545806609-30b27c200554?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1635048424329-a9bfb146d7aa?w=400&h=300&fit=crop&q=80",
+  ],
+  "pest-control": [
+    "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1527515637462-cee1cc710140?w=400&h=300&fit=crop&q=80",
+  ],
+  "bazeni-i-odrzavanje": [
+    "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1572331165267-854da2b021b1?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1519449556851-5720b33024e7?w=400&h=300&fit=crop&q=80",
+  ],
+  "pranje-tepiha": [
+    "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1563453392212-326f5e854473?w=400&h=300&fit=crop&q=80",
+  ],
+  kljucar: [
+    "https://images.unsplash.com/photo-1582139329536-e7284fece509?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1621600411688-4be93cd68504?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop&q=80",
+  ],
+  "odvoz-otpada": [
+    "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1604187351574-c75ca79f5807?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?w=400&h=300&fit=crop&q=80",
+  ],
+  "sigurnosni-sustavi": [
+    "https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1558002038-1055907df827?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=400&h=300&fit=crop&q=80",
+  ],
+  "web-dizajn": [
+    "https://images.unsplash.com/photo-1547658719-da2b51169166?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=300&fit=crop&q=80",
+  ],
 };
 
 const DEFAULT_IMAGES = [
