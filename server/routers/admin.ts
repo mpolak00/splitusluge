@@ -470,6 +470,64 @@ export const adminRouter = router({
       };
     }),
 
+  // Bot scanner - scan ALL businesses and return full report
+  runBotScan: publicProcedure
+    .input(adminAuth)
+    .query(async ({ input }) => {
+      verifyAdmin(input.adminPassword);
+      const db = await getDb();
+      if (!db) return { total: 0, noWebsite: 0, googleSite: 0, withWebsite: 0, withPhone: 0, withEmail: 0, leads: [] };
+
+      const allBiz = await db.select({
+        id: businesses.id,
+        name: businesses.name,
+        address: businesses.address,
+        phone: businesses.phone,
+        email: businesses.email,
+        website: businesses.website,
+        rating: businesses.rating,
+        reviewCount: businesses.reviewCount,
+        categoryId: businesses.categoryId,
+        categoryName: categories.name,
+        categorySlug: categories.slug,
+        city: businesses.city,
+        description: businesses.description,
+        openingHours: businesses.openingHours,
+        imageUrl: businesses.imageUrl,
+      })
+        .from(businesses)
+        .leftJoin(categories, eq(businesses.categoryId, categories.id))
+        .where(eq(businesses.isActive, 1))
+        .orderBy(desc(businesses.rating));
+
+      const total = allBiz.length;
+      let noWebsite = 0;
+      let googleSite = 0;
+      let withWebsite = 0;
+      let withPhone = 0;
+      let withEmail = 0;
+      const leads: typeof allBiz = [];
+
+      for (const b of allBiz) {
+        const hasPhone = !!(b.phone && b.phone.trim());
+        const hasEmail = !!(b.email && b.email.trim());
+        if (hasPhone) withPhone++;
+        if (hasEmail) withEmail++;
+
+        if (!b.website || b.website.trim() === "") {
+          noWebsite++;
+          if (hasPhone || hasEmail) leads.push(b);
+        } else if (b.website.includes("sites.google.com") || b.website.includes("business.site")) {
+          googleSite++;
+          if (hasPhone || hasEmail) leads.push(b);
+        } else {
+          withWebsite++;
+        }
+      }
+
+      return { total, noWebsite, googleSite, withWebsite, withPhone, withEmail, leads };
+    }),
+
   // Log an outreach event
   logOutreach: publicProcedure
     .input(adminAuth.extend({
