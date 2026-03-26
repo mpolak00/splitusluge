@@ -167,7 +167,7 @@ export default function HomeNew() {
               </div>
             </div>
 
-            <div className="mt-10 grid gap-4 md:grid-cols-4">
+            <div className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
               <div className="rounded-2xl border border-white/12 bg-white/8 p-4 backdrop-blur">
                 <p className="text-sm text-white/70">Aktivnih poslovanja</p>
                 <p className="mt-2 text-3xl font-bold">{allBusinesses.length || "..."}</p>
@@ -182,7 +182,7 @@ export default function HomeNew() {
               </div>
               <div className="rounded-2xl border border-white/12 bg-white/8 p-4 backdrop-blur">
                 <p className="text-sm text-white/70">Pokrivena područja</p>
-                <p className="mt-2 text-lg font-semibold">{SERVICE_AREAS.join(", ")}</p>
+                <p className="mt-2 text-lg font-semibold">{SERVICE_AREAS.length}+</p>
               </div>
             </div>
           </div>

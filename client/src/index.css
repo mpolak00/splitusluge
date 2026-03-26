@@ -205,3 +205,12 @@
   --font-sans: 'Inter', sans-serif;
   --font-display: 'Barlow Condensed', sans-serif;
 }
+
+/* Hide scrollbar for horizontal tab scrolling on mobile */
+@utility scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

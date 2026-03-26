@@ -4,7 +4,7 @@ import { getDb } from "../db.js";
 import { businesses, categories, pageViews, clickEvents, searchQueries, businessScans, outreachLog, servicePurchases } from "../../drizzle/schema.js";
 import { eq, desc, sql, and, gte, lte, count, isNull, or, like } from "drizzle-orm";
 
-const ADMIN_PASSWORD = "white1413";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "white1413";
 
 const adminAuth = z.object({
   adminPassword: z.string(),

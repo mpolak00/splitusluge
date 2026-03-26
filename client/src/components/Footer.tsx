@@ -36,7 +36,7 @@ export function Footer() {
             <p className="mt-2 text-sm text-muted-foreground">
               Prijavite se za obavijesti o novim kategorijama, promotivnim akcijama i lokalnim uslugama.
             </p>
-            <form onSubmit={handleSubmit} className="mt-4 flex gap-2">
+            <form onSubmit={handleSubmit} className="mt-4 flex flex-col sm:flex-row gap-2">
               <Input
                 type="email"
                 value={email}
