@@ -221,9 +221,9 @@ export default function HomeNew() {
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 {filteredBusinesses.map(business => (
                   <Card key={business.id} className="overflow-hidden border-border/70 transition-all hover:-translate-y-0.5 hover:shadow-lg">
-                    <div className="h-44 bg-muted">
+                    <div className="h-44 bg-muted overflow-hidden">
                       <img
-                        src={getBusinessImage(business.id, categorySlugMap[business.categoryId] || "general", business.imageUrl)}
+                        src={getBusinessImage(business.id, categorySlugMap[business.categoryId] || "", business.imageUrl)}
                         alt={business.name}
                         className="h-full w-full object-cover"
                         loading="lazy"
@@ -398,9 +398,9 @@ export default function HomeNew() {
                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                   {featuredBusinesses.map(business => (
                     <Card key={business.id} className="overflow-hidden border-border/70 transition-all hover:-translate-y-0.5 hover:shadow-lg">
-                      <div className="h-44 bg-muted">
+                      <div className="h-44 bg-muted overflow-hidden">
                         <img
-                          src={getBusinessImage(business.id, categorySlugMap[business.categoryId] || "general", business.imageUrl)}
+                          src={getBusinessImage(business.id, categorySlugMap[business.categoryId] || "", business.imageUrl)}
                           alt={business.name}
                           className="h-full w-full object-cover"
                           loading="lazy"
