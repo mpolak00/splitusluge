@@ -7,10 +7,10 @@ import {
   BarChart3, Eye, Globe, Lock, LogOut, MousePointerClick, Search,
   TrendingUp, Users, FileText, Scan, ExternalLink, Phone, MapPin,
   Download, RefreshCw, ChevronLeft, ChevronRight, Filter, Wand2, Copy, CheckCircle,
-  MessageCircle, Mail, Star, Clock, Send, PhoneCall, Server, CreditCard, Bot
+  MessageCircle, Mail, Star, Clock, Send, PhoneCall, Server, CreditCard, Bot, UserCheck, Mic
 } from "lucide-react";
 
-type AdminTab = "dashboard" | "categories" | "searches" | "clicks" | "reports" | "scanner" | "outreach" | "prompts" | "hosting" | "ai-calls" | "clients";
+type AdminTab = "dashboard" | "categories" | "searches" | "clicks" | "reports" | "scanner" | "outreach" | "prompts" | "hosting" | "ai-calls" | "clients" | "claims" | "voice-agents";
 
 function getSessionId() {
   let id = sessionStorage.getItem("su_session");
@@ -125,6 +125,8 @@ export default function AdminPanel() {
             { id: "hosting", label: "Hosting", icon: Server },
             { id: "ai-calls", label: "AI Pozivi", icon: Bot },
             { id: "clients", label: "Klijenti", icon: CreditCard },
+            { id: "claims", label: "Zahtjevi", icon: UserCheck },
+            { id: "voice-agents", label: "Voice Agenti", icon: Mic },
           ] as { id: AdminTab; label: string; icon: any }[]).map(tab => (
             <Button
               key={tab.id}
@@ -150,6 +152,8 @@ export default function AdminPanel() {
         {activeTab === "hosting" && <HostingTab />}
         {activeTab === "ai-calls" && <AICallsTab adminPassword={adminPassword} />}
         {activeTab === "clients" && <ClientsTab adminPassword={adminPassword} />}
+        {activeTab === "claims" && <ClaimsTab adminPassword={adminPassword} />}
+        {activeTab === "voice-agents" && <VoiceAgentsTab adminPassword={adminPassword} />}
       </div>
     </div>
   );
@@ -1522,6 +1526,304 @@ function ClientsTab({ adminPassword }: { adminPassword: string }) {
           ) : (
             <p className="text-muted-foreground text-sm text-center py-8">Još nema kontakata — koristi Scanner tab za slanje ponuda</p>
           )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+/* ─── Claims Tab ─── */
+function ClaimsTab({ adminPassword }: { adminPassword: string }) {
+  const claimsQuery = trpc.owners.getPendingClaims.useQuery({ adminPassword });
+  const verifyMutation = trpc.owners.verifyClaim.useMutation({
+    onSuccess: () => claimsQuery.refetch(),
+  });
+
+  const pending = (claimsQuery.data || []).filter((c: any) => !c.isVerified);
+  const verified = (claimsQuery.data || []).filter((c: any) => c.isVerified);
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <UserCheck className="h-5 w-5" /> Zahtjevi za preuzimanje djelatnosti
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {pending.length === 0 ? (
+            <p className="text-muted-foreground text-sm text-center py-8">Nema novih zahtjeva za odobrenje</p>
+          ) : (
+            <div className="space-y-3">
+              {pending.map((claim: any) => (
+                <div key={claim.claimId} className="flex items-center justify-between p-4 rounded-lg border border-orange-200 bg-orange-50">
+                  <div>
+                    <p className="font-semibold">{claim.businessName || `Biznis #${claim.businessId}`}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {claim.ownerName} &bull; {claim.ownerEmail} {claim.ownerPhone && `• ${claim.ownerPhone}`}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Telefon biznisa: {claim.businessPhone || "N/A"} &bull; Prijavljeno: {new Date(claim.createdAt).toLocaleDateString("hr")}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      className="bg-green-600 hover:bg-green-700 text-white"
+                      disabled={verifyMutation.isPending}
+                      onClick={() => verifyMutation.mutate({ adminPassword, claimId: claim.claimId, approved: true })}
+                    >
+                      <CheckCircle className="h-4 w-4 mr-1" /> Odobri
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      disabled={verifyMutation.isPending}
+                      onClick={() => verifyMutation.mutate({ adminPassword, claimId: claim.claimId, approved: false })}
+                    >
+                      Odbij
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Potvrđeni vlasnici ({verified.length})</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {verified.length === 0 ? (
+            <p className="text-muted-foreground text-sm text-center py-4">Nema potvrđenih vlasnika</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b text-left">
+                    <th className="py-2">Biznis</th>
+                    <th className="py-2">Vlasnik</th>
+                    <th className="py-2">Email</th>
+                    <th className="py-2">Telefon</th>
+                    <th className="py-2">Datum</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {verified.map((c: any) => (
+                    <tr key={c.claimId} className="border-b border-border/50">
+                      <td className="py-2 font-medium">{c.businessName || `#${c.businessId}`}</td>
+                      <td className="py-2">{c.ownerName}</td>
+                      <td className="py-2">{c.ownerEmail}</td>
+                      <td className="py-2">{c.ownerPhone || "-"}</td>
+                      <td className="py-2 text-xs text-muted-foreground">{new Date(c.createdAt).toLocaleDateString("hr")}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+/* ─── Voice Agents Tab ─── */
+function VoiceAgentsTab({ adminPassword }: { adminPassword: string }) {
+  const [copied, setCopied] = useState("");
+
+  const copyText = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(label);
+    setTimeout(() => setCopied(""), 2000);
+  };
+
+  const setupScript = `# AI Voice Agent - Postavljanje za biznis
+
+## Platforme za voice agente (odaberi jednu):
+
+### 1. Bland.ai (Preporučeno - najjednostavnije)
+- Registracija: https://bland.ai
+- Cijena: ~$0.09/min
+- Podrška za hrvatski: DA (Custom voice cloning)
+
+### 2. Vapi.ai
+- Registracija: https://vapi.ai
+- Cijena: ~$0.05/min + provider costs
+- Podrška za hrvatski: DA (preko ElevenLabs)
+
+### 3. Retell.ai
+- Registracija: https://retell.ai
+- Cijena: ~$0.10/min
+- Podrška za hrvatski: DA
+
+## Koraci za postavljanje:
+1. Registriraj se na odabranu platformu
+2. Kreiraj novog agenta s hrvatskim jezikom
+3. Kopiraj System Prompt odozdo
+4. Postavi broj telefona (Twilio ili platforma)
+5. Testiraj poziv
+6. Dodaj webhook za rezervacije`;
+
+  const systemPrompt = `Ti si ljubazni AI asistent za [IME BIZNISA] u Splitu.
+
+PRAVILA:
+- Govori SAMO na hrvatskom jeziku
+- Budi profesionalan ali prijateljski
+- Cilj: rezervacija termina ili prikupljanje kontakt podataka
+
+POZDRAV: "Dobar dan! Hvala što ste nazvali [IME BIZNISA]. Ja sam virtualni asistent. Kako Vam mogu pomoći?"
+
+USLUGE:
+[LISTA USLUGA S CIJENAMA]
+
+RADNO VRIJEME:
+[RADNO VRIJEME]
+
+REZERVACIJA:
+- Pitaj za ime i prezime
+- Pitaj za željeni datum i vrijeme
+- Pitaj za broj telefona
+- Potvrdi sve podatke
+- Reci: "Vaš termin je rezerviran. Poslat ćemo Vam SMS potvrdu. Hvala i vidimo se!"
+
+AKO NE MOŽE REZERVIRATI:
+- Ponudi alternativni termin
+- Ako nema slobodnih termina, zapiši kontakt podatke
+- Reci: "Javit ćemo Vam se čim se oslobodi termin. Hvala na strpljenju!"
+
+CIJENA INFO:
+Ako pitaju za cijene, daj informacije. Ako nisi siguran, reci: "Za točnu cijenu, naš tim će Vas kontaktirati."`;
+
+  const pricingPlans = [
+    { name: "Basic", price: "99€/mj", minutes: 100, features: ["100 minuta/mj", "1 agent", "Hrvatski jezik", "Osnovni pozdrav", "Email izvještaji"] },
+    { name: "Pro", price: "199€/mj", minutes: 300, features: ["300 minuta/mj", "2 agenta", "HR + EN", "Prilagođeni promptovi", "SMS potvrde", "Webhook integracije"] },
+    { name: "Enterprise", price: "399€/mj", minutes: 1000, features: ["1000 minuta/mj", "Neograničeni agenti", "Svi jezici", "Custom voice cloning", "API pristup", "Prioritetna podrška", "CRM integracija"] },
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* Pricing Plans */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Mic className="h-5 w-5" /> AI Voice Agent - Paketi za prodaju
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid md:grid-cols-3 gap-4">
+            {pricingPlans.map(plan => (
+              <div key={plan.name} className={`p-4 rounded-lg border-2 ${plan.name === "Pro" ? "border-orange-500 bg-orange-50" : "border-border"}`}>
+                {plan.name === "Pro" && <span className="text-xs font-bold text-orange-600 uppercase">Najpopularniji</span>}
+                <h3 className="text-lg font-bold mt-1">{plan.name}</h3>
+                <p className="text-2xl font-black text-orange-600">{plan.price}</p>
+                <ul className="mt-3 space-y-1.5">
+                  {plan.features.map(f => (
+                    <li key={f} className="text-sm flex items-center gap-2">
+                      <CheckCircle className="h-3.5 w-3.5 text-green-600" /> {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Setup Guide */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Upute za postavljanje</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <pre className="bg-muted p-4 rounded-lg text-xs whitespace-pre-wrap overflow-x-auto">{setupScript}</pre>
+          <Button
+            size="sm"
+            className="mt-3"
+            onClick={() => copyText(setupScript, "setup")}
+          >
+            <Copy className="h-4 w-4 mr-1" /> {copied === "setup" ? "Kopirano!" : "Kopiraj upute"}
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* System Prompt */}
+      <Card>
+        <CardHeader>
+          <CardTitle>System Prompt za Voice Agenta (HR)</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <pre className="bg-muted p-4 rounded-lg text-xs whitespace-pre-wrap overflow-x-auto">{systemPrompt}</pre>
+          <Button
+            size="sm"
+            className="mt-3"
+            onClick={() => copyText(systemPrompt, "prompt")}
+          >
+            <Copy className="h-4 w-4 mr-1" /> {copied === "prompt" ? "Kopirano!" : "Kopiraj prompt"}
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* WhatsApp Sales Pitch */}
+      <Card>
+        <CardHeader>
+          <CardTitle>WhatsApp poruka za prodaju Voice Agenta</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="bg-green-50 p-4 rounded-lg text-sm">
+            <p>Dobar dan! 👋</p>
+            <p className="mt-2">Javljam se iz Split Usluge. Imamo AI asistenta koji može odgovarati na pozive Vašeg biznisa 24/7 - na hrvatskom jeziku!</p>
+            <p className="mt-2">✅ Automatsko rezerviranje termina</p>
+            <p>✅ Odgovara na pitanja o cijenama i uslugama</p>
+            <p>✅ Nikad ne propušta poziv</p>
+            <p>✅ Šalje SMS potvrde klijentima</p>
+            <p className="mt-2">Paketi od 99€/mj. Želite li besplatnu probnu demonstraciju?</p>
+            <p className="mt-2">Info: kondor1413@gmail.com</p>
+          </div>
+          <Button
+            size="sm"
+            className="mt-3"
+            onClick={() => copyText("Dobar dan! 👋\n\nJavljam se iz Split Usluge. Imamo AI asistenta koji može odgovarati na pozive Vašeg biznisa 24/7 - na hrvatskom jeziku!\n\n✅ Automatsko rezerviranje termina\n✅ Odgovara na pitanja o cijenama i uslugama\n✅ Nikad ne propušta poziv\n✅ Šalje SMS potvrde klijentima\n\nPaketi od 99€/mj. Želite li besplatnu probnu demonstraciju?\n\nInfo: kondor1413@gmail.com", "wa-voice")}
+          >
+            <Copy className="h-4 w-4 mr-1" /> {copied === "wa-voice" ? "Kopirano!" : "Kopiraj poruku"}
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* Quick Integration Checklist */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Brza integracija - Checklist</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ol className="space-y-3 text-sm">
+            <li className="flex gap-3">
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center text-xs font-bold">1</span>
+              <div><strong>Registracija na Bland.ai</strong> — Napravi account, dodaj payment method</div>
+            </li>
+            <li className="flex gap-3">
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center text-xs font-bold">2</span>
+              <div><strong>Kupi Twilio broj</strong> — Hrvatski broj (+385) za $1/mj na twilio.com</div>
+            </li>
+            <li className="flex gap-3">
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center text-xs font-bold">3</span>
+              <div><strong>Kreiraj agenta</strong> — Zalijepi System Prompt gore, odaberi glas i jezik</div>
+            </li>
+            <li className="flex gap-3">
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center text-xs font-bold">4</span>
+              <div><strong>Poveži broj</strong> — Forwarding sa biznisovog broja na Twilio → Bland</div>
+            </li>
+            <li className="flex gap-3">
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center text-xs font-bold">5</span>
+              <div><strong>Testiraj</strong> — Nazovi i provjeri da sve radi, prilagodi prompt po potrebi</div>
+            </li>
+            <li className="flex gap-3">
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center text-xs font-bold">6</span>
+              <div><strong>Webhook</strong> — Postavi webhook za primanje rezervacija u email/Sheets/CRM</div>
+            </li>
+          </ol>
         </CardContent>
       </Card>
     </div>
