@@ -109,7 +109,7 @@ export default function AdminPanel() {
 
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Tabs */}
-        <div className="flex gap-1 mb-6 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-none">
+        <div className="flex flex-wrap gap-1 mb-6">
           {([
             { id: "dashboard", label: "Pregled", icon: BarChart3 },
             { id: "categories", label: "Kategorije", icon: TrendingUp },
