@@ -25,7 +25,7 @@ export default function Terms() {
           {/* Introduction */}
           <section className="space-y-4">
             <p className="text-muted-foreground text-lg">
-              Dobrodošli na Split Usluge. Ovi uvjeti korištenja reguliraju vašu upotrebu naše platforme. Korištenjem ove web stranice, prihvaćate sve uvjete navedene u nastavku.
+              Dobrodošli na Majstori Split. Ovi uvjeti korištenja reguliraju vašu upotrebu naše platforme. Korištenjem ove web stranice, prihvaćate sve uvjete navedene u nastavku.
             </p>
           </section>
 
@@ -33,7 +33,7 @@ export default function Terms() {
           <section className="space-y-4">
             <h2 className="text-2xl font-bold text-foreground">1. Korištenje Platforme</h2>
             <p className="text-muted-foreground">
-              Split Usluge je besplatna platforma za pronalaženje lokalnih usluga u Splitu i okolici. Korisnici mogu pregledavati biznise, čitati recenzije i kontaktirati pružatelje usluga.
+              Majstori Split je besplatna platforma za pronalaženje lokalnih usluga u Splitu i okolici. Korisnici mogu pregledavati biznise, čitati recenzije i kontaktirati pružatelje usluga.
             </p>
             <p className="text-muted-foreground">
               Korisnici se slažu da će koristiti platformu samo za legalne svrhe i na način koji ne narušava prava drugih korisnika.
@@ -63,7 +63,7 @@ export default function Terms() {
           <section className="space-y-4">
             <h2 className="text-2xl font-bold text-foreground">4. Odgovornost</h2>
             <p className="text-muted-foreground">
-              Split Usluge nije odgovorna za kvalitetu usluga pruženih od strane registriranih biznisa. Korisnici koriste usluge na vlastitu odgovornost.
+              Majstori Split nije odgovorna za kvalitetu usluga pruženih od strane registriranih biznisa. Korisnici koriste usluge na vlastitu odgovornost.
             </p>
             <p className="text-muted-foreground">
               Svi podaci na platformi se pružaju "kako su" bez ikakvih jamstava. Nismo odgovorni za bilo kakve štete ili gubitke koji mogu nastati korištenjem platforme.

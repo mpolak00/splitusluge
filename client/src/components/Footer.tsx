@@ -105,7 +105,7 @@ export function Footer() {
           </div>
 
           <div className="mt-10 border-t border-white/10 pt-6 text-center text-xs text-white/40">
-            <p>&copy; {new Date().getFullYear()} Split Usluge. Sva prava pridržana.</p>
+            <p>&copy; {new Date().getFullYear()} Majstori Split. Sva prava pridržana.</p>
             <p className="mt-1">Pokrivamo: {SERVICE_AREAS.join(", ")}</p>
           </div>
         </div>

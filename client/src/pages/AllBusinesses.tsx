@@ -59,7 +59,7 @@ export default function AllBusinesses() {
   const averageRating = useMemo(() => getAverageRating(filteredBusinesses), [filteredBusinesses]);
 
   const seoPayload = useMemo(() => {
-    const title = "Svi obrti i lokalne usluge u Splitu | Split Usluge";
+    const title = "Svi obrti i lokalne usluge u Splitu | Majstori Split";
     const description = `Pregledajte ${filteredBusinesses.length || allBusinesses.length} lokalnih poslovanja u Splitu i okolici. Usporedite kategorije, profile, kontakte i lokacije na jednom mjestu.`;
     const siteUrl = typeof window !== "undefined" ? window.location.origin : undefined;
     const breadcrumbs = [
@@ -80,14 +80,14 @@ export default function AllBusinesses() {
       pathname: ALL_BUSINESSES_PATH,
       siteUrl,
       structuredData: [
-        ...buildBaseStructuredData(siteUrl || "https://split-usluge.com"),
-        buildBreadcrumbSchema(siteUrl || "https://split-usluge.com", breadcrumbs),
+        ...buildBaseStructuredData(siteUrl || "https://splitmajstori.com"),
+        buildBreadcrumbSchema(siteUrl || "https://splitmajstori.com", breadcrumbs),
         {
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           name: title,
           description,
-          url: `${siteUrl || "https://split-usluge.com"}${ALL_BUSINESSES_PATH}`,
+          url: `${siteUrl || "https://splitmajstori.com"}${ALL_BUSINESSES_PATH}`,
           inLanguage: "hr-HR",
           areaServed: SERVICE_AREAS,
         },
@@ -111,7 +111,7 @@ export default function AllBusinesses() {
               Svi obrti i lokalne usluge u Splitu na jednom mjestu
             </h1>
             <p className="max-w-3xl text-lg leading-8 text-white/80">
-              Ovo je centralni imenik Split Usluge. Ovdje možete filtrirati kategorije, usporediti profile
+              Ovo je centralni imenik Majstori Split. Ovdje možete filtrirati kategorije, usporediti profile
               poslovanja i otvoriti detaljne stranice za svaki lokalni biznis.
             </p>
             <div className="grid gap-4 md:grid-cols-3">

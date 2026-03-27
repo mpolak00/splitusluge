@@ -13,7 +13,7 @@ const ADS_PACKAGES = [
     name: "Oglas Basic",
     price: 25,
     period: "mj",
-    description: "Vidljivost na Split Usluge imeniku za lokalne kupce koji aktivno traže usluge.",
+    description: "Vidljivost na Majstori Split imeniku za lokalne kupce koji aktivno traže usluge.",
     icon: Megaphone,
     color: "border-blue-200 dark:border-blue-800",
     headerColor: "bg-blue-50 dark:bg-blue-950",
@@ -135,8 +135,8 @@ const FAQS = [
 
 export default function Paketi() {
   const seoPayload = useMemo(() => buildSeoPayload({
-    title: "Paketi - Oglašavanje i Web stranice za biznise u Splitu | Split Usluge",
-    description: "Oglašavaj se na Split Usluge od 25 EUR/mj ili naruči profesionalnu web stranicu od 300 EUR. Bez ugovora, bez skrivenih troškova.",
+    title: "Paketi - Oglašavanje i Web stranice za biznise u Splitu | Majstori Split",
+    description: "Oglašavaj se na Majstori Split od 25 EUR/mj ili naruči profesionalnu web stranicu od 300 EUR. Bez ugovora, bez skrivenih troškova.",
     keywords: ["oglašavanje split", "web stranica split", "izrada web stranice split", "oglas lokalni biznis split"],
     pathname: "/paketi",
   }), []);
@@ -156,7 +156,7 @@ export default function Paketi() {
             <span className="text-orange-400">Manje troškova.</span>
           </h1>
           <p className="text-lg text-white/70 max-w-2xl mx-auto mb-8">
-            Oglašavaj se na Split Usluge od <strong className="text-white">25 EUR/mj</strong> ili naruči
+            Oglašavaj se na Majstori Split od <strong className="text-white">25 EUR/mj</strong> ili naruči
             profesionalnu web stranicu od <strong className="text-white">300 EUR</strong>.
             Turisti i lokalni kupci traže tvoje usluge — budi tamo gdje te mogu naći.
           </p>
@@ -187,7 +187,7 @@ export default function Paketi() {
       <section id="oglasavanje" className="container mx-auto px-4 py-16">
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 rounded-full bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300 px-4 py-1.5 text-sm font-semibold mb-4">
-            <Megaphone className="h-4 w-4" /> Oglašavanje na Split Usluge imeniku
+            <Megaphone className="h-4 w-4" /> Oglašavanje na Majstori Split imeniku
           </div>
           <h2 className="text-3xl font-bold tracking-tight mb-3">Tvoj biznis na prvom mjestu u pretrazi</h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
@@ -232,7 +232,7 @@ export default function Paketi() {
                     variant={pkg.highlight ? "default" : "outline"}
                     asChild
                   >
-                    <a href={`mailto:info@split-usluge.com?subject=Oglas paket ${pkg.name}&body=Zainteresiran/a sam za ${pkg.name} paket (${pkg.price} EUR/mj). Ime biznisa: `}>
+                    <a href={`mailto:info@splitmajstori.com?subject=Oglas paket ${pkg.name}&body=Zainteresiran/a sam za ${pkg.name} paket (${pkg.price} EUR/mj). Ime biznisa: `}>
                       {pkg.ctaLabel}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </a>
@@ -303,7 +303,7 @@ export default function Paketi() {
                     variant={pkg.highlight ? "default" : "outline"}
                     asChild
                   >
-                    <a href={`mailto:info@split-usluge.com?subject=${pkg.name} - Narudžba web stranice&body=Zainteresiran/a sam za ${pkg.name} (${pkg.price} EUR). Ime biznisa: `}>
+                    <a href={`mailto:info@splitmajstori.com?subject=${pkg.name} - Narudžba web stranice&body=Zainteresiran/a sam za ${pkg.name} (${pkg.price} EUR). Ime biznisa: `}>
                       {pkg.ctaLabel}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </a>
@@ -327,7 +327,7 @@ export default function Paketi() {
             </p>
             <div className="flex gap-3 justify-center flex-wrap">
               <Button asChild className="bg-orange-500 hover:bg-orange-600 text-white">
-                <a href="mailto:info@split-usluge.com?subject=Zahtjev za besplatni preview web stranice&body=Ime biznisa: %0ATelefon: %0AAdresa: %0AKategorija usluge: ">
+                <a href="mailto:info@splitmajstori.com?subject=Zahtjev za besplatni preview web stranice&body=Ime biznisa: %0ATelefon: %0AAdresa: %0AKategorija usluge: ">
                   <Mail className="mr-2 h-4 w-4" /> Zatraži besplatni preview
                 </a>
               </Button>
@@ -400,7 +400,7 @@ export default function Paketi() {
         </p>
         <div className="flex gap-4 justify-center flex-wrap">
           <Button asChild className="bg-orange-500 hover:bg-orange-600 text-white h-12 px-8">
-            <a href="mailto:info@split-usluge.com">
+            <a href="mailto:info@splitmajstori.com">
               <Mail className="mr-2 h-4 w-4" /> Kontaktiraj nas
             </a>
           </Button>

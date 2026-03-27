@@ -10,12 +10,12 @@ export default function Promocija() {
   const seoPayload = useMemo(() => {
     const siteUrl = typeof window !== "undefined" ? window.location.origin : undefined;
     return buildSeoPayload({
-      title: "Promoviraj svoje poslovanje | Split Usluge",
+      title: "Promoviraj svoje poslovanje | Majstori Split",
       description: "Istaknite svoje poslovanje na vrh kategorije i privucite više klijenata u Splitu i okolici.",
       keywords: ["promocija biznisa split", "oglašavanje split", "istaknuti poslovanje split"],
       pathname: "/promocija",
       siteUrl,
-      structuredData: buildBaseStructuredData(siteUrl || "https://split-usluge.com"),
+      structuredData: buildBaseStructuredData(siteUrl || "https://splitmajstori.com"),
     });
   }, []);
 

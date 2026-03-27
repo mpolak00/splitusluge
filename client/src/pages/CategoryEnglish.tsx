@@ -230,7 +230,7 @@ export default function CategoryEnglish() {
 
   const seoPayload = useMemo(() => {
     if (!categoryQuery.data) return null;
-    const siteUrl = typeof window !== "undefined" ? window.location.origin : "https://split-usluge.com";
+    const siteUrl = typeof window !== "undefined" ? window.location.origin : "https://splitmajstori.com";
     const pathname = `/en/${categorySlug}`;
     const breadcrumbs = [
       { name: "Home", path: "/en" },

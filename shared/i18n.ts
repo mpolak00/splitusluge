@@ -3,7 +3,7 @@ export type Language = "hr" | "en";
 export type Translations = Record<string, string>;
 
 const hr: Translations = {
-  "site.name": "Split Usluge",
+  "site.name": "Majstori Split",
   "site.tagline": "Lokalni imenik usluga, obrta i firmi u Splitu",
   "site.description": "Pronađite lokalne usluge, obrte i firme u Splitu i okolici.",
   "nav.home": "Naslovnica",

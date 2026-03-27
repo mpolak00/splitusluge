@@ -95,7 +95,7 @@ export default function CategoryPage() {
   const seoPayload = useMemo(() => {
     if (!categoryQuery.data) return null;
 
-    const title = `${categoryCopy.title} u Splitu | ${businesses.length} profila | Split Usluge`;
+    const title = `${categoryCopy.title} u Splitu | ${businesses.length} profila | Majstori Split`;
     const description = `${categoryCopy.intro} Trenutno prikazujemo ${businesses.length} profila. ${
       topLocations.length > 0 ? `Najviše unosa pokriva: ${topLocations.join(", ")}.` : ""
     }`;
@@ -115,14 +115,14 @@ export default function CategoryPage() {
       siteUrl,
       ogType: "article",
       structuredData: [
-        ...buildBaseStructuredData(siteUrl || "https://split-usluge.com"),
-        buildBreadcrumbSchema(siteUrl || "https://split-usluge.com", breadcrumbs),
+        ...buildBaseStructuredData(siteUrl || "https://splitmajstori.com"),
+        buildBreadcrumbSchema(siteUrl || "https://splitmajstori.com", breadcrumbs),
         {
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           name: title,
           description,
-          url: `${siteUrl || "https://split-usluge.com"}${pathname}`,
+          url: `${siteUrl || "https://splitmajstori.com"}${pathname}`,
           inLanguage: "hr-HR",
           about: categoryCopy.title,
           areaServed: SERVICE_AREAS,
@@ -135,7 +135,7 @@ export default function CategoryPage() {
             "@type": "ListItem",
             position: index + 1,
             name: business.name,
-            url: `${siteUrl || "https://split-usluge.com"}${getBusinessPath(business)}`,
+            url: `${siteUrl || "https://splitmajstori.com"}${getBusinessPath(business)}`,
           })),
         },
         {

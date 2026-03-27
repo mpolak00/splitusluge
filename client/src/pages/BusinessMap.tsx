@@ -35,7 +35,7 @@ export default function BusinessMap() {
 
   const seoPayload = useMemo(() => {
     const siteUrl = typeof window !== "undefined" ? window.location.origin : undefined;
-    const title = "Mapa lokalnih usluga u Splitu | Split Usluge";
+    const title = "Mapa lokalnih usluga u Splitu | Majstori Split";
     const description = `Interaktivna karta za ${businesses.length} lokalnih poslovanja u Splitu i okolici. Filtriraj kategorije i otvori profil svakog biznisa.`;
     const breadcrumbs = [
       { name: "Naslovnica", path: "/" },
@@ -49,14 +49,14 @@ export default function BusinessMap() {
       pathname: "/mapa",
       siteUrl,
       structuredData: [
-        ...buildBaseStructuredData(siteUrl || "https://split-usluge.com"),
-        buildBreadcrumbSchema(siteUrl || "https://split-usluge.com", breadcrumbs),
+        ...buildBaseStructuredData(siteUrl || "https://splitmajstori.com"),
+        buildBreadcrumbSchema(siteUrl || "https://splitmajstori.com", breadcrumbs),
         {
           "@context": "https://schema.org",
           "@type": "Map",
           name: title,
           description,
-          url: `${siteUrl || "https://split-usluge.com"}/mapa`,
+          url: `${siteUrl || "https://splitmajstori.com"}/mapa`,
           areaServed: SERVICE_AREAS,
         },
       ],

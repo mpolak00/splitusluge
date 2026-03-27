@@ -201,6 +201,6 @@ export const ownersRouter = router({
   // Get contact info
   getContactInfo: publicProcedure.query(() => ({
     email: OWNER_EMAIL,
-    siteName: "Split Usluge",
+    siteName: "Majstori Split",
   })),
 });

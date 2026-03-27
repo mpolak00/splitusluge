@@ -48,7 +48,7 @@ export function PromoBanner() {
           </div>
 
           <h3 className="text-base font-bold leading-snug text-foreground">
-            Istaknite vaš biznis u Split Usluge imeniku
+            Istaknite vaš biznis u Majstori Split imeniku
           </h3>
           <p className="mt-1.5 text-sm leading-6 text-muted-foreground">
             Prioritetni prikaz, bolja pozicija u kategoriji i više poziva od lokalnih kupaca.

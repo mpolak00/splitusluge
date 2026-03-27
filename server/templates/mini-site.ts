@@ -318,7 +318,7 @@ const LABELS = {
     starterFeatures: [
       'Preview stranica',
       'Osnovno SEO',
-      'Split Usluge branding',
+      'Majstori Split branding',
     ],
     standardFeatures: [
       'Profesionalna stranica',
@@ -370,7 +370,7 @@ const LABELS = {
     starterFeatures: [
       'Preview page',
       'Basic SEO',
-      'Split Usluge branding',
+      'Majstori Split branding',
     ],
     standardFeatures: [
       'Professional website',
@@ -499,7 +499,7 @@ export function generateMiniSiteHtml(
       ? `https://wa.me/${phoneClean.replace('+', '')}?text=${encodeURIComponent(l.whatsappMsg)}`
       : null;
 
-  const pageTitle = `${business.name}${category ? ` - ${category.name}` : ''} | Split Usluge`;
+  const pageTitle = `${business.name}${category ? ` - ${category.name}` : ''} | Majstori Split`;
   const pageDesc = business.description
     ? business.description.slice(0, 160)
     : `${business.name}${category ? ` - ${category.name}` : ''} - Split, Hrvatska`;
@@ -815,7 +815,7 @@ ${
       <ul>
 ${l.starterFeatures.map((f) => `        <li>${esc(f)}</li>`).join('\n')}
       </ul>
-      <a href="https://split-usluge.com" class="btn btn-outline">${l.choosePackage}</a>
+      <a href="https://splitmajstori.com" class="btn btn-outline">${l.choosePackage}</a>
     </div>
 
     <!-- Standard -->
@@ -827,7 +827,7 @@ ${l.starterFeatures.map((f) => `        <li>${esc(f)}</li>`).join('\n')}
       <ul>
 ${l.standardFeatures.map((f) => `        <li>${esc(f)}</li>`).join('\n')}
       </ul>
-      <a href="https://split-usluge.com" class="btn btn-primary">${l.choosePackage}</a>
+      <a href="https://splitmajstori.com" class="btn btn-primary">${l.choosePackage}</a>
     </div>
 
     <!-- Premium -->
@@ -838,7 +838,7 @@ ${l.standardFeatures.map((f) => `        <li>${esc(f)}</li>`).join('\n')}
       <ul>
 ${l.premiumFeatures.map((f) => `        <li>${esc(f)}</li>`).join('\n')}
       </ul>
-      <a href="https://split-usluge.com" class="btn btn-outline">${l.choosePackage}</a>
+      <a href="https://splitmajstori.com" class="btn btn-outline">${l.choosePackage}</a>
     </div>
 
   </div>
@@ -847,7 +847,7 @@ ${l.premiumFeatures.map((f) => `        <li>${esc(f)}</li>`).join('\n')}
 
 <!-- Footer -->
 <footer>
-  <p>${l.poweredBy} <a href="https://split-usluge.com">Split Usluge</a></p>
+  <p>${l.poweredBy} <a href="https://splitmajstori.com">Majstori Split</a></p>
   <p style="margin-top:.3rem">&copy; ${new Date().getFullYear()} ${esc(business.name)}. ${l.allRightsReserved}</p>
 </footer>
 
