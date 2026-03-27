@@ -203,17 +203,36 @@ const DEFAULT_IMAGES = [
   "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400&h=300&fit=crop&q=80",
 ];
 
+/** URL patterns known to be expired / broken */
+const BROKEN_URL_PATTERNS = [
+  "forge.manus.ai",
+  "maps.googleapis.com/maps/api/place/photo",
+];
+
+function isLikelyBroken(url: string): boolean {
+  return BROKEN_URL_PATTERNS.some(p => url.includes(p));
+}
+
 /**
  * Get a deterministic placeholder image for a business based on its category and id.
- * Returns the business's own image if available, otherwise a category-relevant placeholder.
+ * Returns the business's own image if available and not known-broken,
+ * otherwise a category-relevant placeholder.
  */
 export function getBusinessImage(
   businessId: number | string,
   categorySlug: string,
   ownImageUrl?: string | null
 ): string {
-  if (ownImageUrl) return ownImageUrl;
+  if (ownImageUrl && !isLikelyBroken(ownImageUrl)) return ownImageUrl;
 
+  return getCategoryFallbackImage(businessId, categorySlug);
+}
+
+/** Always returns the category/default placeholder (ignores ownImageUrl). */
+export function getCategoryFallbackImage(
+  businessId: number | string,
+  categorySlug: string,
+): string {
   const images = CATEGORY_IMAGES[categorySlug] || DEFAULT_IMAGES;
   const index = (typeof businessId === "number" ? businessId : parseInt(String(businessId), 10) || 0) % images.length;
   return images[index];

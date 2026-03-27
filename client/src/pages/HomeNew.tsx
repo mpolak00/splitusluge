@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useFuzzySearch } from "@/hooks/useFuzzySearch";
 import { calculateWeightedScore, getAverageRating, getRatingValue, sortBusinessesByWeighted } from "@/lib/directory";
-import { getBusinessImage } from "@/lib/category-images";
+import { getBusinessImage, getCategoryFallbackImage } from "@/lib/category-images";
 import { trpc } from "@/lib/trpc";
 import { usePageTracking, useTrackClick, useTrackSearch } from "@/hooks/useAnalytics";
 
@@ -227,6 +227,11 @@ export default function HomeNew() {
                         alt={business.name}
                         className="h-full w-full object-cover"
                         loading="lazy"
+                        onError={e => {
+                          const img = e.target as HTMLImageElement;
+                          const fallback = getCategoryFallbackImage(business.id, categorySlugMap[business.categoryId] || "");
+                          if (img.src !== fallback) img.src = fallback;
+                        }}
                       />
                     </div>
                     <CardContent className="space-y-4 p-5">
@@ -405,6 +410,11 @@ export default function HomeNew() {
                           alt={business.name}
                           className="h-full w-full object-cover"
                           loading="lazy"
+                          onError={e => {
+                            const img = e.target as HTMLImageElement;
+                            const fallback = getCategoryFallbackImage(business.id, categorySlugMap[business.categoryId] || "");
+                            if (img.src !== fallback) img.src = fallback;
+                          }}
                         />
                       </div>
                       <CardContent className="space-y-4 p-5">

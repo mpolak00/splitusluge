@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePageSeo } from "@/hooks/usePageSeo";
 import { getAverageRating, getRatingValue, sortBusinessesByWeighted } from "@/lib/directory";
-import { getBusinessImage } from "@/lib/category-images";
+import { getBusinessImage, getCategoryFallbackImage } from "@/lib/category-images";
 import { trpc } from "@/lib/trpc";
 
 function openGoogleMaps(name: string, address?: string | null) {
@@ -210,6 +210,11 @@ export default function AllBusinesses() {
                     alt={business.name}
                     className="h-full w-full object-cover"
                     loading="lazy"
+                    onError={e => {
+                      const img = e.target as HTMLImageElement;
+                      const fallback = getCategoryFallbackImage(business.id, categorySlugMap[business.categoryId] || "");
+                      if (img.src !== fallback) img.src = fallback;
+                    }}
                   />
                 </div>
 
