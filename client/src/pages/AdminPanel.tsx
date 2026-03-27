@@ -1597,12 +1597,11 @@ function getScoreColor(score: number) {
 }
 
 function BotScanTab({ adminPassword }: { adminPassword: string }) {
-  const [running, setRunning] = useState(false);
   const [sentIds, setSentIds] = useState<Set<string>>(new Set());
   const [filterCat, setFilterCat] = useState("");
   const [filterIssue, setFilterIssue] = useState("");
   const [sortBy, setSortBy] = useState<"score" | "rating">("score");
-  const scanResult = trpc.admin.runBotScan.useQuery({ adminPassword }, { enabled: running });
+  const scanResult = trpc.admin.runBotScan.useQuery({ adminPassword });
   const logOutreach = trpc.admin.logOutreach.useMutation();
 
   const leads = scanResult.data?.leads || [];
@@ -1662,24 +1661,7 @@ function BotScanTab({ adminPassword }: { adminPassword: string }) {
 
   return (
     <div className="space-y-6">
-      {!running ? (
-        <Card className="border-2 border-dashed border-primary/30">
-          <CardContent className="p-8 text-center space-y-4">
-            <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-              <Radar className="h-8 w-8 text-primary" />
-            </div>
-            <h2 className="text-2xl font-bold">Bot Skener — Digitalna prisutnost</h2>
-            <p className="text-muted-foreground max-w-lg mx-auto">
-              Skenira SVE biznise u Splitu i ocjenjuje njihovu digitalnu prisutnost. Pronalazi: bez web stranice,
-              bez Google profila, bez opisa, bez radnog vremena, loše ocjene, bez recenzija.
-              Svaki biznis dobiva score 0-100 i popis problema — sortirano po prioritetu za outreach.
-            </p>
-            <Button size="lg" onClick={() => setRunning(true)} className="bg-primary">
-              <Radar className="h-5 w-5 mr-2" /> Pokreni skeniranje
-            </Button>
-          </CardContent>
-        </Card>
-      ) : scanResult.isLoading ? (
+      {scanResult.isLoading ? (
         <Card>
           <CardContent className="p-8 text-center space-y-4">
             <div className="mx-auto w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
@@ -1712,7 +1694,7 @@ function BotScanTab({ adminPassword }: { adminPassword: string }) {
                 </div>
                 <div className="flex gap-2">
                   <Button size="sm" variant="outline" onClick={exportCSV}><FileDown className="h-4 w-4 mr-1" />CSV</Button>
-                  <Button size="sm" variant="outline" onClick={() => setRunning(false)}><RefreshCw className="h-4 w-4 mr-1" />Rescan</Button>
+                  <Button size="sm" variant="outline" onClick={() => scanResult.refetch()}><RefreshCw className="h-4 w-4 mr-1" />Rescan</Button>
                 </div>
               </div>
             </CardHeader>

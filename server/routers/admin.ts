@@ -269,7 +269,7 @@ export const adminRouter = router({
       if (!db) return { businesses: [], total: 0 };
 
       const conditions = [
-        eq(businesses.isActive, 1),
+        or(eq(businesses.isActive, 1), isNull(businesses.isActive)),
         or(
           isNull(businesses.website),
           eq(businesses.website, ""),
@@ -412,7 +412,7 @@ export const adminRouter = router({
       if (!db) return { businesses: [], total: 0 };
 
       const conditions = [
-        eq(businesses.isActive, 1),
+        or(eq(businesses.isActive, 1), isNull(businesses.isActive)),
       ];
 
       if (input.noWebsiteOnly) {
@@ -500,7 +500,7 @@ export const adminRouter = router({
       })
         .from(businesses)
         .leftJoin(categories, eq(businesses.categoryId, categories.id))
-        .where(eq(businesses.isActive, 1));
+        .where(or(eq(businesses.isActive, 1), isNull(businesses.isActive)));
 
       const total = allBiz.length;
       const stats = { noWebsite: 0, googleSite: 0, withWebsite: 0, noGoogle: 0, noEmail: 0, noDescription: 0, noHours: 0, lowRating: 0, noReviews: 0 };
