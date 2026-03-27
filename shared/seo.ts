@@ -53,7 +53,7 @@ type SeoBuilderInput = {
   ogImagePath?: string;
 };
 
-export const DEFAULT_SITE_URL = "https://splitmajstori.com";
+export const DEFAULT_SITE_URL = "https://majstorisplit.com";
 export const DEFAULT_SITE_NAME = "Majstori Split";
 export const DEFAULT_OG_IMAGE = "/images/hero-split.jpg";
 

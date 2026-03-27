@@ -128,8 +128,8 @@ export default function BusinessDetailPage() {
       siteUrl,
       ogType: "article",
       structuredData: [
-        ...buildBaseStructuredData(siteUrl || "https://splitmajstori.com"),
-        buildBreadcrumbSchema(siteUrl || "https://splitmajstori.com", breadcrumbs),
+        ...buildBaseStructuredData(siteUrl || "https://majstorisplit.com"),
+        buildBreadcrumbSchema(siteUrl || "https://majstorisplit.com", breadcrumbs),
         localBusinessSchema,
       ],
     });

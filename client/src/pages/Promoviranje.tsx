@@ -82,8 +82,8 @@ export default function Promoviranje() {
       pathname: "/promoviranje",
       siteUrl,
       structuredData: [
-        ...buildBaseStructuredData(siteUrl || "https://splitmajstori.com"),
-        buildBreadcrumbSchema(siteUrl || "https://splitmajstori.com", [
+        ...buildBaseStructuredData(siteUrl || "https://majstorisplit.com"),
+        buildBreadcrumbSchema(siteUrl || "https://majstorisplit.com", [
           { name: "Naslovnica", path: "/" },
           { name: "Promoviranje", path: "/promoviranje" },
         ]),
@@ -254,9 +254,9 @@ export default function Promoviranje() {
           </p>
           <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Button asChild variant="outline">
-              <a href="mailto:info@splitmajstori.com">
+              <a href="mailto:info@majstorisplit.com">
                 <Mail className="mr-2 h-4 w-4" />
-                info@splitmajstori.com
+                info@majstorisplit.com
               </a>
             </Button>
             <Button asChild variant="outline">

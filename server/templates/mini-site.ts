@@ -815,7 +815,7 @@ ${
       <ul>
 ${l.starterFeatures.map((f) => `        <li>${esc(f)}</li>`).join('\n')}
       </ul>
-      <a href="https://splitmajstori.com" class="btn btn-outline">${l.choosePackage}</a>
+      <a href="https://majstorisplit.com" class="btn btn-outline">${l.choosePackage}</a>
     </div>
 
     <!-- Standard -->
@@ -827,7 +827,7 @@ ${l.starterFeatures.map((f) => `        <li>${esc(f)}</li>`).join('\n')}
       <ul>
 ${l.standardFeatures.map((f) => `        <li>${esc(f)}</li>`).join('\n')}
       </ul>
-      <a href="https://splitmajstori.com" class="btn btn-primary">${l.choosePackage}</a>
+      <a href="https://majstorisplit.com" class="btn btn-primary">${l.choosePackage}</a>
     </div>
 
     <!-- Premium -->
@@ -838,7 +838,7 @@ ${l.standardFeatures.map((f) => `        <li>${esc(f)}</li>`).join('\n')}
       <ul>
 ${l.premiumFeatures.map((f) => `        <li>${esc(f)}</li>`).join('\n')}
       </ul>
-      <a href="https://splitmajstori.com" class="btn btn-outline">${l.choosePackage}</a>
+      <a href="https://majstorisplit.com" class="btn btn-outline">${l.choosePackage}</a>
     </div>
 
   </div>
@@ -847,7 +847,7 @@ ${l.premiumFeatures.map((f) => `        <li>${esc(f)}</li>`).join('\n')}
 
 <!-- Footer -->
 <footer>
-  <p>${l.poweredBy} <a href="https://splitmajstori.com">Majstori Split</a></p>
+  <p>${l.poweredBy} <a href="https://majstorisplit.com">Majstori Split</a></p>
   <p style="margin-top:.3rem">&copy; ${new Date().getFullYear()} ${esc(business.name)}. ${l.allRightsReserved}</p>
 </footer>
 

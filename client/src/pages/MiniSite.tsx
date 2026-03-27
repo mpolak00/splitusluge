@@ -231,7 +231,7 @@ export default function MiniSite() {
 
 <div class="footer">
   <p>&copy; ${new Date().getFullYear()} ${business.name} · Sva prava pridržana</p>
-  <p style="margin-top:8px">Web stranica izrada: <a href="https://splitmajstori.com" target="_blank">Majstori Split</a></p>
+  <p style="margin-top:8px">Web stranica izrada: <a href="https://majstorisplit.com" target="_blank">Majstori Split</a></p>
 </div>
 
 ${phone ? `<a href="tel:${phone}" style="position:fixed;bottom:20px;right:20px;background:#22c55e;color:#fff;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:1.5rem;box-shadow:0 4px 16px rgba(34,197,94,.4);z-index:999">📞</a>` : ""}

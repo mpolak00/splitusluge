@@ -4,7 +4,7 @@ Disallow: /admin/
 Disallow: /api/
 Disallow: /private/
 
-Sitemap: https://splitmajstori.com/sitemap.xml
+Sitemap: https://majstorisplit.com/sitemap.xml
 
 # Google
 User-agent: Googlebot

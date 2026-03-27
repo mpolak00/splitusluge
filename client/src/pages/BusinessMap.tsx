@@ -56,14 +56,14 @@ export default function BusinessMap() {
       pathname: "/mapa",
       siteUrl,
       structuredData: [
-        ...buildBaseStructuredData(siteUrl || "https://splitmajstori.com"),
-        buildBreadcrumbSchema(siteUrl || "https://splitmajstori.com", breadcrumbs),
+        ...buildBaseStructuredData(siteUrl || "https://majstorisplit.com"),
+        buildBreadcrumbSchema(siteUrl || "https://majstorisplit.com", breadcrumbs),
         {
           "@context": "https://schema.org",
           "@type": "Map",
           name: title,
           description,
-          url: `${siteUrl || "https://splitmajstori.com"}/mapa`,
+          url: `${siteUrl || "https://majstorisplit.com"}/mapa`,
           areaServed: SERVICE_AREAS,
         },
       ],

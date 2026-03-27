@@ -15,7 +15,7 @@ export default function Promocija() {
       keywords: ["promocija biznisa split", "oglašavanje split", "istaknuti poslovanje split"],
       pathname: "/promocija",
       siteUrl,
-      structuredData: buildBaseStructuredData(siteUrl || "https://splitmajstori.com"),
+      structuredData: buildBaseStructuredData(siteUrl || "https://majstorisplit.com"),
     });
   }, []);
 

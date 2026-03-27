@@ -115,14 +115,14 @@ export default function CategoryPage() {
       siteUrl,
       ogType: "article",
       structuredData: [
-        ...buildBaseStructuredData(siteUrl || "https://splitmajstori.com"),
-        buildBreadcrumbSchema(siteUrl || "https://splitmajstori.com", breadcrumbs),
+        ...buildBaseStructuredData(siteUrl || "https://majstorisplit.com"),
+        buildBreadcrumbSchema(siteUrl || "https://majstorisplit.com", breadcrumbs),
         {
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           name: title,
           description,
-          url: `${siteUrl || "https://splitmajstori.com"}${pathname}`,
+          url: `${siteUrl || "https://majstorisplit.com"}${pathname}`,
           inLanguage: "hr-HR",
           about: categoryCopy.title,
           areaServed: SERVICE_AREAS,
@@ -135,7 +135,7 @@ export default function CategoryPage() {
             "@type": "ListItem",
             position: index + 1,
             name: business.name,
-            url: `${siteUrl || "https://splitmajstori.com"}${getBusinessPath(business)}`,
+            url: `${siteUrl || "https://majstorisplit.com"}${getBusinessPath(business)}`,
           })),
         },
         {
