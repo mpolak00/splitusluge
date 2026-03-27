@@ -29,7 +29,7 @@ export default function About() {
               Naša Misija
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Split Usluge je digitalni puls grada pod Marjanom. Naša misija je povezati sugrađane s najboljim lokalnim obrtnicima i stručnjacima, čuvajući tradiciju kvalitete i povjerenja koja je obilježila Split kroz povijest.
+              Majstori Split je digitalni puls grada pod Marjanom. Naša misija je povezati sugrađane s najboljim lokalnim obrtnicima i stručnjacima, čuvajući tradiciju kvalitete i povjerenja koja je obilježila Split kroz povijest.
             </p>
             <p className="text-lg text-muted-foreground leading-relaxed">
               Vjerujemo da je pronalaženje pouzdane usluge trebalo biti jednostavno. Zato smo kreirali prostor gdje su svi obrci dostupni na jednom mjestu - od vulkanizera do vodoinstalatera, od frizerskih salona do automehaničara.

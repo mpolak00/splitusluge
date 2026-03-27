@@ -70,9 +70,9 @@ const PLANS = [
 
 export default function Promoviranje() {
   const seoPayload = useMemo(() => {
-    const title = "Promoviranje biznisa | Split Usluge";
+    const title = "Promoviranje biznisa | Majstori Split";
     const description =
-      "Istaknite vaš biznis u Split Usluge imeniku. Prioritetni prikaz, veća vidljivost u kategoriji i više poziva od lokalnih klijenata. Pogledajte planove.";
+      "Istaknite vaš biznis u Majstori Split imeniku. Prioritetni prikaz, veća vidljivost u kategoriji i više poziva od lokalnih klijenata. Pogledajte planove.";
     const siteUrl = typeof window !== "undefined" ? window.location.origin : undefined;
 
     return buildSeoPayload({
@@ -82,8 +82,8 @@ export default function Promoviranje() {
       pathname: "/promoviranje",
       siteUrl,
       structuredData: [
-        ...buildBaseStructuredData(siteUrl || "https://split-usluge.com"),
-        buildBreadcrumbSchema(siteUrl || "https://split-usluge.com", [
+        ...buildBaseStructuredData(siteUrl || "https://splitmajstori.com"),
+        buildBreadcrumbSchema(siteUrl || "https://splitmajstori.com", [
           { name: "Naslovnica", path: "/" },
           { name: "Promoviranje", path: "/promoviranje" },
         ]),
@@ -115,7 +115,7 @@ export default function Promoviranje() {
               Povećajte vidljivost svog biznisa u Splitu
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-white/80">
-              Split Usluge imenik svakodnevno posjećuju lokalni stanovnici koji traže usluge. Prioritetnim prikazom
+              Majstori Split imenik svakodnevno posjećuju lokalni stanovnici koji traže usluge. Prioritetnim prikazom
               vaš profil dolazi do više korisnika u pravom trenutku.
             </p>
           </div>
@@ -229,7 +229,7 @@ export default function Promoviranje() {
               },
               {
                 q: "Što je prioritetni prikaz?",
-                a: "Prioritetni profili pojavljuju se na vrhu kategorije i na naslovnici Split Usluge imenika, ispred besplatnih profila.",
+                a: "Prioritetni profili pojavljuju se na vrhu kategorije i na naslovnici Majstori Split imenika, ispred besplatnih profila.",
               },
               {
                 q: "Kako se kontaktirati zbog pitanja?",
@@ -254,9 +254,9 @@ export default function Promoviranje() {
           </p>
           <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Button asChild variant="outline">
-              <a href="mailto:info@split-usluge.com">
+              <a href="mailto:info@splitmajstori.com">
                 <Mail className="mr-2 h-4 w-4" />
-                info@split-usluge.com
+                info@splitmajstori.com
               </a>
             </Button>
             <Button asChild variant="outline">

@@ -287,7 +287,7 @@ export default function Home() {
                      Splitski.
                   </h2>
                   <p className="text-lg text-muted-foreground leading-relaxed">
-                     Split Usluge nije samo još jedan oglasnik. Mi smo digitalni puls grada pod Marjanom. 
+                     Majstori Split nije samo još jedan oglasnik. Mi smo digitalni puls grada pod Marjanom. 
                      Povezujemo sugrađane s najboljim lokalnim obrtnicima, čuvajući tradiciju kvalitete i povjerenja.
                   </p>
                   <p className="text-lg text-muted-foreground leading-relaxed">

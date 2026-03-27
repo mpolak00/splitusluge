@@ -75,7 +75,7 @@ export default function HomeNew() {
   const averageRating = useMemo(() => getAverageRating(allBusinesses), [allBusinesses]);
 
   const seoPayload = useMemo(() => {
-    const title = "Split Usluge | Lokalni imenik usluga, obrta i firmi u Splitu";
+    const title = "Majstori Split | Lokalni imenik usluga, obrta i firmi u Splitu";
     const description = `Pronađite ${allBusinesses.length || "provjerene"} lokalne usluge, obrte i firme u Splitu i okolici. Kategorije, kontakti, karta i profilna poslovanja na jednom mjestu.`;
     const siteUrl = typeof window !== "undefined" ? window.location.origin : undefined;
 
@@ -93,13 +93,13 @@ export default function HomeNew() {
       pathname: "/",
       siteUrl,
       structuredData: [
-        ...buildBaseStructuredData(siteUrl || "https://split-usluge.com"),
+        ...buildBaseStructuredData(siteUrl || "https://splitmajstori.com"),
         {
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           name: title,
           description,
-          url: siteUrl || "https://split-usluge.com",
+          url: siteUrl || "https://splitmajstori.com",
           inLanguage: "hr-HR",
           areaServed: SERVICE_AREAS,
         },
@@ -111,7 +111,7 @@ export default function HomeNew() {
             "@type": "ListItem",
             position: index + 1,
             name: category.name,
-            url: `${siteUrl || "https://split-usluge.com"}/usluga/${category.slug}`,
+            url: `${siteUrl || "https://splitmajstori.com"}/usluga/${category.slug}`,
           })),
         },
       ],
@@ -137,7 +137,7 @@ export default function HomeNew() {
               Sve lokalne usluge u Splitu na jednom mjestu
             </h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-white/80 md:text-xl">
-              Od vulkanizera i frizera do vodoinstalatera, stomatologa i selidbi. Split Usluge
+              Od vulkanizera i frizera do vodoinstalatera, stomatologa i selidbi. Majstori Split
               okuplja lokalne biznise, kontakte i profile poslovanja kako bi ih korisnici lakše našli,
               usporedili i kontaktirali.
             </p>
@@ -340,7 +340,7 @@ export default function HomeNew() {
                     <p className="text-sm font-semibold uppercase tracking-[0.25em] text-orange-300">Za biznise</p>
                     <h2 className="mt-3 text-3xl font-bold tracking-tight">Želiš više poziva i bolju poziciju na Googleu?</h2>
                     <p className="mt-4 text-white/75">
-                      Split Usluge gradimo kao lokalni imenik koji spaja organski SEO, Google Ads i
+                      Majstori Split gradimo kao lokalni imenik koji spaja organski SEO, Google Ads i
                       prioritetne pozicije unutar kategorija. To znači više vidljivosti za one koji žele biti
                       ispred konkurencije.
                     </p>
@@ -494,7 +494,7 @@ export default function HomeNew() {
                   <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">Područja</p>
                   <h2 className="text-3xl font-bold tracking-tight">Gdje trenutno gradimo lokalni autoritet</h2>
                   <p className="leading-8 text-muted-foreground">
-                    Split Usluge nije samo za strogi centar grada. Imenik je postavljen tako da pokriva i
+                    Majstori Split nije samo za strogi centar grada. Imenik je postavljen tako da pokriva i
                     širu okolicu u kojoj ljudi svakodnevno traže lokalne usluge.
                   </p>
                   <div className="grid gap-3 sm:grid-cols-2">

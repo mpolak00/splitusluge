@@ -53,8 +53,8 @@ type SeoBuilderInput = {
   ogImagePath?: string;
 };
 
-export const DEFAULT_SITE_URL = "https://split-usluge.com";
-export const DEFAULT_SITE_NAME = "Split Usluge";
+export const DEFAULT_SITE_URL = "https://splitmajstori.com";
+export const DEFAULT_SITE_NAME = "Majstori Split";
 export const DEFAULT_OG_IMAGE = "/images/hero-split.jpg";
 
 export const SERVICE_AREAS = [
@@ -380,33 +380,33 @@ const CATEGORY_CONTENT: Record<string, CategoryPageCopy> = {
 
 const STATIC_ROUTE_CONTENT: Record<string, { title: string; description: string; keywords: string[] }> = {
   "/": {
-    title: "Split Usluge | Lokalni imenik obrta i usluga u Splitu",
+    title: "Majstori Split | Lokalni imenik obrta i usluga u Splitu",
     description: "Pronadite provjerene obrte, majstore i lokalne usluge u Splitu, Solinu, Kastelima, Podstrani, Dugopolju i Omisu.",
     keywords: ["split usluge", "obrti split", "lokalne usluge split", "majstori split", "imenik obrta split"],
   },
   "/mapa": {
-    title: "Mapa lokalnih usluga u Splitu | Split Usluge",
+    title: "Mapa lokalnih usluga u Splitu | Majstori Split",
     description: "Pregledajte lokalne usluge i obrte na karti Splita i okolice i brze pronadite najblizu opciju.",
     keywords: ["mapa usluga split", "lokalne usluge karta", "obrti split mapa"],
   },
   [ALL_BUSINESSES_PATH]: {
-    title: "Svi obrti i lokalne usluge u Splitu | Split Usluge",
+    title: "Svi obrti i lokalne usluge u Splitu | Majstori Split",
     description: "Popis svih dostupnih obrta i lokalnih usluga u Splitu i okolici na jednoj stranici.",
     keywords: ["svi obrti split", "sve usluge split", "imenik obrta split"],
   },
   "/registracija": {
-    title: "Registracija obrta i poslovanja | Split Usluge",
-    description: "Dodajte svoj obrt ili poslovanje u lokalni imenik Split Usluge i povecajte vidljivost u Splitu i okolici.",
+    title: "Registracija obrta i poslovanja | Majstori Split",
+    description: "Dodajte svoj obrt ili poslovanje u lokalni imenik Majstori Split i povecajte vidljivost u Splitu i okolici.",
     keywords: ["registracija obrta split", "dodaj poslovanje split", "oglasavanje obrta split"],
   },
   "/o-nama": {
-    title: "O nama | Split Usluge",
-    description: "Saznajte kako Split Usluge pomaze gradanima i turistima da lakse pronadu lokalne usluge u Splitu i okolici.",
+    title: "O nama | Majstori Split",
+    description: "Saznajte kako Majstori Split pomaze gradanima i turistima da lakse pronadu lokalne usluge u Splitu i okolici.",
     keywords: ["o nama split usluge", "lokalni imenik split"],
   },
   "/uvjeti": {
-    title: "Uvjeti koristenja | Split Usluge",
-    description: "Uvjeti koristenja i osnovne informacije o pravilima koristenja platforme Split Usluge.",
+    title: "Uvjeti koristenja | Majstori Split",
+    description: "Uvjeti koristenja i osnovne informacije o pravilima koristenja platforme Majstori Split.",
     keywords: ["uvjeti koristenja split usluge"],
   },
 };

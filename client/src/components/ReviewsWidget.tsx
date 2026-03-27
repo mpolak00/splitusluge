@@ -76,7 +76,7 @@ export function ReviewsWidget() {
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-slate-900 mb-4">Što misle naši korisnici?</h2>
-          <p className="text-lg text-slate-600">Pročitajte iskustva drugih korisnika Split Usluge</p>
+          <p className="text-lg text-slate-600">Pročitajte iskustva drugih korisnika Majstori Split</p>
         </div>
 
         {/* Stats Section */}
@@ -143,7 +143,7 @@ export function ReviewsWidget() {
             <DialogContent className="max-w-md">
               <DialogHeader>
                 <DialogTitle>Napišite review</DialogTitle>
-                <DialogDescription>Podijelite svoje iskustvo s Split Usluge</DialogDescription>
+                <DialogDescription>Podijelite svoje iskustvo s Majstori Split</DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
                 {/* Rating Selection */}

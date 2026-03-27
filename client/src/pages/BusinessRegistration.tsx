@@ -70,7 +70,7 @@ export default function BusinessRegistration() {
             <CardHeader className="bg-gradient-to-r from-primary to-secondary text-white">
               <CardTitle className="text-3xl">Registrirajte svoj obrt</CardTitle>
               <CardDescription className="text-white/90">
-                Postanite dio Split Usluge i dosegnite nove klijente u vašem gradu
+                Postanite dio Majstori Split i dosegnite nove klijente u vašem gradu
               </CardDescription>
             </CardHeader>
 

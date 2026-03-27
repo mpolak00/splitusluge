@@ -63,7 +63,7 @@ export default function AdminPanel() {
               <Lock className="h-8 w-8 text-primary" />
             </div>
             <CardTitle className="text-2xl">Admin Panel</CardTitle>
-            <p className="text-muted-foreground text-sm mt-1">Split Usluge - Administracija</p>
+            <p className="text-muted-foreground text-sm mt-1">Majstori Split - Administracija</p>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
@@ -92,7 +92,7 @@ export default function AdminPanel() {
         <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-primary rounded flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">S</span>
+              <span className="text-primary-foreground font-bold text-lg">MS</span>
             </div>
             <span className="font-bold text-lg">Admin</span>
           </div>
@@ -405,7 +405,7 @@ function ReportsTab({ adminPassword, dateFrom, dateTo }: { adminPassword: string
   const handleExportCSV = useCallback(() => {
     if (!report) return;
     const lines = [
-      "Split Usluge - Izvjestaj",
+      "Majstori Split - Izvjestaj",
       `Period: ${dateFrom} - ${dateTo}`,
       `Kategorija: ${selectedCategory || "Sve"}`,
       "",
@@ -481,7 +481,7 @@ function ReportsTab({ adminPassword, dateFrom, dateTo }: { adminPassword: string
                 <div className="bg-background rounded p-3 text-sm whitespace-pre-wrap font-mono text-xs">
 {`Poštovani,
 
-Šaljemo Vam izvještaj o vidljivosti Vaše kategorije "${selectedCategory}" na platformi Split Usluge za period ${dateFrom} - ${dateTo}.
+Šaljemo Vam izvještaj o vidljivosti Vaše kategorije "${selectedCategory}" na platformi Majstori Split za period ${dateFrom} - ${dateTo}.
 
 📊 Statistika:
 - Ukupno pregleda stranice: ${report.totalViews}
@@ -498,14 +498,14 @@ Vaša kategorija privlači pozornost korisnika koji aktivno traže usluge poput 
 Za više informacija, odgovorite na ovaj email ili nas kontaktirajte.
 
 Srdačan pozdrav,
-Split Usluge tim`}
+Majstori Split tim`}
                 </div>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => {
                     navigator.clipboard.writeText(
-                      `Poštovani,\n\nŠaljemo Vam izvještaj o vidljivosti Vaše kategorije "${selectedCategory}" na platformi Split Usluge za period ${dateFrom} - ${dateTo}.\n\n📊 Statistika:\n- Ukupno pregleda stranice: ${report.totalViews}\n- Ukupno klikova: ${report.totalClicks}\n${report.clicksByType.map((ct: any) => `- ${ct.eventType}: ${ct.count}`).join("\n")}\n\nVaša kategorija privlači pozornost korisnika.\n\nŽelite li povećati svoju vidljivost? Nudimo promotivne pakete.\n\nSrdačan pozdrav,\nSplit Usluge tim`
+                      `Poštovani,\n\nŠaljemo Vam izvještaj o vidljivosti Vaše kategorije "${selectedCategory}" na platformi Majstori Split za period ${dateFrom} - ${dateTo}.\n\n📊 Statistika:\n- Ukupno pregleda stranice: ${report.totalViews}\n- Ukupno klikova: ${report.totalClicks}\n${report.clicksByType.map((ct: any) => `- ${ct.eventType}: ${ct.count}`).join("\n")}\n\nVaša kategorija privlači pozornost korisnika.\n\nŽelite li povećati svoju vidljivost? Nudimo promotivne pakete.\n\nSrdačan pozdrav,\nMajstori Split tim`
                     );
                   }}
                 >
@@ -529,20 +529,20 @@ function normalizePhone(phone: string): string {
 
 function buildWhatsAppMsg(name: string, previewUrl: string, hasWebsite: boolean): string {
   if (hasWebsite) {
-    return `Poštovani,\n\njavljam se iz Split Usluge, lokalnog imenika za Split.\n\nVaš biznis "${name}" je uvršten u naš imenik. Nudimo:\n\n🌐 Profesionalna web stranica — 400€\n📱 Prilagođena za mobitele\n🔍 SEO optimizacija za Google\n🔧 Održavanje: 50-75€/mj\n\nPogledajte preview:\n${previewUrl}\n\n70% klijenata traži usluge na Google-u. Moderna stranica = više poziva.\n\nZainteresirani? Javite se!\nkondor1413@gmail.com`;
+    return `Poštovani,\n\njavljam se iz Majstori Split, lokalnog imenika za Split.\n\nVaš biznis "${name}" je uvršten u naš imenik. Nudimo:\n\n🌐 Profesionalna web stranica — 400€\n📱 Prilagođena za mobitele\n🔍 SEO optimizacija za Google\n🔧 Održavanje: 50-75€/mj\n\nPogledajte preview:\n${previewUrl}\n\n70% klijenata traži usluge na Google-u. Moderna stranica = više poziva.\n\nZainteresirani? Javite se!\nkondor1413@gmail.com`;
   }
-  return `Poštovani,\n\njavljam se iz Split Usluge. Primijetili smo da "${name}" nema web stranicu.\n\nDanas 70% ljudi traži usluge na Google-u. Bez web stranice gubite klijente.\n\nNapravili smo Vam besplatni preview:\n${previewUrl}\n\n💰 Izrada profesionalne stranice: 400€\n💰 Mjesečno održavanje: 50-75€/mj\n💰 Gotovo za 48h\n\nUključeno: responzivni dizajn, SEO, hosting, SSL, kontakt forma\n\nJavite se za info!\nkondor1413@gmail.com`;
+  return `Poštovani,\n\njavljam se iz Majstori Split. Primijetili smo da "${name}" nema web stranicu.\n\nDanas 70% ljudi traži usluge na Google-u. Bez web stranice gubite klijente.\n\nNapravili smo Vam besplatni preview:\n${previewUrl}\n\n💰 Izrada profesionalne stranice: 400€\n💰 Mjesečno održavanje: 50-75€/mj\n💰 Gotovo za 48h\n\nUključeno: responzivni dizajn, SEO, hosting, SSL, kontakt forma\n\nJavite se za info!\nkondor1413@gmail.com`;
 }
 
 function buildEmailBody(name: string, previewUrl: string, hasWebsite: boolean): string {
   if (hasWebsite) {
-    return `Poštovani,\n\nJavljam se iz Split Usluge — lokalnog online imenika za Split i okolicu.\n\nVaš biznis "${name}" je dio našeg imenika, i pripremili smo personalizirani preview moderne web stranice za Vas:\n${previewUrl}\n\nŠto nudimo:\n✅ Profesionalna, mobilno prilagođena stranica\n✅ SEO optimizacija (da Vas klijenti nađu na Google-u)\n✅ Hosting i SSL uključeni\n\n💰 Izrada: 400€\n💰 Održavanje: 50-75€/mj (ovisno o zahtjevima)\n\nStranica gotova za 48h.\n\nSrdačan pozdrav,\nSplit Usluge tim\nkondor1413@gmail.com`;
+    return `Poštovani,\n\nJavljam se iz Majstori Split — lokalnog online imenika za Split i okolicu.\n\nVaš biznis "${name}" je dio našeg imenika, i pripremili smo personalizirani preview moderne web stranice za Vas:\n${previewUrl}\n\nŠto nudimo:\n✅ Profesionalna, mobilno prilagođena stranica\n✅ SEO optimizacija (da Vas klijenti nađu na Google-u)\n✅ Hosting i SSL uključeni\n\n💰 Izrada: 400€\n💰 Održavanje: 50-75€/mj (ovisno o zahtjevima)\n\nStranica gotova za 48h.\n\nSrdačan pozdrav,\nMajstori Split tim\nkondor1413@gmail.com`;
   }
-  return `Poštovani,\n\nJavljam se iz Split Usluge. Primijetili smo da "${name}" trenutno nema web stranicu.\n\n📊 70% korisnika traži lokalne usluge na Google-u\n📊 Biznisi sa web stranicom dobivaju 3x više poziva\n📊 Bez web prisutnosti, gubite klijente konkurenciji\n\nNapravili smo Vam besplatni preview stranice:\n${previewUrl}\n\n💰 Izrada profesionalne stranice: 400€\n💰 Mjesečno održavanje: 50-75€/mj\n💰 Stranica gotova za 48h\n\nUključeno: responzivni dizajn, SEO, hosting, SSL, kontakt forma\n\nSrdačan pozdrav,\nSplit Usluge tim\nkondor1413@gmail.com`;
+  return `Poštovani,\n\nJavljam se iz Majstori Split. Primijetili smo da "${name}" trenutno nema web stranicu.\n\n📊 70% korisnika traži lokalne usluge na Google-u\n📊 Biznisi sa web stranicom dobivaju 3x više poziva\n📊 Bez web prisutnosti, gubite klijente konkurenciji\n\nNapravili smo Vam besplatni preview stranice:\n${previewUrl}\n\n💰 Izrada profesionalne stranice: 400€\n💰 Mjesečno održavanje: 50-75€/mj\n💰 Stranica gotova za 48h\n\nUključeno: responzivni dizajn, SEO, hosting, SSL, kontakt forma\n\nSrdačan pozdrav,\nMajstori Split tim\nkondor1413@gmail.com`;
 }
 
 function buildSmsMsg(name: string, previewUrl: string): string {
-  return `${name} — napravili smo besplatni preview web stranice za Vaš biznis: ${previewUrl} Javite se na kondor1413@gmail.com — Split Usluge`;
+  return `${name} — napravili smo besplatni preview web stranice za Vaš biznis: ${previewUrl} Javite se na kondor1413@gmail.com — Majstori Split`;
 }
 
 function ScannerTab({ adminPassword }: { adminPassword: string }) {
@@ -965,11 +965,11 @@ Nudimo:
 Hosting je besplatan za sve pakete! Jedini trošak za Vas je domena (~10 EUR/god).
 
 Javite nam se za više info!
-Split Usluge tim` : "";
+Majstori Split tim` : "";
 
   const emailOffer = selectedBusiness ? `Poštovani,
 
-Pišemo Vam u ime Split Usluge, lokalnog imenika usluga za Split i okolicu.
+Pišemo Vam u ime Majstori Split, lokalnog imenika usluga za Split i okolicu.
 
 Primijetili smo da ${selectedBusiness.name} trenutno nema web stranicu, a mi smo pripremili besplatnu probnu verziju:
 ${window.location.origin}/preview/${selectedBusiness.id}
@@ -986,7 +986,7 @@ Hosting je besplatan. Jedini dodatni trošak: domena (~10 EUR/godišnje).
 Možemo početi odmah — javite nam se na ovaj mail ili pozovite nas.
 
 Srdačan pozdrav,
-Split Usluge tim
+Majstori Split tim
 ${window.location.origin}` : "";
 
   return (
@@ -1076,7 +1076,7 @@ ${window.location.origin}` : "";
                     onClick={() => {
                       const phone = normalizePhone(selectedBusiness.phone!);
                       logOutreach.mutate({ adminPassword, businessId: selectedBusiness.id, channel: "sms" });
-                      window.open(`sms:${phone}?body=${encodeURIComponent(`${selectedBusiness.name}, napravili smo besplatnu web stranicu za Vas: ${window.location.origin}/preview/${selectedBusiness.id} - Split Usluge`)}`, "_blank");
+                      window.open(`sms:${phone}?body=${encodeURIComponent(`${selectedBusiness.name}, napravili smo besplatnu web stranicu za Vas: ${window.location.origin}/preview/${selectedBusiness.id} - Majstori Split`)}`, "_blank");
                     }}>
                     <Send className="h-5 w-5" />
                     <span className="text-xs">SMS ponuda</span>
@@ -1284,7 +1284,7 @@ function AICallsTab({ adminPassword }: { adminPassword: string }) {
     setTimeout(() => setCopiedScript(""), 2000);
   }, []);
 
-  const introScript = `Dobar dan! Zovem u ime Split Usluge, lokalnog imenika usluga za Split i okolicu.
+  const introScript = `Dobar dan! Zovem u ime Majstori Split, lokalnog imenika usluga za Split i okolicu.
 
 Primijetili smo da [IME_BIZNISA] trenutno nema web stranicu, a mi smo pripremili besplatnu probnu verziju stranice s Vašim podacima — ocjenom, radnim vremenom, kontaktom i lokacijom.
 
@@ -1413,14 +1413,14 @@ Hosting je besplatan za sve pakete. Jedini dodatni trošak je domena, oko 10 eur
           <div className="flex items-center justify-between">
             <h4 className="font-bold text-sm">Kompletni System Prompt za AI agenta</h4>
             <Button variant="ghost" size="sm" className="text-xs h-6" onClick={() => copyScript(
-              `Ti si ljubazni prodajni agent za Split Usluge, lokalni imenik usluga u Splitu, Hrvatska. Zoveš lokalne biznise koji nemaju web stranicu da im ponudiš besplatnu izradu probne web stranice.\n\nPRAVILA:\n- Govori na hrvatskom jeziku, ljubazno i profesionalno\n- Predstavi se i objasni zašto zoveš\n- Spomeni da si primijetio da nemaju web stranicu\n- Ponudi besplatnu probnu stranicu (STARTER paket)\n- Ako su zainteresirani, pitaj za WhatsApp broj da im pošalješ link\n- Ako pitaju za cijenu: STANDARD 199 EUR + 29 EUR/mj, PREMIUM 399 EUR + 59 EUR/mj\n- Naglasi da je hosting besplatan, jedini trošak je domena ~10 EUR/god\n- Budi kratak, ne duži poziv preko 2 minute\n- Ako kažu "ne hvala" — zahvali se i završi ljubazno\n\nINFORMACIJE O BIZNISU (zamijeni za svaki poziv):\n[IME]: {business_name}\n[KATEGORIJA]: {category}\n[PREVIEW_LINK]: {preview_url}`,
+              `Ti si ljubazni prodajni agent za Majstori Split, lokalni imenik usluga u Splitu, Hrvatska. Zoveš lokalne biznise koji nemaju web stranicu da im ponudiš besplatnu izradu probne web stranice.\n\nPRAVILA:\n- Govori na hrvatskom jeziku, ljubazno i profesionalno\n- Predstavi se i objasni zašto zoveš\n- Spomeni da si primijetio da nemaju web stranicu\n- Ponudi besplatnu probnu stranicu (STARTER paket)\n- Ako su zainteresirani, pitaj za WhatsApp broj da im pošalješ link\n- Ako pitaju za cijenu: STANDARD 199 EUR + 29 EUR/mj, PREMIUM 399 EUR + 59 EUR/mj\n- Naglasi da je hosting besplatan, jedini trošak je domena ~10 EUR/god\n- Budi kratak, ne duži poziv preko 2 minute\n- Ako kažu "ne hvala" — zahvali se i završi ljubazno\n\nINFORMACIJE O BIZNISU (zamijeni za svaki poziv):\n[IME]: {business_name}\n[KATEGORIJA]: {category}\n[PREVIEW_LINK]: {preview_url}`,
               "system"
             )}>
               {copiedScript === "system" ? <><CheckCircle className="h-3 w-3 mr-1" /> Kopirano</> : <><Copy className="h-3 w-3 mr-1" /> Kopiraj</>}
             </Button>
           </div>
           <pre className="bg-muted p-3 rounded text-[11px] whitespace-pre-wrap max-h-48 overflow-y-auto">
-{`Ti si ljubazni prodajni agent za Split Usluge, lokalni imenik usluga u Splitu, Hrvatska. Zoveš lokalne biznise koji nemaju web stranicu da im ponudiš besplatnu izradu probne web stranice.
+{`Ti si ljubazni prodajni agent za Majstori Split, lokalni imenik usluga u Splitu, Hrvatska. Zoveš lokalne biznise koji nemaju web stranicu da im ponudiš besplatnu izradu probne web stranice.
 
 PRAVILA:
 - Govori na hrvatskom jeziku, ljubazno i profesionalno
@@ -1481,7 +1481,7 @@ function ClientsTab({ adminPassword }: { adminPassword: string }) {
               <h4 className="font-bold text-green-800 dark:text-green-200">STARTER — Besplatno</h4>
               <ul className="text-xs space-y-1 text-green-700 dark:text-green-300">
                 <li>• Generirana probna stranica</li>
-                <li>• Split Usluge branding</li>
+                <li>• Majstori Split branding</li>
                 <li>• Besplatan hosting</li>
                 <li>• Osnovno SEO</li>
               </ul>
@@ -1492,7 +1492,7 @@ function ClientsTab({ adminPassword }: { adminPassword: string }) {
               <h4 className="font-bold text-blue-800 dark:text-blue-200">STANDARD — Popularan</h4>
               <ul className="text-xs space-y-1 text-blue-700 dark:text-blue-300">
                 <li>• Profesionalna web stranica</li>
-                <li>• Bez Split Usluge brenda</li>
+                <li>• Bez Majstori Split brenda</li>
                 <li>• Kontakt forma</li>
                 <li>• Google Analytics</li>
                 <li>• SSL + hosting uključen</li>
@@ -1640,7 +1640,7 @@ function BotScanTab({ adminPassword }: { adminPassword: string }) {
     const hasNoWeb = issues.includes("no_website") || issues.includes("google_site");
     const hasNoGoogle = issues.includes("no_google");
 
-    let msg = `Poštovani,\n\njavljam se iz Split Usluge — lokalnog imenika za Split i okolicu.\n\n`;
+    let msg = `Poštovani,\n\njavljam se iz Majstori Split — lokalnog imenika za Split i okolicu.\n\n`;
 
     if (hasNoWeb && hasNoGoogle) {
       msg += `Primijetili smo da "${b.name}" nema ni web stranicu ni Google Business profil. To znači da Vas klijenti ne mogu naći online.\n\n`;
@@ -1760,7 +1760,7 @@ function BotScanTab({ adminPassword }: { adminPassword: string }) {
                   const waMsg = buildWaMsg(b);
                   const waUrl = phone ? `https://wa.me/${phone.replace("+", "")}?text=${encodeURIComponent(waMsg)}` : "";
                   const previewUrl = `${window.location.origin}/preview/${b.id}`;
-                  const emailBody = `Poštovani,\n\nJavljam se iz Split Usluge.\n\nPogledajte besplatni preview stranice za "${b.name}":\n${previewUrl}\n\n💰 Izrada: 400€\n💰 Održavanje: 50-75€/mj\n\nJavite se na +385 95 757 1220 ili kondor1413@gmail.com\n\nSrdačan pozdrav,\nSplit Usluge`;
+                  const emailBody = `Poštovani,\n\nJavljam se iz Majstori Split.\n\nPogledajte besplatni preview stranice za "${b.name}":\n${previewUrl}\n\n💰 Izrada: 400€\n💰 Održavanje: 50-75€/mj\n\nJavite se na +385 95 757 1220 ili kondor1413@gmail.com\n\nSrdačan pozdrav,\nMajstori Split`;
                   const emailUrl = b.email ? `mailto:${b.email}?subject=${encodeURIComponent(`Profesionalna web stranica za ${b.name}`)}&body=${encodeURIComponent(emailBody)}` : "";
 
                   return (
@@ -2064,7 +2064,7 @@ Ako pitaju za cijene, daj informacije. Ako nisi siguran, reci: "Za točnu cijenu
         <CardContent>
           <div className="bg-green-50 p-4 rounded-lg text-sm">
             <p>Dobar dan! 👋</p>
-            <p className="mt-2">Javljam se iz Split Usluge. Imamo AI asistenta koji može odgovarati na pozive Vašeg biznisa 24/7 - na hrvatskom jeziku!</p>
+            <p className="mt-2">Javljam se iz Majstori Split. Imamo AI asistenta koji može odgovarati na pozive Vašeg biznisa 24/7 - na hrvatskom jeziku!</p>
             <p className="mt-2">✅ Automatsko rezerviranje termina</p>
             <p>✅ Odgovara na pitanja o cijenama i uslugama</p>
             <p>✅ Nikad ne propušta poziv</p>
@@ -2075,7 +2075,7 @@ Ako pitaju za cijene, daj informacije. Ako nisi siguran, reci: "Za točnu cijenu
           <Button
             size="sm"
             className="mt-3"
-            onClick={() => copyText("Dobar dan! 👋\n\nJavljam se iz Split Usluge. Imamo AI asistenta koji može odgovarati na pozive Vašeg biznisa 24/7 - na hrvatskom jeziku!\n\n✅ Automatsko rezerviranje termina\n✅ Odgovara na pitanja o cijenama i uslugama\n✅ Nikad ne propušta poziv\n✅ Šalje SMS potvrde klijentima\n\nPaketi od 99€/mj. Želite li besplatnu probnu demonstraciju?\n\nInfo: kondor1413@gmail.com", "wa-voice")}
+            onClick={() => copyText("Dobar dan! 👋\n\nJavljam se iz Majstori Split. Imamo AI asistenta koji može odgovarati na pozive Vašeg biznisa 24/7 - na hrvatskom jeziku!\n\n✅ Automatsko rezerviranje termina\n✅ Odgovara na pitanja o cijenama i uslugama\n✅ Nikad ne propušta poziv\n✅ Šalje SMS potvrde klijentima\n\nPaketi od 99€/mj. Želite li besplatnu probnu demonstraciju?\n\nInfo: kondor1413@gmail.com", "wa-voice")}
           >
             <Copy className="h-4 w-4 mr-1" /> {copied === "wa-voice" ? "Kopirano!" : "Kopiraj poruku"}
           </Button>

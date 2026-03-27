@@ -25,7 +25,7 @@ export default function BusinessLogin() {
             <Store className="h-8 w-8 text-primary" />
           </div>
           <h1 className="text-2xl font-bold">Moja djelatnost</h1>
-          <p className="text-muted-foreground text-sm">Prijavite se ili preuzmite svoju djelatnost na Split Usluge</p>
+          <p className="text-muted-foreground text-sm">Prijavite se ili preuzmite svoju djelatnost na Majstori Split</p>
         </div>
 
         <div className="flex gap-2">
@@ -293,7 +293,7 @@ function OwnerDashboard({ token, onLogout }: { token: string; onLogout: () => vo
           <Card>
             <CardContent className="p-5 space-y-3">
               <h3 className="font-bold flex items-center gap-2"><Globe className="h-5 w-5 text-primary" /> Vaša stranica</h3>
-              <p className="text-sm text-muted-foreground">Pogledajte kako Vaša djelatnost izgleda na Split Usluge:</p>
+              <p className="text-sm text-muted-foreground">Pogledajte kako Vaša djelatnost izgleda na Majstori Split:</p>
               <div className="flex gap-2">
                 <Button asChild variant="outline" size="sm">
                   <Link href={getBusinessPath(business)}>Profil na imeniku</Link>

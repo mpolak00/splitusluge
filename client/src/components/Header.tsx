@@ -25,9 +25,9 @@ export function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500 text-sm font-black">
-            SU
+            MS
           </div>
-          <span className="text-base font-bold tracking-tight">Split Usluge</span>
+          <span className="text-base font-bold tracking-tight">Majstori Split</span>
         </Link>
 
         {/* Desktop nav */}

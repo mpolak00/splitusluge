@@ -69,10 +69,10 @@ export default function BusinessDetailPage() {
     }
 
     const categoryName = currentCategory?.name || "lokalna usluga";
-    const title = `${business.name} | ${categoryName} u Splitu | Split Usluge`;
+    const title = `${business.name} | ${categoryName} u Splitu | Majstori Split`;
     const description =
       business.description?.trim() ||
-      `${business.name} je uvršten u Split Usluge kao ${categoryName.toLowerCase()} u Splitu i okolici. Pogledajte kontakt, lokaciju, radno vrijeme i dodatne informacije prije poziva ili dolaska.`;
+      `${business.name} je uvršten u Majstori Split kao ${categoryName.toLowerCase()} u Splitu i okolici. Pogledajte kontakt, lokaciju, radno vrijeme i dodatne informacije prije poziva ili dolaska.`;
     const path = getBusinessPath(business);
     const siteUrl = typeof window !== "undefined" ? window.location.origin : undefined;
     const breadcrumbs = [
@@ -128,8 +128,8 @@ export default function BusinessDetailPage() {
       siteUrl,
       ogType: "article",
       structuredData: [
-        ...buildBaseStructuredData(siteUrl || "https://split-usluge.com"),
-        buildBreadcrumbSchema(siteUrl || "https://split-usluge.com", breadcrumbs),
+        ...buildBaseStructuredData(siteUrl || "https://splitmajstori.com"),
+        buildBreadcrumbSchema(siteUrl || "https://splitmajstori.com", breadcrumbs),
         localBusinessSchema,
       ],
     });
@@ -210,7 +210,7 @@ export default function BusinessDetailPage() {
                 <h1 className="text-4xl font-bold tracking-tight md:text-6xl">{business.name}</h1>
                 <p className="mt-4 max-w-3xl text-lg leading-8 text-white/80">
                   {business.description?.trim() ||
-                    `${business.name} je dio imenika Split Usluge. Na ovoj stranici možete brzo pronaći kontakt, adresu, kartu i ostale informacije prije poziva ili dolaska.`}
+                    `${business.name} je dio imenika Majstori Split. Na ovoj stranici možete brzo pronaći kontakt, adresu, kartu i ostale informacije prije poziva ili dolaska.`}
                 </p>
               </div>
 

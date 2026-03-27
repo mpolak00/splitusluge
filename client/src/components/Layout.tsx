@@ -19,9 +19,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <header className="md:hidden sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border p-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
            <div className="w-8 h-8 bg-primary rounded-sm flex items-center justify-center">
-              <span className="text-primary-foreground font-display font-bold text-xl">S</span>
+              <span className="text-primary-foreground font-display font-bold text-xl">MS</span>
            </div>
-           <span className="font-display font-bold text-xl tracking-tight uppercase">Split Usluge</span>
+           <span className="font-display font-bold text-xl tracking-tight uppercase">Majstori Split</span>
         </Link>
         <Sheet>
           <SheetTrigger asChild>
@@ -34,9 +34,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <div className="p-6 border-b border-sidebar-border">
                   <Link href="/" className="flex items-center gap-2">
                     <div className="w-8 h-8 bg-primary rounded-sm flex items-center justify-center">
-                        <span className="text-primary-foreground font-display font-bold text-xl">S</span>
+                        <span className="text-primary-foreground font-display font-bold text-xl">MS</span>
                     </div>
-                    <span className="font-display font-bold text-xl tracking-tight uppercase">Split Usluge</span>
+                    <span className="font-display font-bold text-xl tracking-tight uppercase">Majstori Split</span>
                   </Link>
                 </div>
                 <nav className="flex-1 overflow-y-auto py-4">
@@ -91,7 +91,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="p-6 border-b border-sidebar-border sticky top-0 bg-sidebar z-10">
           <Link href="/" className="flex items-center gap-2 group">
              <div className="w-10 h-10 bg-primary rounded-sm flex items-center justify-center group-hover:scale-105 transition-transform">
-                <span className="text-primary-foreground font-display font-bold text-2xl">S</span>
+                <span className="text-primary-foreground font-display font-bold text-2xl">MS</span>
              </div>
              <div className="flex flex-col">
                 <span className="font-display font-bold text-xl tracking-tight uppercase leading-none">Split</span>
@@ -191,7 +191,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 {t("lang.switch")}
               </Button>
             </div>
-            <p>&copy; 2024 Split Usluge. {t("footer.rights")}</p>
+            <p>&copy; 2024 Majstori Split. {t("footer.rights")}</p>
           </div>
         </footer>
       </main>

@@ -231,7 +231,7 @@ export default function MiniSite() {
 
 <div class="footer">
   <p>&copy; ${new Date().getFullYear()} ${business.name} · Sva prava pridržana</p>
-  <p style="margin-top:8px">Web stranica izrada: <a href="https://split-usluge.hr" target="_blank">Split Usluge</a></p>
+  <p style="margin-top:8px">Web stranica izrada: <a href="https://splitmajstori.com" target="_blank">Majstori Split</a></p>
 </div>
 
 ${phone ? `<a href="tel:${phone}" style="position:fixed;bottom:20px;right:20px;background:#22c55e;color:#fff;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:1.5rem;box-shadow:0 4px 16px rgba(34,197,94,.4);z-index:999">📞</a>` : ""}
@@ -261,7 +261,7 @@ ${phone ? `<a href="tel:${phone}" style="position:fixed;bottom:20px;right:20px;b
               const previewUrl = window.location.href;
               if (business.phone) {
                 const phone = business.phone.replace(/\D/g, "");
-                const msg = encodeURIComponent(`Pozdrav! Napravili smo preview vaše web stranice: ${previewUrl}\n\nZanima li vas profesionalna web stranica od 300 EUR? Održavanje 75 EUR/mj. - Split Usluge`);
+                const msg = encodeURIComponent(`Pozdrav! Napravili smo preview vaše web stranice: ${previewUrl}\n\nZanima li vas profesionalna web stranica od 300 EUR? Održavanje 75 EUR/mj. - Majstori Split`);
                 window.open(`https://wa.me/385${phone.replace(/^0/, "")}?text=${msg}`);
               }
             }}>
@@ -467,7 +467,7 @@ ${phone ? `<a href="tel:${phone}" style="position:fixed;bottom:20px;right:20px;b
 
         {/* Footer */}
         <div className="text-center text-xs text-muted-foreground pt-4 pb-8 space-y-2">
-          <p>Automatski generirano putem <a href="/" className="text-primary hover:underline font-medium">Split Usluge</a></p>
+          <p>Automatski generirano putem <a href="/" className="text-primary hover:underline font-medium">Majstori Split</a></p>
           <p>Splitski imenik lokalnih usluga i biznisa</p>
         </div>
       </div>
