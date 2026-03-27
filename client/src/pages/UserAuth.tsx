@@ -9,7 +9,7 @@ import { User, Mail, Lock, ArrowLeft, CheckCircle } from "lucide-react";
 export function useUserSession() {
   const [user, setUser] = useState<{ id: number; name: string; email: string } | null>(() => {
     try {
-      const saved = localStorage.getItem("su_user");
+      const saved = localStorage.getItem("ms_user");
       return saved ? JSON.parse(saved) : null;
     } catch {
       return null;
@@ -17,12 +17,12 @@ export function useUserSession() {
   });
 
   const login = (userData: { id: number; name: string; email: string }) => {
-    localStorage.setItem("su_user", JSON.stringify(userData));
+    localStorage.setItem("ms_user", JSON.stringify(userData));
     setUser(userData);
   };
 
   const logout = () => {
-    localStorage.removeItem("su_user");
+    localStorage.removeItem("ms_user");
     setUser(null);
   };
 
