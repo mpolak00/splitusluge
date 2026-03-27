@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { MapView } from "@/components/Map";
 import { usePageSeo } from "@/hooks/usePageSeo";
 import { getRatingValue } from "@/lib/directory";
+import { getBusinessImage } from "@/lib/category-images";
 import { trpc } from "@/lib/trpc";
 
 export default function BusinessMap() {
@@ -24,6 +25,12 @@ export default function BusinessMap() {
 
   const categories = categoriesQuery.data || [];
   const businesses = businessesQuery.data || [];
+
+  const categorySlugMap = useMemo(() => {
+    const map: Record<number, string> = {};
+    categories.forEach(c => { map[c.id] = c.slug; });
+    return map;
+  }, [categories]);
 
   const filteredBusinesses = useMemo(
     () =>
@@ -211,13 +218,11 @@ export default function BusinessMap() {
                 </Button>
               </div>
 
-              {selectedBusiness.imageUrl ? (
-                <img
-                  src={selectedBusiness.imageUrl}
-                  alt={selectedBusiness.name}
-                  className="h-52 w-full rounded-2xl object-cover"
-                />
-              ) : null}
+              <img
+                src={getBusinessImage(selectedBusiness.id, categorySlugMap[selectedBusiness.categoryId] || "", selectedBusiness.imageUrl)}
+                alt={selectedBusiness.name}
+                className="h-52 w-full rounded-2xl object-cover"
+              />
 
               {getRatingValue(selectedBusiness) > 0 && (
                 <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400/15 px-3 py-1.5 text-sm font-semibold text-yellow-700">
