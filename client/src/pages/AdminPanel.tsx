@@ -10,7 +10,7 @@ import {
   MessageCircle, Mail, Star, Clock, Send, PhoneCall, Server, CreditCard, Bot, UserCheck, Mic, Radar, FileDown
 } from "lucide-react";
 
-type AdminTab = "dashboard" | "categories" | "searches" | "clicks" | "reports" | "scanner" | "outreach" | "prompts" | "hosting" | "ai-calls" | "clients" | "claims" | "voice-agents" | "bot-scan";
+type AdminTab = "dashboard" | "categories" | "searches" | "clicks" | "reports" | "scanner" | "outreach" | "prompts" | "hosting" | "ai-calls" | "clients" | "claims" | "voice-agents" | "bot-scan" | "comments-users";
 
 function getSessionId() {
   let id = sessionStorage.getItem("su_session");
@@ -125,6 +125,7 @@ export default function AdminPanel() {
             { id: "bot-scan", label: "🤖 Bot Skener", icon: Radar },
             { id: "claims", label: "Zahtjevi", icon: UserCheck },
             { id: "voice-agents", label: "Voice Agenti", icon: Mic },
+            { id: "comments-users", label: "Komentari & Korisnici", icon: Users },
           ] as { id: AdminTab; label: string; icon: any }[]).map(tab => (
             <Button
               key={tab.id}
@@ -153,6 +154,7 @@ export default function AdminPanel() {
         {activeTab === "bot-scan" && <BotScanTab adminPassword={adminPassword} />}
         {activeTab === "claims" && <ClaimsTab adminPassword={adminPassword} />}
         {activeTab === "voice-agents" && <VoiceAgentsTab adminPassword={adminPassword} />}
+        {activeTab === "comments-users" && <CommentsUsersTab adminPassword={adminPassword} />}
       </div>
     </div>
   );
@@ -2114,6 +2116,198 @@ Ako pitaju za cijene, daj informacije. Ako nisi siguran, reci: "Za točnu cijenu
           </ol>
         </CardContent>
       </Card>
+    </div>
+  );
+}
+
+function CommentsUsersTab({ adminPassword }: { adminPassword: string }) {
+  const [view, setView] = useState<"comments" | "users">("comments");
+  const [statusFilter, setStatusFilter] = useState<string>("");
+
+  const commentsQuery = trpc.comments.adminGetAll.useQuery({
+    adminPassword,
+    status: statusFilter || undefined,
+    limit: 100,
+  });
+  const usersQuery = trpc.comments.adminGetUsers.useQuery({ adminPassword, limit: 100 });
+
+  const updateStatus = trpc.comments.adminUpdateStatus.useMutation({
+    onSuccess: () => commentsQuery.refetch(),
+  });
+  const deleteComment = trpc.comments.adminDelete.useMutation({
+    onSuccess: () => commentsQuery.refetch(),
+  });
+  const toggleBan = trpc.comments.adminToggleBan.useMutation({
+    onSuccess: () => usersQuery.refetch(),
+  });
+
+  const comments = commentsQuery.data || [];
+  const users = usersQuery.data || [];
+
+  const formatDate = (date: string | Date) =>
+    new Date(date).toLocaleDateString("hr-HR", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-2">
+        <Button variant={view === "comments" ? "default" : "outline"} size="sm" onClick={() => setView("comments")}>
+          Komentari ({comments.length})
+        </Button>
+        <Button variant={view === "users" ? "default" : "outline"} size="sm" onClick={() => setView("users")}>
+          Korisnici ({users.length})
+        </Button>
+      </div>
+
+      {view === "comments" && (
+        <div className="space-y-4">
+          <div className="flex gap-2">
+            {["", "approved", "hidden", "flagged"].map((s) => (
+              <Button
+                key={s}
+                variant={statusFilter === s ? "default" : "outline"}
+                size="sm"
+                onClick={() => setStatusFilter(s)}
+              >
+                {s === "" ? "Svi" : s === "approved" ? "Odobreni" : s === "hidden" ? "Skriveni" : "Prijavljeni"}
+              </Button>
+            ))}
+          </div>
+
+          {comments.length > 0 ? (
+            <div className="space-y-2">
+              {comments.map((c: any) => (
+                <Card key={c.id}>
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-semibold text-sm">{c.userName}</span>
+                          <span className="text-xs text-muted-foreground">{c.userEmail}</span>
+                          <span className="text-xs text-muted-foreground">· Biznis #{c.businessId}</span>
+                          {c.rating && (
+                            <span className="text-xs bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded">
+                              {"★".repeat(c.rating)}{"☆".repeat(5 - c.rating)}
+                            </span>
+                          )}
+                          <span className={`text-xs px-1.5 py-0.5 rounded ${
+                            c.status === "approved" ? "bg-green-100 text-green-800" :
+                            c.status === "hidden" ? "bg-gray-100 text-gray-800" :
+                            "bg-red-100 text-red-800"
+                          }`}>
+                            {c.status}
+                          </span>
+                        </div>
+                        <p className="text-sm mt-1 text-muted-foreground">{c.content}</p>
+                        <span className="text-xs text-muted-foreground">{formatDate(c.createdAt)}</span>
+                      </div>
+                      <div className="flex gap-1 flex-shrink-0">
+                        {c.status !== "approved" && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-7 text-xs text-green-700"
+                            onClick={() => updateStatus.mutate({ adminPassword, commentId: c.id, status: "approved" })}
+                          >
+                            Odobri
+                          </Button>
+                        )}
+                        {c.status !== "hidden" && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-7 text-xs text-orange-700"
+                            onClick={() => updateStatus.mutate({ adminPassword, commentId: c.id, status: "hidden" })}
+                          >
+                            Sakrij
+                          </Button>
+                        )}
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 text-xs text-red-700"
+                          onClick={() => {
+                            if (confirm("Obriši komentar?")) {
+                              deleteComment.mutate({ adminPassword, commentId: c.id });
+                            }
+                          }}
+                        >
+                          Obriši
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <Card>
+              <CardContent className="p-8 text-center text-muted-foreground">
+                Nema komentara
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      )}
+
+      {view === "users" && (
+        <div className="space-y-2">
+          {users.length > 0 ? (
+            <Card>
+              <CardContent className="p-0">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b bg-muted/30">
+                        <th className="text-left py-2 px-3 font-medium">ID</th>
+                        <th className="text-left py-2 px-3 font-medium">Ime</th>
+                        <th className="text-left py-2 px-3 font-medium">Email</th>
+                        <th className="text-center py-2 px-3 font-medium">Komentari</th>
+                        <th className="text-center py-2 px-3 font-medium">Status</th>
+                        <th className="text-left py-2 px-3 font-medium">Registriran</th>
+                        <th className="text-right py-2 px-3 font-medium">Akcije</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {users.map((u: any) => (
+                        <tr key={u.id} className="border-b border-border/50 hover:bg-muted/20">
+                          <td className="py-2 px-3 text-muted-foreground">{u.id}</td>
+                          <td className="py-2 px-3 font-medium">{u.name}</td>
+                          <td className="py-2 px-3 text-muted-foreground">{u.email}</td>
+                          <td className="py-2 px-3 text-center">{u.commentCount}</td>
+                          <td className="py-2 px-3 text-center">
+                            <span className={`text-xs px-1.5 py-0.5 rounded ${
+                              u.isBanned ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"
+                            }`}>
+                              {u.isBanned ? "Blokiran" : "Aktivan"}
+                            </span>
+                          </td>
+                          <td className="py-2 px-3 text-muted-foreground text-xs">{formatDate(u.createdAt)}</td>
+                          <td className="py-2 px-3 text-right">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className={`h-7 text-xs ${u.isBanned ? "text-green-700" : "text-red-700"}`}
+                              onClick={() => toggleBan.mutate({ adminPassword, userId: u.id, banned: !u.isBanned })}
+                            >
+                              {u.isBanned ? "Odblokiraj" : "Blokiraj"}
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card>
+              <CardContent className="p-8 text-center text-muted-foreground">
+                Nema registriranih korisnika
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      )}
     </div>
   );
 }

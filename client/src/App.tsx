@@ -26,6 +26,7 @@ import NotFound from "@/pages/NotFound";
 import Paketi from "@/pages/Paketi";
 import Promoviranje from "@/pages/Promoviranje";
 import BusinessLogin from "@/pages/BusinessLogin";
+import UserAuth from "@/pages/UserAuth";
 import Terms from "@/pages/Terms";
 
 function LegacyAllBusinessesRedirect() {
@@ -55,6 +56,7 @@ function Router() {
       <Route path="/o-nama" component={About} />
       <Route path="/uvjeti" component={Terms} />
       <Route path="/prijava" component={BusinessLogin} />
+      <Route path="/racun" component={UserAuth} />
       <Route path="/admin" component={AdminPanel} />
       <Route path="/paketi" component={Paketi} />
       <Route path="/preview/:id" component={MiniSite} />

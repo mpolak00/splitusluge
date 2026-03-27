@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link, useRoute } from "wouter";
 import { ALL_BUSINESSES_PATH, getBusinessPath } from "@shared/paths";
 import {
@@ -7,7 +7,7 @@ import {
   buildSeoPayload,
   SERVICE_AREAS,
 } from "@shared/seo";
-import { ArrowLeft, Clock, Globe, Mail, MapPin, MessageCircle, Navigation, Phone, Star, Tag, UserCheck } from "lucide-react";
+import { ArrowLeft, Clock, Globe, Mail, MapPin, MessageCircle, Navigation, Phone, Star, Tag, UserCheck, Send, Trash2, User } from "lucide-react";
 import { usePageSeo } from "@/hooks/usePageSeo";
 import { trpc } from "@/lib/trpc";
 import {
@@ -368,6 +368,8 @@ export default function BusinessDetailPage() {
             </CardContent>
           </Card>
 
+          <CommentsSection businessId={businessId} />
+
           {relatedBusinesses.length > 0 && (
             <Card className="border-border/70">
               <CardContent className="space-y-5 p-6 md:p-8">
@@ -502,5 +504,208 @@ export default function BusinessDetailPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function CommentsSection({ businessId }: { businessId: number }) {
+  const [content, setContent] = useState("");
+  const [rating, setRating] = useState<number>(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [error, setError] = useState("");
+
+  const user = (() => {
+    try {
+      const saved = localStorage.getItem("su_user");
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  })();
+
+  const commentsQuery = trpc.comments.getByBusiness.useQuery({ businessId });
+  const statsQuery = trpc.comments.getStats.useQuery({ businessId });
+  const addMutation = trpc.comments.add.useMutation({
+    onSuccess: () => {
+      setContent("");
+      setRating(0);
+      setError("");
+      commentsQuery.refetch();
+      statsQuery.refetch();
+    },
+    onError: (err) => setError(err.message),
+  });
+  const deleteMutation = trpc.comments.delete.useMutation({
+    onSuccess: () => {
+      commentsQuery.refetch();
+      statsQuery.refetch();
+    },
+  });
+
+  const comments = commentsQuery.data || [];
+  const stats = statsQuery.data;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) return;
+    if (!content.trim()) return;
+    setError("");
+    addMutation.mutate({
+      businessId,
+      userId: user.id,
+      userEmail: user.email,
+      rating: rating > 0 ? rating : undefined,
+      content: content.trim(),
+    });
+  };
+
+  const handleDelete = (commentId: number) => {
+    if (!user) return;
+    deleteMutation.mutate({ commentId, userId: user.id, userEmail: user.email });
+  };
+
+  const formatDate = (date: string | Date) => {
+    return new Date(date).toLocaleDateString("hr-HR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  };
+
+  return (
+    <Card className="border-border/70">
+      <CardContent className="space-y-5 p-6 md:p-8">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight">Komentari i ocjene</h2>
+            {stats && stats.totalComments > 0 && (
+              <p className="mt-1 text-sm text-muted-foreground">
+                {stats.totalComments} {stats.totalComments === 1 ? "komentar" : stats.totalComments < 5 ? "komentara" : "komentara"}
+                {stats.totalRatings > 0 && (
+                  <> · Prosječna ocjena: <Star className="inline h-3.5 w-3.5 fill-yellow-400 text-yellow-400 -mt-0.5" /> {stats.averageRating}</>
+                )}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Comment form */}
+        {user ? (
+          <form onSubmit={handleSubmit} className="space-y-3 rounded-2xl border border-border/70 bg-muted/30 p-4">
+            <div className="flex items-center gap-2 text-sm">
+              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                <User className="h-4 w-4 text-primary" />
+              </div>
+              <span className="font-medium">{user.name}</span>
+            </div>
+
+            {/* Star rating */}
+            <div className="flex items-center gap-1">
+              <span className="text-sm text-muted-foreground mr-1">Ocjena:</span>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => setRating(rating === star ? 0 : star)}
+                  onMouseEnter={() => setHoverRating(star)}
+                  onMouseLeave={() => setHoverRating(0)}
+                  className="p-0.5"
+                >
+                  <Star
+                    className={`h-5 w-5 transition-colors ${
+                      star <= (hoverRating || rating)
+                        ? "fill-yellow-400 text-yellow-400"
+                        : "text-gray-300"
+                    }`}
+                  />
+                </button>
+              ))}
+              {rating > 0 && (
+                <span className="text-xs text-muted-foreground ml-1">({rating}/5)</span>
+              )}
+            </div>
+
+            <textarea
+              placeholder="Napišite komentar..."
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm min-h-[80px] resize-y focus:outline-none focus:ring-2 focus:ring-primary/30"
+              required
+              minLength={3}
+              maxLength={2000}
+            />
+
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+
+            <div className="flex justify-end">
+              <Button type="submit" size="sm" disabled={addMutation.isPending || !content.trim()}>
+                <Send className="h-4 w-4 mr-1" />
+                {addMutation.isPending ? "Objavljujem..." : "Objavi"}
+              </Button>
+            </div>
+          </form>
+        ) : (
+          <div className="rounded-2xl border border-dashed border-border bg-muted/20 p-6 text-center">
+            <User className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+            <p className="text-sm text-muted-foreground mb-3">
+              Prijavite se za komentiranje i ocjenjivanje
+            </p>
+            <Button asChild size="sm">
+              <Link href="/racun">Prijava / Registracija</Link>
+            </Button>
+          </div>
+        )}
+
+        {/* Comments list */}
+        {comments.length > 0 ? (
+          <div className="space-y-4 pt-2">
+            {comments.map((comment) => (
+              <div key={comment.id} className="rounded-2xl border border-border/70 bg-background p-4">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <User className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <span className="text-sm font-semibold">{comment.userName}</span>
+                      <span className="text-xs text-muted-foreground ml-2">{formatDate(comment.createdAt)}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {comment.rating && (
+                      <div className="flex items-center gap-0.5">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`h-3.5 w-3.5 ${
+                              i < comment.rating! ? "fill-yellow-400 text-yellow-400" : "text-gray-200"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    )}
+                    {user && user.id === comment.userId && (
+                      <button
+                        onClick={() => handleDelete(comment.id)}
+                        className="text-muted-foreground hover:text-red-500 transition-colors p-1"
+                        title="Obriši komentar"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground pl-10">
+                  {comment.content}
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground text-center py-4">
+            Još nema komentara. Budite prvi!
+          </p>
+        )}
+      </CardContent>
+    </Card>
   );
 }
