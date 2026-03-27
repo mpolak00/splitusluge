@@ -1573,15 +1573,42 @@ function ClientsTab({ adminPassword }: { adminPassword: string }) {
 }
 
 /* ─── Bot Scan Tab ─── */
+const MY_WHATSAPP = "385957571220";
+const ISSUE_LABELS: Record<string, { label: string; color: string; emoji: string }> = {
+  no_website: { label: "Nema web", color: "bg-red-100 text-red-800", emoji: "🔴" },
+  google_site: { label: "Google Site", color: "bg-orange-100 text-orange-800", emoji: "🟠" },
+  no_google: { label: "Nema Google profil", color: "bg-purple-100 text-purple-800", emoji: "🟣" },
+  no_email: { label: "Nema email", color: "bg-gray-100 text-gray-800", emoji: "⚪" },
+  no_description: { label: "Nema opis", color: "bg-blue-100 text-blue-800", emoji: "🔵" },
+  no_hours: { label: "Nema radno vrijeme", color: "bg-blue-100 text-blue-800", emoji: "🔵" },
+  low_rating: { label: "Niska ocjena", color: "bg-yellow-100 text-yellow-800", emoji: "🟡" },
+  no_rating: { label: "Nema ocjenu", color: "bg-gray-100 text-gray-800", emoji: "⚪" },
+  no_reviews: { label: "Nema recenzija", color: "bg-gray-100 text-gray-800", emoji: "⚪" },
+  few_reviews: { label: "Malo recenzija", color: "bg-yellow-100 text-yellow-800", emoji: "🟡" },
+};
+
+function getScoreColor(score: number) {
+  if (score <= 20) return "bg-red-500";
+  if (score <= 40) return "bg-orange-500";
+  if (score <= 60) return "bg-yellow-500";
+  return "bg-green-500";
+}
+
 function BotScanTab({ adminPassword }: { adminPassword: string }) {
   const [running, setRunning] = useState(false);
   const [sentIds, setSentIds] = useState<Set<string>>(new Set());
   const [filterCat, setFilterCat] = useState("");
+  const [filterIssue, setFilterIssue] = useState("");
+  const [sortBy, setSortBy] = useState<"score" | "rating">("score");
   const scanResult = trpc.admin.runBotScan.useQuery({ adminPassword }, { enabled: running });
   const logOutreach = trpc.admin.logOutreach.useMutation();
 
   const leads = scanResult.data?.leads || [];
-  const filteredLeads = filterCat ? leads.filter((l: any) => l.categoryName === filterCat) : leads;
+  const stats = scanResult.data?.stats;
+  let filteredLeads = leads as any[];
+  if (filterCat) filteredLeads = filteredLeads.filter((l: any) => l.categoryName === filterCat);
+  if (filterIssue) filteredLeads = filteredLeads.filter((l: any) => l.issues?.includes(filterIssue));
+  if (sortBy === "rating") filteredLeads = [...filteredLeads].sort((a: any, b: any) => parseFloat(b.rating || "0") - parseFloat(a.rating || "0"));
   const uniqueCategories = Array.from(new Set(leads.map((l: any) => l.categoryName).filter(Boolean))).sort();
 
   const handleSend = useCallback((businessId: number, channel: string, url: string) => {
@@ -1592,32 +1619,58 @@ function BotScanTab({ adminPassword }: { adminPassword: string }) {
 
   function exportCSV() {
     if (!leads.length) return;
-    const header = "ID,Naziv,Kategorija,Telefon,Email,Adresa,Website,Ocjena,Recenzije\n";
+    const header = "ID,Naziv,Kategorija,Score,Problemi,Telefon,Email,Adresa,Website,Google Profil,Ocjena,Recenzije\n";
     const rows = leads.map((b: any) =>
-      `${b.id},"${(b.name || "").replace(/"/g, '""')}","${b.categoryName || ""}","${b.phone || ""}","${b.email || ""}","${(b.address || "").replace(/"/g, '""')}","${b.website || ""}",${b.rating || ""},${b.reviewCount || 0}`
+      `${b.id},"${(b.name || "").replace(/"/g, '""')}","${b.categoryName || ""}",${b.score},"${(b.issues || []).join("; ")}","${b.phone || ""}","${b.email || ""}","${(b.address || "").replace(/"/g, '""')}","${b.website || ""}","${b.googlePlaceId ? "DA" : "NE"}",${b.rating || ""},${b.reviewCount || 0}`
     ).join("\n");
     const blob = new Blob(["\uFEFF" + header + rows], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `bot-scan-leads-${new Date().toISOString().split("T")[0]}.csv`;
+    a.download = `bot-scan-${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   }
 
+  function buildWaMsg(b: any) {
+    const previewUrl = `${window.location.origin}/preview/${b.id}`;
+    const issues = b.issues || [];
+    const hasNoWeb = issues.includes("no_website") || issues.includes("google_site");
+    const hasNoGoogle = issues.includes("no_google");
+
+    let msg = `Poštovani,\n\njavljam se iz Split Usluge — lokalnog imenika za Split i okolicu.\n\n`;
+
+    if (hasNoWeb && hasNoGoogle) {
+      msg += `Primijetili smo da "${b.name}" nema ni web stranicu ni Google Business profil. To znači da Vas klijenti ne mogu naći online.\n\n`;
+    } else if (hasNoWeb) {
+      msg += `Primijetili smo da "${b.name}" nema web stranicu. Danas 70% klijenata traži usluge na Google-u — bez stranice gubite posao.\n\n`;
+    } else if (hasNoGoogle) {
+      msg += `Vaš biznis "${b.name}" nema Google Business profil. To je besplatno, a pomaže da Vas klijenti nađu na Google Maps-u.\n\n`;
+    } else {
+      msg += `Pregledali smo online prisutnost "${b.name}" i imamo prijedlog kako poboljšati vidljivost i dobiti više klijenata.\n\n`;
+    }
+
+    msg += `Napravili smo besplatni preview stranice za Vas:\n${previewUrl}\n\n`;
+    msg += `💰 Profesionalna izrada: 400€\n💰 Održavanje: 50-75€/mj\n💰 Gotovo za 48h\n\n`;
+    msg += `Uključeno: responzivni dizajn, SEO, hosting, SSL, kontakt forma`;
+    if (hasNoGoogle) msg += `, + besplatna pomoć oko Google Business profila`;
+    msg += `\n\nJavite se za info ili pogledajte preview!\n+385 95 757 1220\nkondor1413@gmail.com`;
+    return msg;
+  }
+
   return (
     <div className="space-y-6">
-      {/* Start Scan */}
       {!running ? (
         <Card className="border-2 border-dashed border-primary/30">
           <CardContent className="p-8 text-center space-y-4">
             <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
               <Radar className="h-8 w-8 text-primary" />
             </div>
-            <h2 className="text-2xl font-bold">Bot Skener</h2>
-            <p className="text-muted-foreground max-w-md mx-auto">
-              Automatski skenira sve biznise u bazi, pronalazi one bez web stranice ili s lošom stranicom,
-              i priprema izvještaj s kontaktima spreman za outreach.
+            <h2 className="text-2xl font-bold">Bot Skener — Digitalna prisutnost</h2>
+            <p className="text-muted-foreground max-w-lg mx-auto">
+              Skenira SVE biznise u Splitu i ocjenjuje njihovu digitalnu prisutnost. Pronalazi: bez web stranice,
+              bez Google profila, bez opisa, bez radnog vremena, loše ocjene, bez recenzija.
+              Svaki biznis dobiva score 0-100 i popis problema — sortirano po prioritetu za outreach.
             </p>
             <Button size="lg" onClick={() => setRunning(true)} className="bg-primary">
               <Radar className="h-5 w-5 mr-2" /> Pokreni skeniranje
@@ -1629,138 +1682,131 @@ function BotScanTab({ adminPassword }: { adminPassword: string }) {
           <CardContent className="p-8 text-center space-y-4">
             <div className="mx-auto w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
             <p className="text-lg font-semibold">Skeniram sve biznise u Splitu...</p>
-            <p className="text-sm text-muted-foreground">Provjeravam web stranice, kontakte i Google Sites</p>
+            <p className="text-sm text-muted-foreground">Provjeravam web, Google profil, opis, radno vrijeme, ocjene, recenzije...</p>
           </CardContent>
         </Card>
-      ) : scanResult.data ? (
+      ) : scanResult.data && stats ? (
         <>
-          {/* Stats Dashboard */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-            <Card><CardContent className="p-4 text-center">
-              <p className="text-3xl font-black">{scanResult.data.total}</p>
-              <p className="text-xs text-muted-foreground mt-1">Ukupno biznisa</p>
-            </CardContent></Card>
-            <Card className="border-red-200 bg-red-50"><CardContent className="p-4 text-center">
-              <p className="text-3xl font-black text-red-600">{scanResult.data.noWebsite}</p>
-              <p className="text-xs text-muted-foreground mt-1">Bez web stranice</p>
-            </CardContent></Card>
-            <Card className="border-orange-200 bg-orange-50"><CardContent className="p-4 text-center">
-              <p className="text-3xl font-black text-orange-600">{scanResult.data.googleSite}</p>
-              <p className="text-xs text-muted-foreground mt-1">Google Sites / Basic</p>
-            </CardContent></Card>
-            <Card className="border-green-200 bg-green-50"><CardContent className="p-4 text-center">
-              <p className="text-3xl font-black text-green-600">{scanResult.data.withWebsite}</p>
-              <p className="text-xs text-muted-foreground mt-1">Imaju stranicu</p>
-            </CardContent></Card>
-            <Card><CardContent className="p-4 text-center">
-              <p className="text-3xl font-black">{scanResult.data.withPhone}</p>
-              <p className="text-xs text-muted-foreground mt-1">S telefonom</p>
-            </CardContent></Card>
-            <Card><CardContent className="p-4 text-center">
-              <p className="text-3xl font-black">{scanResult.data.withEmail}</p>
-              <p className="text-xs text-muted-foreground mt-1">S emailom</p>
-            </CardContent></Card>
+          {/* Stats */}
+          <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-9 gap-2">
+            <Card><CardContent className="p-3 text-center"><p className="text-2xl font-black">{scanResult.data.total}</p><p className="text-[10px] text-muted-foreground">Ukupno</p></CardContent></Card>
+            <Card className="border-red-200 bg-red-50"><CardContent className="p-3 text-center"><p className="text-2xl font-black text-red-600">{stats.noWebsite}</p><p className="text-[10px] text-muted-foreground">Bez weba</p></CardContent></Card>
+            <Card className="border-orange-200 bg-orange-50"><CardContent className="p-3 text-center"><p className="text-2xl font-black text-orange-600">{stats.googleSite}</p><p className="text-[10px] text-muted-foreground">Google Site</p></CardContent></Card>
+            <Card className="border-green-200 bg-green-50"><CardContent className="p-3 text-center"><p className="text-2xl font-black text-green-600">{stats.withWebsite}</p><p className="text-[10px] text-muted-foreground">Imaju web</p></CardContent></Card>
+            <Card className="border-purple-200 bg-purple-50"><CardContent className="p-3 text-center"><p className="text-2xl font-black text-purple-600">{stats.noGoogle}</p><p className="text-[10px] text-muted-foreground">Bez Google</p></CardContent></Card>
+            <Card><CardContent className="p-3 text-center"><p className="text-2xl font-black">{stats.noDescription}</p><p className="text-[10px] text-muted-foreground">Bez opisa</p></CardContent></Card>
+            <Card><CardContent className="p-3 text-center"><p className="text-2xl font-black">{stats.noHours}</p><p className="text-[10px] text-muted-foreground">Bez sati</p></CardContent></Card>
+            <Card><CardContent className="p-3 text-center"><p className="text-2xl font-black">{stats.noReviews}</p><p className="text-[10px] text-muted-foreground">0 recenzija</p></CardContent></Card>
+            <Card><CardContent className="p-3 text-center"><p className="text-2xl font-black">{stats.noEmail}</p><p className="text-[10px] text-muted-foreground">Bez emaila</p></CardContent></Card>
           </div>
 
-          {/* Leads Summary */}
-          <Card className="border-primary/30">
+          {/* Leads */}
+          <Card>
             <CardHeader>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
-                  <CardTitle className="text-xl flex items-center gap-2">
-                    <Radar className="h-5 w-5" /> {leads.length} potencijalnih klijenata
-                  </CardTitle>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Biznisi bez stranice ili s Google Sites koji imaju telefon ili email — spremni za kontakt
-                  </p>
+                  <CardTitle className="text-xl">{leads.length} leadova — sortirano po prioritetu</CardTitle>
+                  <p className="text-sm text-muted-foreground mt-1">Najlošija digitalna prisutnost = najbolji lead. Score 0-100.</p>
                 </div>
                 <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={exportCSV}>
-                    <FileDown className="h-4 w-4 mr-1" /> Export CSV
-                  </Button>
-                  <Button size="sm" variant="outline" onClick={() => { setRunning(false); }}>
-                    <RefreshCw className="h-4 w-4 mr-1" /> Ponovi scan
-                  </Button>
+                  <Button size="sm" variant="outline" onClick={exportCSV}><FileDown className="h-4 w-4 mr-1" />CSV</Button>
+                  <Button size="sm" variant="outline" onClick={() => setRunning(false)}><RefreshCw className="h-4 w-4 mr-1" />Rescan</Button>
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
-              {/* Pricing reminder */}
-              <div className="bg-slate-950 text-white rounded-lg p-4 mb-4">
-                <p className="text-sm font-bold mb-2">Cijene za klijente:</p>
+            <CardContent className="space-y-4">
+              {/* Pricing */}
+              <div className="bg-slate-950 text-white rounded-lg p-4">
                 <div className="flex flex-wrap gap-4 text-sm">
-                  <div>🌐 <strong>Izrada stranice:</strong> 400€</div>
-                  <div>🔧 <strong>Mjesečno održavanje:</strong> 50-75€/mj</div>
-                  <div>📞 <strong>+ AI Agent:</strong> od 99€/mj</div>
+                  <div>🌐 <strong>Izrada:</strong> 400€</div>
+                  <div>🔧 <strong>Održavanje:</strong> 50-75€/mj</div>
+                  <div>📞 <strong>AI Agent:</strong> od 99€/mj</div>
+                  <div>📱 <strong>Moj WA:</strong> +385 95 757 1220</div>
                 </div>
-                <p className="text-xs text-white/60 mt-2">* Prvih par klijenata — cijena održavanja ovisi o zahtjevima</p>
               </div>
 
-              {/* Category filter */}
-              <div className="flex gap-2 mb-4 flex-wrap">
-                <Button size="sm" variant={filterCat === "" ? "default" : "outline"} onClick={() => setFilterCat("")}>
-                  Svi ({leads.length})
-                </Button>
-                {uniqueCategories.map(cat => {
-                  const cnt = leads.filter((l: any) => l.categoryName === cat).length;
-                  return (
-                    <Button key={cat} size="sm" variant={filterCat === cat ? "default" : "outline"} onClick={() => setFilterCat(cat as string)}>
-                      {cat} ({cnt})
+              {/* Filters */}
+              <div className="space-y-2">
+                <div className="flex gap-2 flex-wrap">
+                  <span className="text-xs text-muted-foreground self-center">Problem:</span>
+                  <Button size="sm" variant={filterIssue === "" ? "default" : "outline"} className="h-7 text-xs" onClick={() => setFilterIssue("")}>Svi</Button>
+                  {Object.entries(ISSUE_LABELS).map(([key, val]) => (
+                    <Button key={key} size="sm" variant={filterIssue === key ? "default" : "outline"} className="h-7 text-xs" onClick={() => setFilterIssue(key)}>
+                      {val.emoji} {val.label}
                     </Button>
-                  );
-                })}
+                  ))}
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                  <span className="text-xs text-muted-foreground self-center">Kategorija:</span>
+                  <Button size="sm" variant={filterCat === "" ? "default" : "outline"} className="h-7 text-xs" onClick={() => setFilterCat("")}>Sve</Button>
+                  {uniqueCategories.slice(0, 15).map(cat => (
+                    <Button key={cat} size="sm" variant={filterCat === cat ? "default" : "outline"} className="h-7 text-xs" onClick={() => setFilterCat(cat as string)}>{cat}</Button>
+                  ))}
+                </div>
+                <div className="flex gap-2 items-center">
+                  <span className="text-xs text-muted-foreground">Sortiraj:</span>
+                  <Button size="sm" variant={sortBy === "score" ? "default" : "outline"} className="h-7 text-xs" onClick={() => setSortBy("score")}>Najgori score prvo</Button>
+                  <Button size="sm" variant={sortBy === "rating" ? "default" : "outline"} className="h-7 text-xs" onClick={() => setSortBy("rating")}>Najbolja ocjena</Button>
+                  <span className="ml-auto text-sm text-muted-foreground">{filteredLeads.length} rezultata</span>
+                </div>
               </div>
 
-              {/* Leads list */}
-              <div className="space-y-3 max-h-[600px] overflow-y-auto">
+              {/* Lead rows */}
+              <div className="space-y-2 max-h-[700px] overflow-y-auto">
                 {filteredLeads.map((b: any) => {
                   const phone = b.phone ? normalizePhone(b.phone) : "";
-                  const previewUrl = `${window.location.origin}/preview/${b.id}`;
-                  const hasWeb = !!(b.website && b.website.trim());
-                  const waMsg = `Poštovani,\n\njavljam se iz Split Usluge.${hasWeb ? "" : ` Primijetili smo da "${b.name}" nema web stranicu.`}\n\nDanas 70% klijenata traži usluge na Google-u. ${hasWeb ? "Moderna web stranica" : "Web stranica"} može Vam donijeti 3x više poziva.\n\nNapravili smo besplatni preview za Vas:\n${previewUrl}\n\n💰 Izrada: 400€\n💰 Održavanje: 50-75€/mj\n💰 Gotovo za 48h\n\nZainteresirani? Javite se!\nkondor1413@gmail.com`;
+                  const waMsg = buildWaMsg(b);
                   const waUrl = phone ? `https://wa.me/${phone.replace("+", "")}?text=${encodeURIComponent(waMsg)}` : "";
-                  const emailSubj = hasWeb ? `Moderna web stranica za ${b.name}` : `Web stranica za ${b.name} — besplatni preview`;
-                  const emailBody = `Poštovani,\n\nJavljam se iz Split Usluge — lokalnog online imenika za Split.\n\n${hasWeb ? `Vaš biznis "${b.name}" je u našem imeniku.` : `Primijetili smo da "${b.name}" nema web stranicu.`}\n\n📊 70% korisnika traži usluge na Google-u\n📊 Biznisi sa stranicom dobivaju 3x više poziva\n\nNapravili smo Vam besplatni preview:\n${previewUrl}\n\n💰 Izrada profesionalne stranice: 400€\n💰 Mjesečno održavanje: 50-75€/mj\n💰 Stranica gotova za 48h\n\nUključeno:\n✅ Responzivni dizajn (mobitel + desktop)\n✅ SEO optimizacija za Google\n✅ Hosting\n✅ SSL certifikat\n✅ Kontakt forma\n\nJavite se za dogovor!\n\nSrdačan pozdrav,\nSplit Usluge\nkondor1413@gmail.com`;
-                  const emailUrl = b.email ? `mailto:${b.email}?subject=${encodeURIComponent(emailSubj)}&body=${encodeURIComponent(emailBody)}` : "";
+                  const previewUrl = `${window.location.origin}/preview/${b.id}`;
+                  const emailBody = `Poštovani,\n\nJavljam se iz Split Usluge.\n\nPogledajte besplatni preview stranice za "${b.name}":\n${previewUrl}\n\n💰 Izrada: 400€\n💰 Održavanje: 50-75€/mj\n\nJavite se na +385 95 757 1220 ili kondor1413@gmail.com\n\nSrdačan pozdrav,\nSplit Usluge`;
+                  const emailUrl = b.email ? `mailto:${b.email}?subject=${encodeURIComponent(`Profesionalna web stranica za ${b.name}`)}&body=${encodeURIComponent(emailBody)}` : "";
 
                   return (
-                    <div key={b.id} className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 rounded-lg border border-border/70 hover:border-primary/30 transition-colors">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-sm truncate">{b.name}</span>
-                          {b.rating && (
-                            <span className="text-xs bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded font-bold flex items-center gap-0.5">
-                              <Star className="h-3 w-3 fill-current" />{b.rating}
-                            </span>
+                    <div key={b.id} className="p-3 rounded-lg border border-border/70 hover:border-primary/30 transition-colors">
+                      <div className="flex flex-col sm:flex-row sm:items-start gap-3">
+                        {/* Score badge */}
+                        <div className="flex sm:flex-col items-center gap-2 sm:gap-1 sm:w-14 flex-shrink-0">
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-sm ${getScoreColor(b.score)}`}>
+                            {b.score}
+                          </div>
+                          <span className="text-[10px] text-muted-foreground">/ 100</span>
+                        </div>
+                        {/* Info */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-bold text-sm">{b.name}</span>
+                            {b.rating && <span className="text-xs bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded font-bold"><Star className="h-3 w-3 fill-current inline" /> {b.rating}</span>}
+                            <span className="text-xs text-primary">{b.categoryName}</span>
+                          </div>
+                          <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted-foreground mt-1">
+                            {b.phone && <span><Phone className="h-3 w-3 inline" /> {b.phone}</span>}
+                            {b.email && <span><Mail className="h-3 w-3 inline" /> {b.email}</span>}
+                            {b.address && <span><MapPin className="h-3 w-3 inline" /> {b.address}</span>}
+                          </div>
+                          {/* Issue tags */}
+                          <div className="flex flex-wrap gap-1 mt-2">
+                            {(b.issues || []).map((issue: string) => {
+                              const info = ISSUE_LABELS[issue];
+                              return info ? <span key={issue} className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${info.color}`}>{info.emoji} {info.label}</span> : null;
+                            })}
+                          </div>
+                        </div>
+                        {/* Actions */}
+                        <div className="flex gap-1.5 flex-shrink-0 flex-wrap sm:flex-nowrap">
+                          <Button size="sm" variant="outline" className="h-8 text-xs px-2" onClick={() => window.open(`/preview/${b.id}`, "_blank")}>
+                            <Eye className="h-3 w-3 mr-1" />Preview
+                          </Button>
+                          {waUrl && (
+                            <Button size="sm" className="h-8 text-xs px-2 bg-green-600 hover:bg-green-700 text-white" onClick={() => handleSend(b.id, "whatsapp", waUrl)}>
+                              {sentIds.has(`${b.id}-whatsapp`) ? <><CheckCircle className="h-3 w-3 mr-1" />✓</> : <><MessageCircle className="h-3 w-3 mr-1" />WhatsApp</>}
+                            </Button>
                           )}
-                          <span className="text-xs text-primary font-medium">{b.categoryName}</span>
+                          {emailUrl && (
+                            <Button size="sm" variant="outline" className="h-8 text-xs px-2" onClick={() => handleSend(b.id, "email", emailUrl)}>
+                              {sentIds.has(`${b.id}-email`) ? <><CheckCircle className="h-3 w-3 mr-1" />✓</> : <><Mail className="h-3 w-3 mr-1" />Email</>}
+                            </Button>
+                          )}
                         </div>
-                        <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-muted-foreground mt-1">
-                          {b.phone && <span className="flex items-center gap-1"><Phone className="h-3 w-3" />{b.phone}</span>}
-                          {b.email && <span className="flex items-center gap-1"><Mail className="h-3 w-3" />{b.email}</span>}
-                          {b.address && <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{b.address}</span>}
-                          <span className="flex items-center gap-1 text-red-500 font-medium">
-                            <Globe className="h-3 w-3" />
-                            {!b.website || !b.website.trim() ? "Nema web" : b.website.includes("sites.google") ? "Google Site" : "Basic"}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex gap-1.5 flex-shrink-0">
-                        <Button size="sm" variant="outline" className="h-8 text-xs px-2" onClick={() => window.open(`/preview/${b.id}`, "_blank")}>
-                          <Eye className="h-3 w-3 mr-1" />Preview
-                        </Button>
-                        {waUrl && (
-                          <Button size="sm" className="h-8 text-xs px-2 bg-green-600 hover:bg-green-700 text-white"
-                            onClick={() => handleSend(b.id, "whatsapp", waUrl)}>
-                            {sentIds.has(`${b.id}-whatsapp`) ? <><CheckCircle className="h-3 w-3 mr-1" />Poslano</> : <><MessageCircle className="h-3 w-3 mr-1" />WhatsApp</>}
-                          </Button>
-                        )}
-                        {emailUrl && (
-                          <Button size="sm" variant="outline" className="h-8 text-xs px-2"
-                            onClick={() => handleSend(b.id, "email", emailUrl)}>
-                            {sentIds.has(`${b.id}-email`) ? <><CheckCircle className="h-3 w-3 mr-1" />Poslano</> : <><Mail className="h-3 w-3 mr-1" />Email</>}
-                          </Button>
-                        )}
                       </div>
                     </div>
                   );
