@@ -3,7 +3,7 @@ import { buildRobotsTxt, buildSitemapXml, getFallbackCategorySlugs, getSeoForPat
 import { getBusinessPath } from "../../shared/paths.js";
 import { getAllCategories, getBusinessesForSitemap } from "../db.js";
 
-const DEFAULT_SITE_URL = "https://splitmajstori.com";
+const DEFAULT_SITE_URL = "https://majstorisplit.com";
 
 function stripTrailingSlash(value: string): string {
   return value.replace(/\/+$/, "");

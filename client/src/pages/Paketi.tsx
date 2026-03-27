@@ -232,7 +232,7 @@ export default function Paketi() {
                     variant={pkg.highlight ? "default" : "outline"}
                     asChild
                   >
-                    <a href={`mailto:info@splitmajstori.com?subject=Oglas paket ${pkg.name}&body=Zainteresiran/a sam za ${pkg.name} paket (${pkg.price} EUR/mj). Ime biznisa: `}>
+                    <a href={`mailto:info@majstorisplit.com?subject=Oglas paket ${pkg.name}&body=Zainteresiran/a sam za ${pkg.name} paket (${pkg.price} EUR/mj). Ime biznisa: `}>
                       {pkg.ctaLabel}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </a>
@@ -303,7 +303,7 @@ export default function Paketi() {
                     variant={pkg.highlight ? "default" : "outline"}
                     asChild
                   >
-                    <a href={`mailto:info@splitmajstori.com?subject=${pkg.name} - Narudžba web stranice&body=Zainteresiran/a sam za ${pkg.name} (${pkg.price} EUR). Ime biznisa: `}>
+                    <a href={`mailto:info@majstorisplit.com?subject=${pkg.name} - Narudžba web stranice&body=Zainteresiran/a sam za ${pkg.name} (${pkg.price} EUR). Ime biznisa: `}>
                       {pkg.ctaLabel}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </a>
@@ -327,7 +327,7 @@ export default function Paketi() {
             </p>
             <div className="flex gap-3 justify-center flex-wrap">
               <Button asChild className="bg-orange-500 hover:bg-orange-600 text-white">
-                <a href="mailto:info@splitmajstori.com?subject=Zahtjev za besplatni preview web stranice&body=Ime biznisa: %0ATelefon: %0AAdresa: %0AKategorija usluge: ">
+                <a href="mailto:info@majstorisplit.com?subject=Zahtjev za besplatni preview web stranice&body=Ime biznisa: %0ATelefon: %0AAdresa: %0AKategorija usluge: ">
                   <Mail className="mr-2 h-4 w-4" /> Zatraži besplatni preview
                 </a>
               </Button>
@@ -400,7 +400,7 @@ export default function Paketi() {
         </p>
         <div className="flex gap-4 justify-center flex-wrap">
           <Button asChild className="bg-orange-500 hover:bg-orange-600 text-white h-12 px-8">
-            <a href="mailto:info@splitmajstori.com">
+            <a href="mailto:info@majstorisplit.com">
               <Mail className="mr-2 h-4 w-4" /> Kontaktiraj nas
             </a>
           </Button>

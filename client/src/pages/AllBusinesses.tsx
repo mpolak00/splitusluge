@@ -87,14 +87,14 @@ export default function AllBusinesses() {
       pathname: ALL_BUSINESSES_PATH,
       siteUrl,
       structuredData: [
-        ...buildBaseStructuredData(siteUrl || "https://splitmajstori.com"),
-        buildBreadcrumbSchema(siteUrl || "https://splitmajstori.com", breadcrumbs),
+        ...buildBaseStructuredData(siteUrl || "https://majstorisplit.com"),
+        buildBreadcrumbSchema(siteUrl || "https://majstorisplit.com", breadcrumbs),
         {
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           name: title,
           description,
-          url: `${siteUrl || "https://splitmajstori.com"}${ALL_BUSINESSES_PATH}`,
+          url: `${siteUrl || "https://majstorisplit.com"}${ALL_BUSINESSES_PATH}`,
           inLanguage: "hr-HR",
           areaServed: SERVICE_AREAS,
         },
