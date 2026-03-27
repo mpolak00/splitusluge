@@ -259,3 +259,33 @@ export const voiceAgentSubs = mysqlTable("voiceAgentSubs", {
 
 export type VoiceAgentSub = typeof voiceAgentSubs.$inferSelect;
 export type InsertVoiceAgentSub = typeof voiceAgentSubs.$inferInsert;
+
+// User accounts for commenting and reviews
+export const userAccounts = mysqlTable("userAccounts", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 320 }).notNull().unique(),
+  passwordHash: varchar("passwordHash", { length: 255 }).notNull(),
+  avatar: varchar("avatar", { length: 1000 }),
+  isBanned: int("isBanned").default(0), // 0=active, 1=banned
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type UserAccount = typeof userAccounts.$inferSelect;
+export type InsertUserAccount = typeof userAccounts.$inferInsert;
+
+// Comments and ratings on individual businesses
+export const businessComments = mysqlTable("businessComments", {
+  id: int("id").autoincrement().primaryKey(),
+  businessId: int("businessId").notNull(),
+  userId: int("userId").notNull(),
+  rating: int("rating"), // 1-5, optional
+  content: text("content").notNull(),
+  status: varchar("status", { length: 50 }).default("approved"), // approved, hidden, flagged
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type BusinessComment = typeof businessComments.$inferSelect;
+export type InsertBusinessComment = typeof businessComments.$inferInsert;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, Map, Plus, Info, Megaphone, List, Package, Globe, LogIn } from "lucide-react";
+import { Menu, Map, Plus, Info, Megaphone, List, Package, Globe, LogIn, User } from "lucide-react";
 import { ALL_BUSINESSES_PATH } from "@shared/paths";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -10,6 +10,7 @@ const NAV_LINKS = [
   { href: "/mapa", label: "Mapa", icon: Map },
   { href: "/paketi", label: "Web paketi", icon: Package },
   { href: "/prijava", label: "Moja djelatnost", icon: LogIn },
+  { href: "/racun", label: "Moj račun", icon: User },
   { href: "/en", label: "EN", icon: Globe },
   { href: "/o-nama", label: "O nama", icon: Info },
 ];
