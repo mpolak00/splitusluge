@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePageSeo } from "@/hooks/usePageSeo";
 import { getAverageRating, getRatingValue, sortBusinessesByWeighted } from "@/lib/directory";
+import { getBusinessImage } from "@/lib/category-images";
 import { trpc } from "@/lib/trpc";
 
 function openGoogleMaps(name: string, address?: string | null) {
@@ -57,6 +58,12 @@ export default function AllBusinesses() {
   }, [allBusinesses, searchTerm, sortBy]);
 
   const averageRating = useMemo(() => getAverageRating(filteredBusinesses), [filteredBusinesses]);
+
+  const categorySlugMap = useMemo(() => {
+    const map: Record<number, string> = {};
+    categories.forEach(c => { map[c.id] = c.slug; });
+    return map;
+  }, [categories]);
 
   const seoPayload = useMemo(() => {
     const title = "Svi obrti i lokalne usluge u Splitu | Majstori Split";
@@ -197,14 +204,13 @@ export default function AllBusinesses() {
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {filteredBusinesses.map(business => (
               <Card key={business.id} className="overflow-hidden border-border/70 transition-all hover:-translate-y-0.5 hover:shadow-lg">
-                <div className="h-48 bg-muted">
-                  {business.imageUrl ? (
-                    <img src={business.imageUrl} alt={business.name} className="h-full w-full object-cover" />
-                  ) : (
-                    <div className="flex h-full items-center justify-center text-muted-foreground">
-                      Nema fotografije
-                    </div>
-                  )}
+                <div className="h-48 bg-muted overflow-hidden">
+                  <img
+                    src={getBusinessImage(business.id, categorySlugMap[business.categoryId] || "", business.imageUrl)}
+                    alt={business.name}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
                 </div>
 
                 <CardContent className="space-y-5 p-5">
