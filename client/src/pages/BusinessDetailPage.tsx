@@ -341,7 +341,7 @@ export default function BusinessDetailPage() {
             <CardContent className="space-y-5 p-6 md:p-8">
               <h2 className="text-2xl font-bold tracking-tight">Zašto otvoriti ovaj profil prije poziva?</h2>
               <p className="leading-7 text-muted-foreground">
-                Profili na Split Uslugama skupljaju osnovne informacije s jednog mjesta kako biste brže
+                Profili na Majstori Split skupljaju osnovne informacije s jednog mjesta kako biste brže
                 usporedili više lokalnih opcija. Umjesto da tražite kontakt, lokaciju i ocjene na više strana,
                 ovdje možete odmah vidjeti je li poslovanje relevantno za vaš upit.
               </p>
@@ -515,7 +515,7 @@ function CommentsSection({ businessId }: { businessId: number }) {
 
   const user = (() => {
     try {
-      const saved = localStorage.getItem("su_user");
+      const saved = localStorage.getItem("ms_user");
       return saved ? JSON.parse(saved) : null;
     } catch {
       return null;
