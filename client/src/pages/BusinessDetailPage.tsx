@@ -15,7 +15,7 @@ import {
   parseBusinessTags,
   sortBusinessesByWeighted,
 } from "@/lib/directory";
-import { getBusinessImage } from "@/lib/category-images";
+import { getBusinessImage, getCategoryFallbackImage } from "@/lib/category-images";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -245,6 +245,11 @@ export default function BusinessDetailPage() {
                   src={getBusinessImage(business.id, currentCategory?.slug || "", business.imageUrl)}
                   alt={business.name}
                   className="h-72 w-full object-cover"
+                  onError={e => {
+                    const img = e.target as HTMLImageElement;
+                    const fallback = getCategoryFallbackImage(business.id, currentCategory?.slug || "");
+                    if (img.src !== fallback) img.src = fallback;
+                  }}
                 />
               </CardContent>
             </Card>

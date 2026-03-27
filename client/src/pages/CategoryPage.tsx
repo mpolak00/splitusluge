@@ -24,7 +24,7 @@ import {
   getTopLocations,
   parseBusinessTags,
 } from "@/lib/directory";
-import { getBusinessImage } from "@/lib/category-images";
+import { getBusinessImage, getCategoryFallbackImage } from "@/lib/category-images";
 import { trpc } from "@/lib/trpc";
 import { usePageTracking, useTrackClick } from "@/hooks/useAnalytics";
 
@@ -273,7 +273,9 @@ export default function CategoryPage() {
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                         loading="lazy"
                         onError={e => {
-                          (e.target as HTMLImageElement).style.display = "none";
+                          const img = e.target as HTMLImageElement;
+                          const fallback = getCategoryFallbackImage(business.id, categorySlug);
+                          if (img.src !== fallback) img.src = fallback;
                         }}
                       />
                       {/* Rating badge */}

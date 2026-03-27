@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { MapView } from "@/components/Map";
 import { usePageSeo } from "@/hooks/usePageSeo";
 import { getRatingValue } from "@/lib/directory";
-import { getBusinessImage } from "@/lib/category-images";
+import { getBusinessImage, getCategoryFallbackImage } from "@/lib/category-images";
 import { trpc } from "@/lib/trpc";
 
 export default function BusinessMap() {
@@ -222,6 +222,11 @@ export default function BusinessMap() {
                 src={getBusinessImage(selectedBusiness.id, categorySlugMap[selectedBusiness.categoryId] || "", selectedBusiness.imageUrl)}
                 alt={selectedBusiness.name}
                 className="h-52 w-full rounded-2xl object-cover"
+                onError={e => {
+                  const img = e.target as HTMLImageElement;
+                  const fallback = getCategoryFallbackImage(selectedBusiness.id, categorySlugMap[selectedBusiness.categoryId] || "");
+                  if (img.src !== fallback) img.src = fallback;
+                }}
               />
 
               {getRatingValue(selectedBusiness) > 0 && (
