@@ -470,17 +470,18 @@ export const adminRouter = router({
       };
     }),
 
-  // Bot scanner - scan ALL businesses and return full report
+  // Bot scanner - scan ALL businesses, score digital presence, find leads
   runBotScan: publicProcedure
     .input(adminAuth)
     .query(async ({ input }) => {
       verifyAdmin(input.adminPassword);
       const db = await getDb();
-      if (!db) return { total: 0, noWebsite: 0, googleSite: 0, withWebsite: 0, withPhone: 0, withEmail: 0, leads: [] };
+      if (!db) return { total: 0, stats: { noWebsite: 0, googleSite: 0, withWebsite: 0, noGoogle: 0, noEmail: 0, noDescription: 0, noHours: 0, lowRating: 0, noReviews: 0 }, leads: [] };
 
       const allBiz = await db.select({
         id: businesses.id,
         name: businesses.name,
+        googlePlaceId: businesses.googlePlaceId,
         address: businesses.address,
         phone: businesses.phone,
         email: businesses.email,
@@ -491,41 +492,65 @@ export const adminRouter = router({
         categoryName: categories.name,
         categorySlug: categories.slug,
         city: businesses.city,
+        neighborhood: businesses.neighborhood,
         description: businesses.description,
         openingHours: businesses.openingHours,
         imageUrl: businesses.imageUrl,
+        tags: businesses.tags,
       })
         .from(businesses)
         .leftJoin(categories, eq(businesses.categoryId, categories.id))
-        .where(eq(businesses.isActive, 1))
-        .orderBy(desc(businesses.rating));
+        .where(eq(businesses.isActive, 1));
 
       const total = allBiz.length;
-      let noWebsite = 0;
-      let googleSite = 0;
-      let withWebsite = 0;
-      let withPhone = 0;
-      let withEmail = 0;
-      const leads: typeof allBiz = [];
+      const stats = { noWebsite: 0, googleSite: 0, withWebsite: 0, noGoogle: 0, noEmail: 0, noDescription: 0, noHours: 0, lowRating: 0, noReviews: 0 };
+      const leads: Array<typeof allBiz[number] & { score: number; issues: string[] }> = [];
 
       for (const b of allBiz) {
         const hasPhone = !!(b.phone && b.phone.trim());
         const hasEmail = !!(b.email && b.email.trim());
-        if (hasPhone) withPhone++;
-        if (hasEmail) withEmail++;
+        const hasWebsite = !!(b.website && b.website.trim());
+        const hasGoogleSite = hasWebsite && (b.website!.includes("sites.google.com") || b.website!.includes("business.site"));
+        const hasRealWebsite = hasWebsite && !hasGoogleSite;
+        const hasGoogleProfile = !!(b.googlePlaceId && b.googlePlaceId.trim());
+        const hasDescription = !!(b.description && b.description.trim() && b.description.trim().length > 20);
+        const hasHours = !!(b.openingHours && b.openingHours.trim());
+        const ratingNum = b.rating ? parseFloat(b.rating) : 0;
+        const reviewNum = b.reviewCount || 0;
 
-        if (!b.website || b.website.trim() === "") {
-          noWebsite++;
-          if (hasPhone || hasEmail) leads.push(b);
-        } else if (b.website.includes("sites.google.com") || b.website.includes("business.site")) {
-          googleSite++;
-          if (hasPhone || hasEmail) leads.push(b);
-        } else {
-          withWebsite++;
+        // Stats
+        if (!hasWebsite) stats.noWebsite++;
+        else if (hasGoogleSite) stats.googleSite++;
+        else stats.withWebsite++;
+        if (!hasGoogleProfile) stats.noGoogle++;
+        if (!hasEmail) stats.noEmail++;
+        if (!hasDescription) stats.noDescription++;
+        if (!hasHours) stats.noHours++;
+        if (ratingNum > 0 && ratingNum < 4) stats.lowRating++;
+        if (reviewNum === 0) stats.noReviews++;
+
+        // Score: 0 = worst digital presence, 100 = perfect
+        let score = 0;
+        const issues: string[] = [];
+
+        if (hasRealWebsite) { score += 30; } else if (hasGoogleSite) { score += 10; issues.push("google_site"); } else { issues.push("no_website"); }
+        if (hasGoogleProfile) { score += 15; } else { issues.push("no_google"); }
+        if (hasEmail) { score += 10; } else { issues.push("no_email"); }
+        if (hasDescription) { score += 10; } else { issues.push("no_description"); }
+        if (hasHours) { score += 10; } else { issues.push("no_hours"); }
+        if (ratingNum >= 4) { score += 15; } else if (ratingNum > 0) { score += 5; issues.push("low_rating"); } else { issues.push("no_rating"); }
+        if (reviewNum >= 10) { score += 10; } else if (reviewNum > 0) { score += 3; issues.push("few_reviews"); } else { issues.push("no_reviews"); }
+
+        // Only leads with contact info and issues to fix
+        if ((hasPhone || hasEmail) && issues.length > 0) {
+          leads.push({ ...b, score, issues });
         }
       }
 
-      return { total, noWebsite, googleSite, withWebsite, withPhone, withEmail, leads };
+      // Sort by score ascending (worst = best lead)
+      leads.sort((a, b) => a.score - b.score);
+
+      return { total, stats, leads };
     }),
 
   // Log an outreach event
